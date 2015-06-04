@@ -4,6 +4,8 @@ set(LLVM_USED_LIBS clangTooling clangBasic clangAST)
 add_clang_executable(sample-translator
   SampleTranslator/main.cpp
   SampleTranslator/SampleTranslator.cpp
+  SampleTranslator/SampleASTConsumer.cpp
+  SampleTranslator/SampleVisitor.cpp
   )
 target_link_libraries(sample-translator
   clangTooling

@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		5EF8F4941B20C6B5006AF8EE /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5EF8F4931B20C6B5006AF8EE /* main.cpp */; };
 		5EF8F49B1B20C787006AF8EE /* SampleTranslator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5EF8F49A1B20C787006AF8EE /* SampleTranslator.cpp */; };
+		5EF8F49E1B20CBB4006AF8EE /* SampleASTConsumer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5EF8F49C1B20CBB4006AF8EE /* SampleASTConsumer.cpp */; };
+		5EF8F4A11B20CD14006AF8EE /* SampleVisitor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5EF8F49F1B20CD14006AF8EE /* SampleVisitor.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -27,6 +29,11 @@
 		5EF8F4901B20C6B5006AF8EE /* SampleTranslator */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SampleTranslator; sourceTree = BUILT_PRODUCTS_DIR; };
 		5EF8F4931B20C6B5006AF8EE /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		5EF8F49A1B20C787006AF8EE /* SampleTranslator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SampleTranslator.cpp; sourceTree = "<group>"; };
+		5EF8F49C1B20CBB4006AF8EE /* SampleASTConsumer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SampleASTConsumer.cpp; sourceTree = "<group>"; };
+		5EF8F49D1B20CBB4006AF8EE /* SampleASTConsumer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SampleASTConsumer.h; sourceTree = "<group>"; };
+		5EF8F49F1B20CD14006AF8EE /* SampleVisitor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SampleVisitor.cpp; sourceTree = "<group>"; };
+		5EF8F4A01B20CD14006AF8EE /* SampleVisitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SampleVisitor.h; sourceTree = "<group>"; };
+		5EF8F4A21B20DF83006AF8EE /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,8 +66,13 @@
 		5EF8F4921B20C6B5006AF8EE /* SampleTranslator */ = {
 			isa = PBXGroup;
 			children = (
+				5EF8F4A21B20DF83006AF8EE /* CMakeLists.txt */,
 				5EF8F49A1B20C787006AF8EE /* SampleTranslator.cpp */,
 				5EF8F4931B20C6B5006AF8EE /* main.cpp */,
+				5EF8F49C1B20CBB4006AF8EE /* SampleASTConsumer.cpp */,
+				5EF8F49D1B20CBB4006AF8EE /* SampleASTConsumer.h */,
+				5EF8F49F1B20CD14006AF8EE /* SampleVisitor.cpp */,
+				5EF8F4A01B20CD14006AF8EE /* SampleVisitor.h */,
 			);
 			path = SampleTranslator;
 			sourceTree = "<group>";
@@ -121,6 +133,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5EF8F4A11B20CD14006AF8EE /* SampleVisitor.cpp in Sources */,
+				5EF8F49E1B20CBB4006AF8EE /* SampleASTConsumer.cpp in Sources */,
 				5EF8F4941B20C6B5006AF8EE /* main.cpp in Sources */,
 				5EF8F49B1B20C787006AF8EE /* SampleTranslator.cpp in Sources */,
 			);
