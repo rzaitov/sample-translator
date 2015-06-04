@@ -10,9 +10,10 @@
 #define __SampleTranslator__SampleASTConsumer__
 
 #include <stdio.h>
-#include "clang/AST/ASTConsumer.h"
+
+#include "clang/AST/ASTContext.h"
 #include "clang/Frontend/CompilerInstance.h"
-#include "SampleASTConsumer.h"
+
 #include "SampleVisitor.h"
 
 using namespace clang;

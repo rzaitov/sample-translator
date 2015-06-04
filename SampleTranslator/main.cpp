@@ -15,6 +15,8 @@
 // Declares llvm::cl::extrahelp.
 #include "llvm/Support/CommandLine.h"
 
+#include "FindClassesAction.h"
+
 using namespace clang::tooling;
 using namespace llvm;
 
@@ -35,5 +37,5 @@ int main(int argc, const char **argv) {
     CommonOptionsParser OptionsParser(argc, argv, MyToolCategory);
     ClangTool Tool(OptionsParser.getCompilations(),
                    OptionsParser.getSourcePathList());
-    return Tool.run(newFrontendActionFactory<clang::SyntaxOnlyAction>().get());
+    return Tool.run(newFrontendActionFactory<FindClassesAction>().get());
 }
