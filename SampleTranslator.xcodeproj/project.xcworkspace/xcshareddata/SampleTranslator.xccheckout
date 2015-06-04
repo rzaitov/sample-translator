@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>C957912B-0668-4B32-B185-5D6540AA2B2A</string>
+	<key>IDESourceControlProjectName</key>
+	<string>SampleTranslator</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>2543CF1EF39F0BBDA75D5A64629EEEB92E4178C2</key>
+		<string>https://github.com/llvm-mirror/clang.git</string>
+		<key>4BD75C932C5424A5B785A1AA6753C6815D11E34A</key>
+		<string>http://llvm.org/git/llvm.git</string>
+		<key>8A9D7AD34FFEA56696D91EFBA208E20707F857B4</key>
+		<string>https://github.com/llvm-mirror/clang-tools-extra.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>sample-translator/SampleTranslator.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>2543CF1EF39F0BBDA75D5A64629EEEB92E4178C2</key>
+		<string>../../../../..</string>
+		<key>4BD75C932C5424A5B785A1AA6753C6815D11E34A</key>
+		<string>../../../../../../..</string>
+		<key>8A9D7AD34FFEA56696D91EFBA208E20707F857B4</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/llvm-mirror/clang-tools-extra.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>8A9D7AD34FFEA56696D91EFBA208E20707F857B4</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>2543CF1EF39F0BBDA75D5A64629EEEB92E4178C2</string>
+			<key>IDESourceControlWCCName</key>
+			<string>..</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>4BD75C932C5424A5B785A1AA6753C6815D11E34A</string>
+			<key>IDESourceControlWCCName</key>
+			<string>..</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>8A9D7AD34FFEA56696D91EFBA208E20707F857B4</string>
+			<key>IDESourceControlWCCName</key>
+			<string>extra</string>
+		</dict>
+	</array>
+</dict>
+</plist>
