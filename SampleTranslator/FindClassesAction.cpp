@@ -16,5 +16,6 @@ using namespace std;
 
 unique_ptr<ASTConsumer> FindClassesAction::CreateASTConsumer(CompilerInstance &Compiler, llvm::StringRef InFile)
 {
-    return unique_ptr<ASTConsumer>(new SampleASTConsumer(Compiler));
+    llvm::outs() << InFile << "\n";
+    return unique_ptr<ASTConsumer>(new SampleASTConsumer(Compiler, InFile));
 }

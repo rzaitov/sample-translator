@@ -15,8 +15,8 @@
 
 using namespace clang;
 
-SampleASTConsumer::SampleASTConsumer(CompilerInstance &CI)
-    : visitor(new SampleVisitor(CI)) // initialize the visitor
+SampleASTConsumer::SampleASTConsumer(CompilerInstance &CI, StringRef inFile)
+    : visitor(new SampleVisitor(CI, inFile)) // initialize the visitor
 {
 }
     

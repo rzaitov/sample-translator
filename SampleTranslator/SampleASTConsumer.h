@@ -23,7 +23,7 @@ private:
     SampleVisitor *visitor;
     
 public:
-    SampleASTConsumer(CompilerInstance &CI);
+    SampleASTConsumer(CompilerInstance &CI, StringRef inFile);
     
     // override this to call our ExampleVisitor on each top-level Decl
     virtual void HandleTranslationUnit(ASTContext &Context);

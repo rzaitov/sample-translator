@@ -10,6 +10,7 @@
 #include "clang/AST/ASTContext.h"
 #include "clang/AST/DeclCXX.h"
 #include "clang/AST/DeclObjC.h"
+//#include "clang/AST/"
 #include "clang/Frontend/CompilerInstance.h"
 #include "SampleVisitor.h"
 
@@ -17,9 +18,10 @@
 
 using namespace clang;
 
-SampleVisitor::SampleVisitor(CompilerInstance &CI)
-    : astContext (CI.getASTContext())
+SampleVisitor::SampleVisitor(CompilerInstance &CI, StringRef currentFile)
+    : astContext (CI.getASTContext()), sourceManager(CI.getSourceManager()), file(currentFile)
 {
+    
         
 }
 
@@ -48,7 +50,7 @@ bool SampleVisitor::VisitObjCImplDecl(ObjCImplDecl *D)
             }
         }
         
-        llvm::outs () << D->getNameAsString();
+        llvm::outs () << D->getNameAsString() << "\n\n";
         if( auto superClass = implDecl->getSuperClass()) {
             llvm::outs () << superClass->getName() << "\n";
         } else {
@@ -59,3 +61,44 @@ bool SampleVisitor::VisitObjCImplDecl(ObjCImplDecl *D)
 //    D->dump();
     return true;
 }
+
+bool SampleVisitor::VisitObjCMethodDecl(ObjCMethodDecl *methodDecl)
+{
+    if (!IsFromCurrentFile(methodDecl->getLocation()))
+        return true;
+//    SourceLocation location = methodDecl->getLocation();
+//    llvm::outs() << sourceManager.getFilename(location) << "\n";
+//    
+    Selector selector = methodDecl->getSelector();
+    llvm::outs() << selector.getAsString() << "\n";
+
+    return true;
+}
+
+bool SampleVisitor::IsFromCurrentFile(clang::SourceLocation location)
+{
+    return sourceManager.getFilename(location) == file;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
