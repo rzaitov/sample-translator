@@ -10,8 +10,10 @@
 #include "clang/AST/ASTContext.h"
 #include "clang/AST/DeclCXX.h"
 #include "clang/AST/DeclObjC.h"
+#include "clang/Lex/Lexer.h"
 //#include "clang/AST/"
 #include "clang/Frontend/CompilerInstance.h"
+#include "clang/Rewrite/Core/Rewriter.h"
 #include "SampleVisitor.h"
 
 #include "llvm/Support/raw_ostream.h"
@@ -19,7 +21,7 @@
 using namespace clang;
 
 SampleVisitor::SampleVisitor(CompilerInstance &CI, StringRef currentFile)
-    : astContext (CI.getASTContext()), sourceManager(CI.getSourceManager()), file(currentFile)
+    : compiler (CI), sourceManager(CI.getSourceManager()), file(currentFile)
 {
     
         
@@ -78,8 +80,13 @@ bool SampleVisitor::VisitObjCMethodDecl(ObjCMethodDecl *methodDecl)
             QualType paramType = (*param)->getOriginalType();
             llvm::outs() << "(" << paramType.getAsString() << ") ";
     }
-
     llvm::outs() << "\n";
+    
+    Stmt *methodBody = methodDecl->getBody();
+    Rewriter rewriter;
+    rewriter.setSourceMgr(sourceManager, compiler.getLangOpts());
+    auto methodBodyText = rewriter.getRewrittenText(methodBody->getSourceRange());
+    llvm::outs() << methodBodyText << "\n\n";
 
     return true;
 }

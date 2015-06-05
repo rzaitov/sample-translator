@@ -23,7 +23,7 @@ using namespace clang;
 class SampleVisitor : public RecursiveASTVisitor<SampleVisitor>
 {
 private:
-    ASTContext &astContext; // used for getting additional AST info
+    CompilerInstance &compiler; // used for getting additional AST info
     SourceManager &sourceManager;
     StringRef file;
     bool IsFromCurrentFile (SourceLocation location);
