@@ -68,9 +68,18 @@ bool SampleVisitor::VisitObjCMethodDecl(ObjCMethodDecl *methodDecl)
         return true;
 //    SourceLocation location = methodDecl->getLocation();
 //    llvm::outs() << sourceManager.getFilename(location) << "\n";
-//    
+//
     Selector selector = methodDecl->getSelector();
-    llvm::outs() << selector.getAsString() << "\n";
+    auto returnType = methodDecl->getReturnType().getAsString();
+
+    llvm::outs() << returnType << "  " << selector.getAsString() << "\n";
+    
+    for (auto param = methodDecl->param_begin(); param != methodDecl->param_end(); ++param) {
+            QualType paramType = (*param)->getOriginalType();
+            llvm::outs() << "(" << paramType.getAsString() << ") ";
+    }
+
+    llvm::outs() << "\n";
 
     return true;
 }
