@@ -12,6 +12,7 @@
 #include "clang/AST/RecursiveASTVisitor.h"
 #include "clang/AST/ASTContext.h"
 #include "clang/AST/DeclCXX.h"
+#include "clang/AST/DeclObjC.h"
 #include "clang/Frontend/CompilerInstance.h"
 
 #include <stdio.h>
@@ -26,6 +27,8 @@ private:
 public:
     SampleVisitor(CompilerInstance &CI);
     bool VisitCXXRecordDecl(CXXRecordDecl *Declaration);
+    bool VisitObjCImplDecl(ObjCImplDecl *D);
+    bool VisitObjCInterfaceDecl(ObjCInterfaceDecl *D);
     
     
 };
