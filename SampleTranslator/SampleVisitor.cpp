@@ -107,7 +107,7 @@ void SampleVisitor::PrintMethod(ObjCMethodDecl *methodDecl)
     writer->Indent();
     writer->Outs() << "{\n";
     writer-> PushIndent();
-    PrintMethodBody(GetBodyText(methodDecl));
+    GetBodyText(methodDecl);
     writer-> PopIndent();
     writer->Indent();
     writer->Outs() << "}";
@@ -125,18 +125,20 @@ void SampleVisitor::PrintMethodParams(ObjCMethodDecl *methodDecl)
     writer->Outs() << ")";
 }
 
-string SampleVisitor::GetBodyText(ObjCMethodDecl *methodDecl)
+void SampleVisitor::GetBodyText(ObjCMethodDecl *methodDecl)
 {
     Stmt *methodBody = methodDecl->getBody();
     SourceRange bodyRange;
-    if(CompoundStmt *stmt = dyn_cast<CompoundStmt>(methodBody))
-        bodyRange = stmt->body_back() -> getSourceRange();
-    else
-        bodyRange = methodBody->getSourceRange();
-    
-    Rewriter rewriter;
-    rewriter.setSourceMgr(sourceManager, compiler.getLangOpts());
-    return rewriter.getRewrittenText(bodyRange);
+    if(CompoundStmt *compountStmt = dyn_cast<CompoundStmt>(methodBody)) {
+        for (Stmt** it = compountStmt->body_begin(); it != compountStmt -> body_end(); ++it) {
+            auto range = (*it)->getSourceRange();
+
+            Rewriter rewriter;
+            rewriter.setSourceMgr(sourceManager, compiler.getLangOpts());
+            PrintMethodBody(rewriter.getRewrittenText(range));
+        }
+        return;
+    }
 }
 
 void SampleVisitor::PrintMethodBody(string src)
@@ -153,9 +155,12 @@ void SampleVisitor::PrintMethodBody(string src)
 
 string SampleVisitor::GetPointeeName(QualType qualType)
 {
-    if(const ObjCObjectPointerType * objcPointerType = qualType.getTypePtr()->getAsObjCInterfacePointerType()) {
+    const Type* typePtr = qualType.getTypePtr();
+    if(const ObjCObjectPointerType * objcPointerType = typePtr->getAsObjCInterfacePointerType()) {
         if(const ObjCInterfaceType * interfaceType = objcPointerType->getInterfaceType())
             return interfaceType->getDecl()->getNameAsString();
+    } else if (typePtr->isObjCIdType()) {
+        return "NSObject";
     }
 
     return qualType.getAsString();

@@ -40,7 +40,7 @@ private:
     void PrintClassName(ObjCInterfaceDecl *interfaceDecl);
     string GetPointeeName(QualType qualType);
     string ConvertSelectorToName (string selector);
-    string GetBodyText(ObjCMethodDecl *methodDecl);
+    void GetBodyText(ObjCMethodDecl *methodDecl);
     void PrintMethodBody(string src);
     
     
