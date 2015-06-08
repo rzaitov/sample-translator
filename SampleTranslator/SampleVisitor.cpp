@@ -9,6 +9,7 @@
 #include <string>
 #include <stdio.h>
 #include <iostream>
+#include <sstream>
 
 #include "clang/AST/RecursiveASTVisitor.h"
 #include "clang/AST/ASTContext.h"
@@ -82,40 +83,46 @@ void SampleVisitor::PrintMethod(ObjCMethodDecl *methodDecl)
 {
     if (!IsFromCurrentFile(methodDecl->getLocation()))
         return;
-    //    SourceLocation location = methodDecl->getLocation();
-    //    llvm::outs() << sourceManager.getFilename(location) << "\n";
-    //
+
     Selector selector = methodDecl->getSelector();
     auto returnType = GetPointeeName(methodDecl->getReturnType());
     
     llvm::outs() << "public " << returnType << "  " << selector.getAsString();
     
     for (auto param = methodDecl->param_begin(); param != methodDecl->param_end(); ++param) {
-//        QualType paramType = (*param)->getType().split().Ty->getPointeeType().getAsString();
-//        llvm::outs() << "(" << paramType.getAsString() << ") ";
         QualType paramType = (*param)->getType();
         llvm::outs() << " " << GetPointeeName(paramType);
-//        if(auto t = paramType->getTypePtr getPointeeType()) {
-//            llvm::outs() << "got a pointer";
-//            llvm::outs() << t->getNameAsString();
-//        } else {
-//            llvm::outs() << paramType.getAsString();
-//        }
     }
     llvm::outs() << "\n";
-    
+
+    string methodBodyText = CommentSrc(GetBodyText(methodDecl));
+    llvm::outs() << methodBodyText << "\n\n";
+}
+
+string SampleVisitor::GetBodyText(ObjCMethodDecl *methodDecl)
+{
     Stmt *methodBody = methodDecl->getBody();
     SourceRange bodyRange;
-    if(CompoundStmt *stmt = dyn_cast<CompoundStmt>(methodBody)) {
+    if(CompoundStmt *stmt = dyn_cast<CompoundStmt>(methodBody))
         bodyRange = stmt->body_back() -> getSourceRange();
-    } else {
+    else
         bodyRange = methodBody->getSourceRange();
-    }
     
     Rewriter rewriter;
     rewriter.setSourceMgr(sourceManager, compiler.getLangOpts());
-    auto methodBodyText = rewriter.getRewrittenText(bodyRange);
-    llvm::outs() << methodBodyText << "\n\n";
+    return rewriter.getRewrittenText(bodyRange);
+}
+
+string SampleVisitor::CommentSrc(string src)
+{
+    string line;
+    string output;
+    istringstream stream (src);
+    while(getline(stream, line)) {
+        output = output + "//" + line + "\n";
+    }
+    
+    return output;    
 }
 
 string SampleVisitor::GetPointeeName(QualType qualType)

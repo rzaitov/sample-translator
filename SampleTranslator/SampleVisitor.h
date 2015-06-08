@@ -34,6 +34,8 @@ private:
     void PrintMethod (ObjCMethodDecl *methodDecl);
     void PrintClassName(ObjCInterfaceDecl * interfaceDecl);
     string GetPointeeName(QualType qualType);
+    string GetBodyText(ObjCMethodDecl *methodDecl);
+    string CommentSrc(string src);
     
     
 public:
