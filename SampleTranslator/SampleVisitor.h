@@ -32,6 +32,7 @@ private:
     StringRef file;
     bool IsFromCurrentFile (SourceLocation location);
     void PrintMethod (ObjCMethodDecl *methodDecl);
+    void PrintMethodParams(ObjCMethodDecl *methodDecl);
     void PrintClassName(ObjCInterfaceDecl * interfaceDecl);
     string GetPointeeName(QualType qualType);
     string GetBodyText(ObjCMethodDecl *methodDecl);

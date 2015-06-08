@@ -60,6 +60,7 @@ bool SampleVisitor::VisitObjCImplDecl(ObjCImplDecl *D)
             for(clang::CapturedDecl::specific_decl_iterator<ObjCMethodDecl> m = D->meth_begin(); m != D->meth_end(); ++m) {
                 ObjCMethodDecl* methodDecl = (*m);
                 PrintMethod(methodDecl);
+                llvm::outs() << "\n\n";
             }
         }
     }
@@ -87,16 +88,31 @@ void SampleVisitor::PrintMethod(ObjCMethodDecl *methodDecl)
     Selector selector = methodDecl->getSelector();
     auto returnType = GetPointeeName(methodDecl->getReturnType());
     
-    llvm::outs() << "public " << returnType << "  " << selector.getAsString();
-    
-    for (auto param = methodDecl->param_begin(); param != methodDecl->param_end(); ++param) {
-        QualType paramType = (*param)->getType();
-        llvm::outs() << " " << GetPointeeName(paramType);
-    }
+    string stringSelector = selector.getAsString();
+    auto iter = defaultSignatures.find(stringSelector);
+    if(iter != defaultSignatures.end())
+        llvm::outs() << iter->second;
+    else
+        llvm::outs() << "public " << returnType << "  " << selector.getAsString();
+    PrintMethodParams(methodDecl);
     llvm::outs() << "\n";
 
+    llvm::outs() << "{\n";
     string methodBodyText = CommentSrc(GetBodyText(methodDecl));
-    llvm::outs() << methodBodyText << "\n\n";
+    llvm::outs() << methodBodyText;
+    llvm::outs() << "}";
+}
+
+void SampleVisitor::PrintMethodParams(ObjCMethodDecl *methodDecl)
+{
+    llvm::outs() << "(";
+    bool isFirst = true;
+    for (auto param = methodDecl->param_begin(); param != methodDecl->param_end(); ++param, isFirst = false) {
+        QualType paramType = (*param)->getType();
+        string paramName = (*param)->getNameAsString();
+        llvm::outs() << (isFirst ? "": ", ") << GetPointeeName(paramType) << " " << paramName;
+    }
+    llvm::outs() << ")";
 }
 
 string SampleVisitor::GetBodyText(ObjCMethodDecl *methodDecl)
