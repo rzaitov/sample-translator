@@ -41,7 +41,7 @@ private:
     string GetPointeeName(QualType qualType);
     string ConvertSelectorToName (string selector);
     string GetBodyText(ObjCMethodDecl *methodDecl);
-    string CommentSrc(string src);
+    void PrintMethodBody(string src);
     
     
 public:

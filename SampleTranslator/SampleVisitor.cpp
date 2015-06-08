@@ -104,8 +104,9 @@ void SampleVisitor::PrintMethod(ObjCMethodDecl *methodDecl)
 
     writer->Indent();
     writer->Outs() << "{\n";
-    string methodBodyText = CommentSrc(GetBodyText(methodDecl));
-    writer->Outs() << methodBodyText;
+    writer-> PushIndent();
+    PrintMethodBody(GetBodyText(methodDecl));
+    writer-> PopIndent();
     writer->Indent();
     writer->Outs() << "}";
 }
@@ -136,16 +137,16 @@ string SampleVisitor::GetBodyText(ObjCMethodDecl *methodDecl)
     return rewriter.getRewrittenText(bodyRange);
 }
 
-string SampleVisitor::CommentSrc(string src)
+void SampleVisitor::PrintMethodBody(string src)
 {
     string line;
     string output;
     istringstream stream (src);
     while(getline(stream, line)) {
-        output = output + "//" + line + "\n";
+        writer -> Outs() << "//";
+        writer -> Indent();
+        writer -> Outs() << line << '\n';
     }
-    
-    return output;    
 }
 
 string SampleVisitor::GetPointeeName(QualType qualType)
