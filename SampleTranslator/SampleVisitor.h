@@ -17,23 +17,28 @@
 #include "clang/Frontend/CompilerInstance.h"
 
 #include <stdio.h>
+#include <string>
 
 using namespace clang;
+using namespace std;
+
 
 class SampleVisitor : public RecursiveASTVisitor<SampleVisitor>
 {
 private:
     CompilerInstance &compiler; // used for getting additional AST info
     SourceManager &sourceManager;
+    map<string, string> defaultSignatures;
     StringRef file;
     bool IsFromCurrentFile (SourceLocation location);
+    void PrintMethod (ObjCMethodDecl *methodDecl);
+    
     
 public:
-    SampleVisitor(CompilerInstance &CI, StringRef file);
+    SampleVisitor(CompilerInstance &CI, StringRef file, map<string, string> signatures);
     bool VisitCXXRecordDecl(CXXRecordDecl *Declaration);
     bool VisitObjCImplDecl(ObjCImplDecl *D);
     bool VisitObjCInterfaceDecl(ObjCInterfaceDecl *D);
-    bool VisitObjCMethodDecl(ObjCMethodDecl *methodDecl);
 };
 
 #endif /* defined(__SampleTranslator__SampleVisitor__) */

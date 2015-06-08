@@ -10,6 +10,7 @@
 #define __SampleTranslator__SampleASTConsumer__
 
 #include <stdio.h>
+#include <string>
 
 #include "clang/AST/ASTContext.h"
 #include "clang/Frontend/CompilerInstance.h"
@@ -21,12 +22,15 @@ using namespace clang;
 class SampleASTConsumer : public ASTConsumer {
 private:
     SampleVisitor *visitor;
+    std::map<string, string> defaultSignatures;
     
 public:
-    SampleASTConsumer(CompilerInstance &CI, StringRef inFile);
+    SampleASTConsumer(CompilerInstance &CI, StringRef inFile, std::map<string, string> signatures);
     
     // override this to call our ExampleVisitor on each top-level Decl
     virtual void HandleTranslationUnit(ASTContext &Context);
+    
+    virtual void HandleImplicitImportDecl(ImportDecl *D);
 };
 
 #endif /* defined(__SampleTranslator__SampleASTConsumer__) */

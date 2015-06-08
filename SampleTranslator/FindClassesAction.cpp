@@ -12,10 +12,25 @@
 #include "FindClassesAction.h"
 #include "SampleASTConsumer.h"
 
+#include <iostream>
+#include <fstream>
+#include <string>
+
 using namespace std;
+
+FindClassesAction::FindClassesAction()
+{
+    string selector, signature;
+    ifstream signaturesStorage;
+    signaturesStorage.open ("signatures.txt");
+    
+    while (getline(signaturesStorage, selector) && getline(signaturesStorage, signature))
+        defaultSignatures[selector] = signature;
+    signaturesStorage.close();
+}
 
 unique_ptr<ASTConsumer> FindClassesAction::CreateASTConsumer(CompilerInstance &Compiler, llvm::StringRef InFile)
 {
     llvm::outs() << InFile << "\n";
-    return unique_ptr<ASTConsumer>(new SampleASTConsumer(Compiler, InFile));
+    return unique_ptr<ASTConsumer>(new SampleASTConsumer(Compiler, InFile, defaultSignatures));
 }

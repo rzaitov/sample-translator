@@ -6,6 +6,10 @@
 //  Copyright (c) 2015 Rustam. All rights reserved.
 //
 
+#include <string>
+#include <stdio.h>
+#include <iostream>
+
 #include "clang/AST/RecursiveASTVisitor.h"
 #include "clang/AST/ASTContext.h"
 #include "clang/AST/DeclCXX.h"
@@ -19,12 +23,15 @@
 #include "llvm/Support/raw_ostream.h"
 
 using namespace clang;
+using namespace std;
 
-SampleVisitor::SampleVisitor(CompilerInstance &CI, StringRef currentFile)
-    : compiler (CI), sourceManager(CI.getSourceManager()), file(currentFile)
+SampleVisitor::SampleVisitor(CompilerInstance &CI, StringRef currentFile, map<string, string> signatures)
+    : compiler (CI), sourceManager(CI.getSourceManager()), file(currentFile), defaultSignatures(signatures)
 {
-    
-        
+    for (map<string, string>::iterator it = defaultSignatures.begin(); it != defaultSignatures.end(); ++it) {
+        cout << it->first << "\n";
+        cout << it->second << "\n";
+    }
 }
 
 bool SampleVisitor::VisitCXXRecordDecl(CXXRecordDecl *Declaration)
@@ -47,8 +54,12 @@ bool SampleVisitor::VisitObjCImplDecl(ObjCImplDecl *D)
 {
     if(ObjCImplementationDecl * implDecl = dyn_cast<ObjCImplementationDecl>(D)) {
         if(ObjCInterfaceDecl *interfaceDecl = implDecl-> getClassInterface()) {
-            if(auto super = interfaceDecl->getSuperClass()) {
+            if(auto super = interfaceDecl->getSuperClass())
                 llvm::outs() << super-> getNameAsString() << "\n";
+            
+            for(clang::CapturedDecl::specific_decl_iterator<ObjCMethodDecl> m = D->meth_begin(); m != D->meth_end(); ++m) {
+                ObjCMethodDecl* methodDecl = (*m);
+                PrintMethod(methodDecl);
             }
         }
         
@@ -64,21 +75,26 @@ bool SampleVisitor::VisitObjCImplDecl(ObjCImplDecl *D)
     return true;
 }
 
-bool SampleVisitor::VisitObjCMethodDecl(ObjCMethodDecl *methodDecl)
+bool SampleVisitor::IsFromCurrentFile(clang::SourceLocation location)
+{
+    return sourceManager.getFilename(location) == file;
+}
+
+void SampleVisitor::PrintMethod(ObjCMethodDecl *methodDecl)
 {
     if (!IsFromCurrentFile(methodDecl->getLocation()))
-        return true;
-//    SourceLocation location = methodDecl->getLocation();
-//    llvm::outs() << sourceManager.getFilename(location) << "\n";
-//
+        return;
+    //    SourceLocation location = methodDecl->getLocation();
+    //    llvm::outs() << sourceManager.getFilename(location) << "\n";
+    //
     Selector selector = methodDecl->getSelector();
     auto returnType = methodDecl->getReturnType().getAsString();
-
+    
     llvm::outs() << returnType << "  " << selector.getAsString() << "\n";
     
     for (auto param = methodDecl->param_begin(); param != methodDecl->param_end(); ++param) {
-            QualType paramType = (*param)->getOriginalType();
-            llvm::outs() << "(" << paramType.getAsString() << ") ";
+        QualType paramType = (*param)->getOriginalType();
+        llvm::outs() << "(" << paramType.getAsString() << ") ";
     }
     llvm::outs() << "\n";
     
@@ -94,16 +110,7 @@ bool SampleVisitor::VisitObjCMethodDecl(ObjCMethodDecl *methodDecl)
     rewriter.setSourceMgr(sourceManager, compiler.getLangOpts());
     auto methodBodyText = rewriter.getRewrittenText(bodyRange);
     llvm::outs() << methodBodyText << "\n\n";
-
-    return true;
 }
-
-bool SampleVisitor::IsFromCurrentFile(clang::SourceLocation location)
-{
-    return sourceManager.getFilename(location) == file;
-}
-
-
 
 
 

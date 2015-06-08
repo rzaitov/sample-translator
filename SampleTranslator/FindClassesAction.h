@@ -19,8 +19,11 @@ using namespace std;
 using namespace clang;
 
 class FindClassesAction : public clang::ASTFrontendAction {
+private:
+    map<string, string> defaultSignatures;
+    
 public:
-    FindClassesAction() = default;
+    FindClassesAction();
     virtual unique_ptr<ASTConsumer> CreateASTConsumer(CompilerInstance &Compiler, llvm::StringRef InFile);
 };
 

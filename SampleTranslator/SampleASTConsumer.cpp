@@ -6,6 +6,9 @@
 //  Copyright (c) 2015 Rustam. All rights reserved.
 //
 
+#include <string>
+#include <stdio.h>
+
 #include "clang/AST/ASTConsumer.h"
 #include "clang/AST/ASTContext.h"
 #include "clang/Frontend/CompilerInstance.h"
@@ -14,10 +17,12 @@
 #include "SampleVisitor.h"
 
 using namespace clang;
+using namespace std;
 
-SampleASTConsumer::SampleASTConsumer(CompilerInstance &CI, StringRef inFile)
-    : visitor(new SampleVisitor(CI, inFile)) // initialize the visitor
+SampleASTConsumer::SampleASTConsumer(CompilerInstance &CI, StringRef inFile, map<string, string> signatures)
+    :defaultSignatures(signatures) // initialize the visitor
 {
+    visitor = new SampleVisitor(CI, inFile, defaultSignatures);
 }
     
     // override this to call our ExampleVisitor on each top-level Decl
@@ -28,4 +33,8 @@ void SampleASTConsumer::HandleTranslationUnit(clang::ASTContext &ctx)
    
     auto unitDecl = ctx.getTranslationUnitDecl ();
     visitor->TraverseDecl(unitDecl);
+}
+
+void SampleASTConsumer::HandleImplicitImportDecl(ImportDecl *D)
+{
 }
