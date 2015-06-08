@@ -83,9 +83,16 @@ bool SampleVisitor::VisitObjCMethodDecl(ObjCMethodDecl *methodDecl)
     llvm::outs() << "\n";
     
     Stmt *methodBody = methodDecl->getBody();
+    SourceRange bodyRange;
+    if(CompoundStmt *stmt = dyn_cast<CompoundStmt>(methodBody)) {
+        bodyRange = stmt->body_back() -> getSourceRange();
+    } else {
+        bodyRange = methodBody->getSourceRange();
+    }
+    
     Rewriter rewriter;
     rewriter.setSourceMgr(sourceManager, compiler.getLangOpts());
-    auto methodBodyText = rewriter.getRewrittenText(methodBody->getSourceRange());
+    auto methodBodyText = rewriter.getRewrittenText(bodyRange);
     llvm::outs() << methodBodyText << "\n\n";
 
     return true;
