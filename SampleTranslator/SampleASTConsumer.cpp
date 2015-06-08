@@ -31,6 +31,11 @@ void SampleASTConsumer::HandleTranslationUnit(clang::ASTContext &ctx)
 {
     /* we can use ASTContext to get the TranslationUnitDecl, which is
     a single Decl that collectively represents the entire source file */
+    
+    writer -> Outs() << "using System;\n";
+    writer -> Outs() << "using UIKit;\n";
+    writer -> Outs() << "using Foundation;\n";
+    writer -> Outs() << "\n";
 
     auto unitDecl = ctx.getTranslationUnitDecl ();
     visitor->TraverseDecl(unitDecl);
