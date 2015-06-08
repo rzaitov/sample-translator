@@ -20,19 +20,16 @@
 #include "clang/Frontend/CompilerInstance.h"
 #include "clang/Rewrite/Core/Rewriter.h"
 #include "SampleVisitor.h"
+#include "Writer.h"
 
 #include "llvm/Support/raw_ostream.h"
 
 using namespace clang;
 using namespace std;
 
-SampleVisitor::SampleVisitor(CompilerInstance &CI, StringRef currentFile, map<string, string> signatures)
-    : compiler (CI), sourceManager(CI.getSourceManager()), file(currentFile), defaultSignatures(signatures)
+SampleVisitor::SampleVisitor(CompilerInstance &CI, StringRef currentFile, map<string, string> signatures, Writer *writer)
+    : compiler (CI), sourceManager(CI.getSourceManager()), file(currentFile), defaultSignatures(signatures), writer(writer)
 {
-    for (map<string, string>::iterator it = defaultSignatures.begin(); it != defaultSignatures.end(); ++it) {
-        cout << it->first << "\n";
-        cout << it->second << "\n";
-    }
 }
 
 bool SampleVisitor::VisitCXXRecordDecl(CXXRecordDecl *Declaration)
@@ -56,12 +53,18 @@ bool SampleVisitor::VisitObjCImplDecl(ObjCImplDecl *D)
     if(ObjCImplementationDecl * implDecl = dyn_cast<ObjCImplementationDecl>(D)) {
         if(ObjCInterfaceDecl *interfaceDecl = implDecl-> getClassInterface()) {
             PrintClassName(interfaceDecl);
+            writer->Indent();
+            writer->Outs() << "\n{\n";
+            writer->PushIndent();
             
             for(clang::CapturedDecl::specific_decl_iterator<ObjCMethodDecl> m = D->meth_begin(); m != D->meth_end(); ++m) {
                 ObjCMethodDecl* methodDecl = (*m);
                 PrintMethod(methodDecl);
-                llvm::outs() << "\n\n";
+                writer->Outs() << "\n\n";
             }
+            
+            writer->PopIndent();
+            writer->Outs() << "}\n";
         }
     }
 //    D->dump();
@@ -75,9 +78,10 @@ bool SampleVisitor::IsFromCurrentFile(clang::SourceLocation location)
 
 void SampleVisitor::PrintClassName(ObjCInterfaceDecl * interfaceDecl)
 {
-    llvm::outs() << "public class " << interfaceDecl->getNameAsString();
+    writer->Indent();
+    writer->Outs() << "public class " << interfaceDecl->getNameAsString();
     if(auto super = interfaceDecl->getSuperClass())
-        llvm::outs() << " : " << super-> getNameAsString() << "\n";
+        writer->Outs() << " : " << super-> getNameAsString();
 }
 
 void SampleVisitor::PrintMethod(ObjCMethodDecl *methodDecl)
@@ -87,32 +91,35 @@ void SampleVisitor::PrintMethod(ObjCMethodDecl *methodDecl)
 
     Selector selector = methodDecl->getSelector();
     auto returnType = GetPointeeName(methodDecl->getReturnType());
-    
+
+    writer->Indent();
     string stringSelector = selector.getAsString();
     auto iter = defaultSignatures.find(stringSelector);
     if(iter != defaultSignatures.end())
-        llvm::outs() << iter->second;
+        writer->Outs() << iter->second;
     else
-        llvm::outs() << "public " << returnType << "  " << selector.getAsString();
+        writer->Outs() << "public " << returnType << " " << ConvertSelectorToName(stringSelector);
     PrintMethodParams(methodDecl);
-    llvm::outs() << "\n";
+    writer->Outs() << "\n";
 
-    llvm::outs() << "{\n";
+    writer->Indent();
+    writer->Outs() << "{\n";
     string methodBodyText = CommentSrc(GetBodyText(methodDecl));
-    llvm::outs() << methodBodyText;
-    llvm::outs() << "}";
+    writer->Outs() << methodBodyText;
+    writer->Indent();
+    writer->Outs() << "}";
 }
 
 void SampleVisitor::PrintMethodParams(ObjCMethodDecl *methodDecl)
 {
-    llvm::outs() << "(";
+    writer->Outs() << " (";
     bool isFirst = true;
     for (auto param = methodDecl->param_begin(); param != methodDecl->param_end(); ++param, isFirst = false) {
         QualType paramType = (*param)->getType();
         string paramName = (*param)->getNameAsString();
-        llvm::outs() << (isFirst ? "": ", ") << GetPointeeName(paramType) << " " << paramName;
+        writer->Outs() << (isFirst ? "": ", ") << GetPointeeName(paramType) << " " << paramName;
     }
-    llvm::outs() << ")";
+    writer->Outs() << ")";
 }
 
 string SampleVisitor::GetBodyText(ObjCMethodDecl *methodDecl)
@@ -151,23 +158,15 @@ string SampleVisitor::GetPointeeName(QualType qualType)
     return qualType.getAsString();
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+string SampleVisitor::ConvertSelectorToName (string selector)
+{
+    string line;
+    string output;
+    istringstream stream (selector);
+    while(getline(stream, line, ':')) {
+        line[0] = toupper(line[0]);
+        output += line;
+    }
+    
+    return output;
+}

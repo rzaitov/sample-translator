@@ -7,6 +7,7 @@ add_clang_executable(sample-translator
   SampleTranslator/SampleASTConsumer.cpp
   SampleTranslator/SampleVisitor.cpp
   SampleTranslator/FindClassesAction.cpp
+  SampleTranslator/Writer.cpp
   )
 target_link_libraries(sample-translator
   clangTooling

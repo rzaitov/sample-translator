@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5E71CB2C1B262E9500ED2185 /* Writer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5E71CB2A1B262E9500ED2185 /* Writer.cpp */; };
 		5EF8F4941B20C6B5006AF8EE /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5EF8F4931B20C6B5006AF8EE /* main.cpp */; };
 		5EF8F49B1B20C787006AF8EE /* SampleTranslator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5EF8F49A1B20C787006AF8EE /* SampleTranslator.cpp */; };
 		5EF8F49E1B20CBB4006AF8EE /* SampleASTConsumer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5EF8F49C1B20CBB4006AF8EE /* SampleASTConsumer.cpp */; };
@@ -27,6 +28,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		5E71CB2A1B262E9500ED2185 /* Writer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Writer.cpp; sourceTree = "<group>"; };
+		5E71CB2B1B262E9500ED2185 /* Writer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Writer.h; sourceTree = "<group>"; };
 		5EF8F4901B20C6B5006AF8EE /* SampleTranslator */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SampleTranslator; sourceTree = BUILT_PRODUCTS_DIR; };
 		5EF8F4931B20C6B5006AF8EE /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		5EF8F49A1B20C787006AF8EE /* SampleTranslator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SampleTranslator.cpp; sourceTree = "<group>"; };
@@ -69,6 +72,8 @@
 		5EF8F4921B20C6B5006AF8EE /* SampleTranslator */ = {
 			isa = PBXGroup;
 			children = (
+				5E71CB2A1B262E9500ED2185 /* Writer.cpp */,
+				5E71CB2B1B262E9500ED2185 /* Writer.h */,
 				5EF8F4A21B20DF83006AF8EE /* CMakeLists.txt */,
 				5EF8F4A31B20E9CF006AF8EE /* FindClassesAction.cpp */,
 				5EF8F4A41B20E9CF006AF8EE /* FindClassesAction.h */,
@@ -140,6 +145,7 @@
 			files = (
 				5EF8F4A11B20CD14006AF8EE /* SampleVisitor.cpp in Sources */,
 				5EF8F49E1B20CBB4006AF8EE /* SampleASTConsumer.cpp in Sources */,
+				5E71CB2C1B262E9500ED2185 /* Writer.cpp in Sources */,
 				5EF8F4941B20C6B5006AF8EE /* main.cpp in Sources */,
 				5EF8F4A51B20E9CF006AF8EE /* FindClassesAction.cpp in Sources */,
 				5EF8F49B1B20C787006AF8EE /* SampleTranslator.cpp in Sources */,

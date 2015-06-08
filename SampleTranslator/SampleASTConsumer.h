@@ -22,6 +22,7 @@ using namespace clang;
 class SampleASTConsumer : public ASTConsumer {
 private:
     SampleVisitor *visitor;
+    Writer *writer;
     std::map<string, string> defaultSignatures;
     
 public:

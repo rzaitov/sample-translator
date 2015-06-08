@@ -16,6 +16,8 @@
 #include "clang/AST/DeclObjC.h"
 #include "clang/Frontend/CompilerInstance.h"
 
+#include "Writer.h"
+
 #include <stdio.h>
 #include <string>
 
@@ -30,17 +32,20 @@ private:
     SourceManager &sourceManager;
     map<string, string> defaultSignatures;
     StringRef file;
+    Writer *writer;
+    
     bool IsFromCurrentFile (SourceLocation location);
     void PrintMethod (ObjCMethodDecl *methodDecl);
     void PrintMethodParams(ObjCMethodDecl *methodDecl);
-    void PrintClassName(ObjCInterfaceDecl * interfaceDecl);
+    void PrintClassName(ObjCInterfaceDecl *interfaceDecl);
     string GetPointeeName(QualType qualType);
+    string ConvertSelectorToName (string selector);
     string GetBodyText(ObjCMethodDecl *methodDecl);
     string CommentSrc(string src);
     
     
 public:
-    SampleVisitor(CompilerInstance &CI, StringRef file, map<string, string> signatures);
+    SampleVisitor(CompilerInstance &CI, StringRef file, map<string, string> signatures, Writer *writer);
     bool VisitCXXRecordDecl(CXXRecordDecl *Declaration);
     bool VisitObjCImplDecl(ObjCImplDecl *D);
     bool VisitObjCInterfaceDecl(ObjCInterfaceDecl *D);
