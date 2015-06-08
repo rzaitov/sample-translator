@@ -54,22 +54,13 @@ bool SampleVisitor::VisitObjCImplDecl(ObjCImplDecl *D)
 {
     if(ObjCImplementationDecl * implDecl = dyn_cast<ObjCImplementationDecl>(D)) {
         if(ObjCInterfaceDecl *interfaceDecl = implDecl-> getClassInterface()) {
-            if(auto super = interfaceDecl->getSuperClass())
-                llvm::outs() << super-> getNameAsString() << "\n";
+            PrintClassName(interfaceDecl);
             
             for(clang::CapturedDecl::specific_decl_iterator<ObjCMethodDecl> m = D->meth_begin(); m != D->meth_end(); ++m) {
                 ObjCMethodDecl* methodDecl = (*m);
                 PrintMethod(methodDecl);
             }
         }
-        
-        llvm::outs () << D->getNameAsString() << "\n\n";
-        if( auto superClass = implDecl->getSuperClass()) {
-            llvm::outs () << superClass->getName() << "\n";
-        } else {
-            llvm::outs () << "no supper\n";
-        }
-        
     }
 //    D->dump();
     return true;
@@ -80,6 +71,13 @@ bool SampleVisitor::IsFromCurrentFile(clang::SourceLocation location)
     return sourceManager.getFilename(location) == file;
 }
 
+void SampleVisitor::PrintClassName(ObjCInterfaceDecl * interfaceDecl)
+{
+    llvm::outs() << "public class " << interfaceDecl->getNameAsString();
+    if(auto super = interfaceDecl->getSuperClass())
+        llvm::outs() << " : " << super-> getNameAsString() << "\n";
+}
+
 void SampleVisitor::PrintMethod(ObjCMethodDecl *methodDecl)
 {
     if (!IsFromCurrentFile(methodDecl->getLocation()))
@@ -88,13 +86,21 @@ void SampleVisitor::PrintMethod(ObjCMethodDecl *methodDecl)
     //    llvm::outs() << sourceManager.getFilename(location) << "\n";
     //
     Selector selector = methodDecl->getSelector();
-    auto returnType = methodDecl->getReturnType().getAsString();
+    auto returnType = GetPointeeName(methodDecl->getReturnType());
     
-    llvm::outs() << returnType << "  " << selector.getAsString() << "\n";
+    llvm::outs() << "public " << returnType << "  " << selector.getAsString();
     
     for (auto param = methodDecl->param_begin(); param != methodDecl->param_end(); ++param) {
-        QualType paramType = (*param)->getOriginalType();
-        llvm::outs() << "(" << paramType.getAsString() << ") ";
+//        QualType paramType = (*param)->getType().split().Ty->getPointeeType().getAsString();
+//        llvm::outs() << "(" << paramType.getAsString() << ") ";
+        QualType paramType = (*param)->getType();
+        llvm::outs() << " " << GetPointeeName(paramType);
+//        if(auto t = paramType->getTypePtr getPointeeType()) {
+//            llvm::outs() << "got a pointer";
+//            llvm::outs() << t->getNameAsString();
+//        } else {
+//            llvm::outs() << paramType.getAsString();
+//        }
     }
     llvm::outs() << "\n";
     
@@ -110,6 +116,16 @@ void SampleVisitor::PrintMethod(ObjCMethodDecl *methodDecl)
     rewriter.setSourceMgr(sourceManager, compiler.getLangOpts());
     auto methodBodyText = rewriter.getRewrittenText(bodyRange);
     llvm::outs() << methodBodyText << "\n\n";
+}
+
+string SampleVisitor::GetPointeeName(QualType qualType)
+{
+    if(const ObjCObjectPointerType * objcPointerType = qualType.getTypePtr()->getAsObjCInterfacePointerType()) {
+        if(const ObjCInterfaceType * interfaceType = objcPointerType->getInterfaceType())
+            return interfaceType->getDecl()->getNameAsString();
+    }
+
+    return qualType.getAsString();
 }
 
 
