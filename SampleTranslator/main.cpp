@@ -23,6 +23,7 @@ using namespace llvm;
 // Apply a custom category to all command-line options so that they are the
 // only ones displayed.
 static llvm::cl::OptionCategory MyToolCategory("sample-translator options");
+static cl::opt<string> namespaceName("ns", cl::cat(MyToolCategory));
 
 // CommonOptionsParser declares HelpMessage with a description of the common
 // command-line options related to the compilation database and input files.
@@ -37,5 +38,5 @@ int main(int argc, const char **argv) {
     CommonOptionsParser OptionsParser(argc, argv, MyToolCategory);
     ClangTool Tool(OptionsParser.getCompilations(),
                    OptionsParser.getSourcePathList());
-    return Tool.run(newFrontendActionFactory<FindClassesAction>().get());
+    return Tool.run(new ActionFactory(namespaceName.getValue()));
 }

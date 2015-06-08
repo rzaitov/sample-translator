@@ -53,8 +53,9 @@ bool SampleVisitor::VisitObjCImplDecl(ObjCImplDecl *D)
     if(ObjCImplementationDecl * implDecl = dyn_cast<ObjCImplementationDecl>(D)) {
         if(ObjCInterfaceDecl *interfaceDecl = implDecl-> getClassInterface()) {
             PrintClassName(interfaceDecl);
+            writer-> Outs() << '\n';
             writer->Indent();
-            writer->Outs() << "\n{\n";
+            writer->Outs() << "{\n";
             writer->PushIndent();
             
             for(clang::CapturedDecl::specific_decl_iterator<ObjCMethodDecl> m = D->meth_begin(); m != D->meth_end(); ++m) {
@@ -64,7 +65,8 @@ bool SampleVisitor::VisitObjCImplDecl(ObjCImplDecl *D)
             }
             
             writer->PopIndent();
-            writer->Outs() << "}\n";
+            writer->Indent();
+            writer->Outs() << "}";
         }
     }
 //    D->dump();

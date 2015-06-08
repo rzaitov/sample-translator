@@ -18,7 +18,8 @@
 
 using namespace std;
 
-FindClassesAction::FindClassesAction()
+FindClassesAction::FindClassesAction(string ns)
+:projectNamespace(ns)
 {
     string selector, signature;
     ifstream signaturesStorage;
@@ -32,5 +33,5 @@ FindClassesAction::FindClassesAction()
 unique_ptr<ASTConsumer> FindClassesAction::CreateASTConsumer(CompilerInstance &Compiler, llvm::StringRef InFile)
 {
     llvm::outs() << InFile << "\n";
-    return unique_ptr<ASTConsumer>(new SampleASTConsumer(Compiler, InFile, defaultSignatures));
+    return unique_ptr<ASTConsumer>(new SampleASTConsumer(Compiler, InFile, defaultSignatures, projectNamespace));
 }

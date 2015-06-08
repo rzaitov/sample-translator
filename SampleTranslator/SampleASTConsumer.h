@@ -24,9 +24,10 @@ private:
     SampleVisitor *visitor;
     Writer *writer;
     std::map<string, string> defaultSignatures;
+    string projectNamespace;
     
 public:
-    SampleASTConsumer(CompilerInstance &CI, StringRef inFile, std::map<string, string> signatures);
+    SampleASTConsumer(CompilerInstance &CI, StringRef inFile, std::map<string, string> signatures, string projectNamespace);
     
     // override this to call our ExampleVisitor on each top-level Decl
     virtual void HandleTranslationUnit(ASTContext &Context);

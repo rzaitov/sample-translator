@@ -19,8 +19,8 @@
 using namespace clang;
 using namespace std;
 
-SampleASTConsumer::SampleASTConsumer(CompilerInstance &CI, StringRef inFile, map<string, string> signatures)
-    :defaultSignatures(signatures) // initialize the visitor
+SampleASTConsumer::SampleASTConsumer(CompilerInstance &CI, StringRef inFile, map<string, string> signatures, string projectNamespace)
+    :defaultSignatures(signatures), projectNamespace(projectNamespace)
 {
     writer = new Writer();
     visitor = new SampleVisitor(CI, inFile, defaultSignatures, writer);
@@ -37,8 +37,17 @@ void SampleASTConsumer::HandleTranslationUnit(clang::ASTContext &ctx)
     writer -> Outs() << "using Foundation;\n";
     writer -> Outs() << "\n";
 
+    writer -> Outs() << "namespace " << projectNamespace << "\n";
+    writer -> Outs() << "{\n";
+    writer -> PushIndent();
+    
     auto unitDecl = ctx.getTranslationUnitDecl ();
     visitor->TraverseDecl(unitDecl);
+
+    writer -> PopIndent();
+    writer -> Outs() << '\n';
+    writer -> Outs() << "}\n";
+    
     llvm::outs() << writer->Outs().str();
 }
 
