@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ExtensionModel>
+	<Extension path = "/MonoDevelop/Ide/Commands">
+        <Command id = "ProjectTranslator.ProjectTranslatorCommands.OpenSettings"
+             _label = "Convert Xcode project"
+             _description = "This command opens .xcodeproj to .csproj convertor"
+             defaultHandler = "ProjectTranslator.ProjectTranslatorCommandHandler" />
+    </Extension>
+    <Extension path = "/MonoDevelop/Ide/MainMenu/Tools">
+        <CommandItem id= "ProjectTranslator.ProjectTranslatorCommands.OpenSettings" />
+    </Extension>
+</ExtensionModel>

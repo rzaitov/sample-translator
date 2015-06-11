@@ -1,0 +1,7 @@
+﻿<AddinProject appVersion="2.4">
+	<Project platforms="Mac Linux">
+		<AddinFile>ProjectTranslator/bin/Debug/ProjectTranslator.dll</AddinFile>
+		<BuildFile>ProjectTranslator.sln</BuildFile>
+		<BuildConfiguration>Debug</BuildConfiguration>
+	</Project>
+</AddinProject>

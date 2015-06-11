@@ -1,0 +1,277 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<stetic-interface>
+  <configuration>
+    <images-root-path>..</images-root-path>
+  </configuration>
+  <import>
+    <widget-library name="glade-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <widget-library name="../bin/Release/ProjectTranslatorUI.exe" internal="true" />
+  </import>
+  <widget class="Gtk.Window" id="ProjectTranslatorUI.Settings" design-size="480 300">
+    <property name="MemberName" />
+    <property name="WidthRequest">460</property>
+    <property name="Title" translatable="yes">Convertor settings</property>
+    <property name="Icon">stock:gtk-preferences Menu</property>
+    <property name="WindowPosition">CenterOnParent</property>
+    <property name="Resizable">False</property>
+    <property name="AllowGrow">False</property>
+    <property name="Gravity">Center</property>
+    <child>
+      <widget class="Gtk.Fixed" id="fixed3">
+        <property name="MemberName" />
+        <property name="WidthRequest">480</property>
+        <property name="HasWindow">False</property>
+        <child>
+          <widget class="Gtk.Label" id="inputProjectLabel">
+            <property name="MemberName" />
+            <property name="LabelProp" translatable="yes">Select Xcode project:</property>
+          </widget>
+          <packing>
+            <property name="X">10</property>
+            <property name="Y">10</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="Gtk.Label" id="outputProjectLabel">
+            <property name="MemberName" />
+            <property name="LabelProp" translatable="yes">C# project folder:</property>
+          </widget>
+          <packing>
+            <property name="X">33</property>
+            <property name="Y">40</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="Gtk.Entry" id="inputProjectEntry">
+            <property name="MemberName" />
+            <property name="WidthRequest">200</property>
+            <property name="CanFocus">True</property>
+            <property name="IsEditable">True</property>
+            <property name="InvisibleChar">●</property>
+          </widget>
+          <packing>
+            <property name="X">140</property>
+            <property name="Y">6</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="Gtk.Entry" id="outputProjectFolderEntry">
+            <property name="MemberName" />
+            <property name="WidthRequest">200</property>
+            <property name="CanFocus">True</property>
+            <property name="IsEditable">True</property>
+            <property name="InvisibleChar">●</property>
+          </widget>
+          <packing>
+            <property name="X">140</property>
+            <property name="Y">35</property>
+          </packing>
+        </child>
+        <child>
+          <placeholder />
+        </child>
+        <child>
+          <widget class="Gtk.Button" id="selectButton">
+            <property name="MemberName" />
+            <property name="WidthRequest">100</property>
+            <property name="CanFocus">True</property>
+            <property name="Type">TextOnly</property>
+            <property name="Label" translatable="yes">Select...</property>
+            <property name="UseUnderline">True</property>
+            <signal name="Clicked" handler="SelectInputProject" />
+          </widget>
+          <packing>
+            <property name="X">350</property>
+            <property name="Y">3</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="Gtk.Button" id="runButton">
+            <property name="MemberName" />
+            <property name="WidthRequest">435</property>
+            <property name="CanFocus">True</property>
+            <property name="Type">TextOnly</property>
+            <property name="Label" translatable="yes">Generate C# project</property>
+            <property name="UseUnderline">True</property>
+            <signal name="Clicked" handler="RunUtility" />
+          </widget>
+          <packing>
+            <property name="X">12</property>
+            <property name="Y">260</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="Gtk.Button" id="selectOuputFolderButton">
+            <property name="MemberName" />
+            <property name="WidthRequest">100</property>
+            <property name="CanFocus">True</property>
+            <property name="Type">TextOnly</property>
+            <property name="Label" translatable="yes">Select...</property>
+            <property name="UseUnderline">True</property>
+            <signal name="Clicked" handler="SelectSharpSolutionFolder" />
+          </widget>
+          <packing>
+            <property name="X">350</property>
+            <property name="Y">32</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="Gtk.CheckButton" id="overwriteAppIcons">
+            <property name="MemberName" />
+            <property name="CanFocus">True</property>
+            <property name="Label" translatable="yes">Overwrite app icons with Xamarin assets</property>
+            <property name="Active">True</property>
+            <property name="DrawIndicator">True</property>
+            <property name="HasLabel">True</property>
+            <property name="UseUnderline">True</property>
+          </widget>
+          <packing>
+            <property name="X">12</property>
+            <property name="Y">80</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="Gtk.CheckButton" id="overwriteLaunchImages">
+            <property name="MemberName" />
+            <property name="CanFocus">True</property>
+            <property name="Label" translatable="yes">Overwrite launch images with Xamarin assets</property>
+            <property name="Active">True</property>
+            <property name="DrawIndicator">True</property>
+            <property name="HasLabel">True</property>
+            <property name="UseUnderline">True</property>
+          </widget>
+          <packing>
+            <property name="X">12</property>
+            <property name="Y">105</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="Gtk.HSeparator" id="hseparator1">
+            <property name="MemberName" />
+            <property name="WidthRequest">450</property>
+          </widget>
+          <packing>
+            <property name="X">10</property>
+            <property name="Y">71</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="Gtk.HSeparator" id="hseparator2">
+            <property name="MemberName" />
+            <property name="WidthRequest">450</property>
+          </widget>
+          <packing>
+            <property name="X">10</property>
+            <property name="Y">161</property>
+          </packing>
+        </child>
+        <child>
+          <placeholder />
+        </child>
+        <child>
+          <widget class="Gtk.Label" id="setProjectTypeLabel">
+            <property name="MemberName" />
+            <property name="LabelProp" translatable="yes">Set project type:</property>
+          </widget>
+          <packing>
+            <property name="X">10</property>
+            <property name="Y">170</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="Gtk.ComboBox" id="setProjectTypeCombobox">
+            <property name="MemberName" />
+            <property name="WidthRequest">330</property>
+            <property name="IsTextCombo">True</property>
+            <property name="Items" translatable="yes" />
+            <signal name="Changed" handler="ProjectSelectionChanged" />
+          </widget>
+          <packing>
+            <property name="X">116</property>
+            <property name="Y">165</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="Gtk.Button" id="analyzeXcodeProjectButton">
+            <property name="MemberName" />
+            <property name="WidthRequest">435</property>
+            <property name="CanFocus">True</property>
+            <property name="Type">TextOnly</property>
+            <property name="Label" translatable="yes">Analyze Xcode project</property>
+            <property name="UseUnderline">True</property>
+            <signal name="Clicked" handler="AnalyzeXcodeProject" />
+          </widget>
+          <packing>
+            <property name="X">12</property>
+            <property name="Y">125</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="Gtk.RadioButton" id="iosRadio">
+            <property name="MemberName" />
+            <property name="CanFocus">True</property>
+            <property name="Label" translatable="yes">iOS app</property>
+            <property name="Active">True</property>
+            <property name="DrawIndicator">True</property>
+            <property name="HasLabel">True</property>
+            <property name="UseUnderline">True</property>
+            <property name="Group">group1</property>
+            <signal name="Toggled" handler="ProjectTypeChanged" />
+          </widget>
+          <packing>
+            <property name="X">115</property>
+            <property name="Y">200</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="Gtk.RadioButton" id="extensionRadio">
+            <property name="MemberName" />
+            <property name="CanFocus">True</property>
+            <property name="Label" translatable="yes">Extension</property>
+            <property name="DrawIndicator">True</property>
+            <property name="HasLabel">True</property>
+            <property name="UseUnderline">True</property>
+            <property name="Group">group1</property>
+            <signal name="Toggled" handler="ProjectTypeChanged" />
+          </widget>
+          <packing>
+            <property name="X">115</property>
+            <property name="Y">220</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="Gtk.RadioButton" id="watchRadio">
+            <property name="MemberName" />
+            <property name="CanFocus">True</property>
+            <property name="Label" translatable="yes">Watch App</property>
+            <property name="DrawIndicator">True</property>
+            <property name="HasLabel">True</property>
+            <property name="UseUnderline">True</property>
+            <property name="Group">group1</property>
+            <signal name="Toggled" handler="ProjectTypeChanged" />
+          </widget>
+          <packing>
+            <property name="X">256</property>
+            <property name="Y">200</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="Gtk.RadioButton" id="macRadio">
+            <property name="MemberName" />
+            <property name="CanFocus">True</property>
+            <property name="Label" translatable="yes">Mac</property>
+            <property name="DrawIndicator">True</property>
+            <property name="HasLabel">True</property>
+            <property name="UseUnderline">True</property>
+            <property name="Group">group1</property>
+            <signal name="Toggled" handler="ProjectTypeChanged" />
+          </widget>
+          <packing>
+            <property name="X">256</property>
+            <property name="Y">220</property>
+          </packing>
+        </child>
+      </widget>
+    </child>
+  </widget>
+</stetic-interface>

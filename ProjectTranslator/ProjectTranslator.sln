@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectTranslator", "ProjectTranslator\ProjectTranslator.csproj", "{AFA2AD62-714B-4178-ACBE-E191EEC26268}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectTranslatorUI", "ProjectTranslatorUI\ProjectTranslatorUI.csproj", "{6E046429-4481-4532-989E-60C565FCA680}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XcodeProjectParser", "XcodeProjectParser\XcodeProjectParser.csproj", "{109CCF31-CECC-454A-95BD-8EE1E7B7AE7B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{109CCF31-CECC-454A-95BD-8EE1E7B7AE7B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{109CCF31-CECC-454A-95BD-8EE1E7B7AE7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{109CCF31-CECC-454A-95BD-8EE1E7B7AE7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{109CCF31-CECC-454A-95BD-8EE1E7B7AE7B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E046429-4481-4532-989E-60C565FCA680}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E046429-4481-4532-989E-60C565FCA680}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E046429-4481-4532-989E-60C565FCA680}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E046429-4481-4532-989E-60C565FCA680}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AFA2AD62-714B-4178-ACBE-E191EEC26268}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFA2AD62-714B-4178-ACBE-E191EEC26268}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFA2AD62-714B-4178-ACBE-E191EEC26268}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFA2AD62-714B-4178-ACBE-E191EEC26268}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
