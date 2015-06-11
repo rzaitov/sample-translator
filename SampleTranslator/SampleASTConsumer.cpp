@@ -8,7 +8,11 @@
 
 #include <string>
 #include <stdio.h>
+#include <iostream>
+#include <fstream>
 
+#include "llvm/Support/Path.h"
+#include "llvm/Support/FileSystem.h"
 #include "clang/AST/ASTConsumer.h"
 #include "clang/AST/ASTContext.h"
 #include "clang/Frontend/CompilerInstance.h"
@@ -19,9 +23,18 @@
 using namespace clang;
 using namespace std;
 
-SampleASTConsumer::SampleASTConsumer(CompilerInstance &CI, StringRef inFile, map<string, string> signatures, string projectNamespace)
+SampleASTConsumer::SampleASTConsumer(CompilerInstance &CI, StringRef inFile, map<string, string> signatures, string projectNamespace, string outputDir)
     :defaultSignatures(signatures), projectNamespace(projectNamespace)
 {
+    StringRef fn = llvm::sys::path::filename(inFile);
+    SmallString<256> storage = fn;
+    llvm::sys::path::replace_extension(storage, ".cs");
+    csFile = storage.str(); // just file name without dir
+    
+    storage = outputDir;
+    llvm::sys::path::append(storage, csFile);
+    csFile = storage.str(); // full path
+    
     writer = new Writer();
     visitor = new SampleVisitor(CI, inFile, defaultSignatures, writer);
 }
@@ -47,6 +60,11 @@ void SampleASTConsumer::HandleTranslationUnit(clang::ASTContext &ctx)
     writer -> PopIndent();
     writer -> Outs() << '\n';
     writer -> Outs() << "}\n";
+    
+    ofstream fileStream;
+    fileStream.open(csFile);
+    fileStream << writer->Outs().str();
+    fileStream.close();
     
     llvm::outs() << writer->Outs().str();
 }

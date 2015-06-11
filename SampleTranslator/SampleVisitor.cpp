@@ -137,7 +137,6 @@ void SampleVisitor::GetBodyText(ObjCMethodDecl *methodDecl)
             rewriter.setSourceMgr(sourceManager, compiler.getLangOpts());
             PrintMethodBody(rewriter.getRewrittenText(range));
         }
-        return;
     }
 }
 

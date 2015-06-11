@@ -24,22 +24,24 @@ class FindClassesAction : public clang::ASTFrontendAction {
 private:
     map<string, string> defaultSignatures;
     string projectNamespace;
+    string outputDir;
     
 public:
-    FindClassesAction(string ns);
+    FindClassesAction(string ns, string outputDir);
     virtual unique_ptr<ASTConsumer> CreateASTConsumer(CompilerInstance &Compiler, llvm::StringRef InFile);
 };
 
 class ActionFactory : public clang::tooling::FrontendActionFactory {
 private:
     string ns;
+    string outputDir;
     
 public:
-    ActionFactory(string ns)
-    : ns(ns)
+    ActionFactory(string ns, string outputDir)
+    : ns(ns), outputDir(outputDir)
     { }
     
-    clang::FrontendAction *create() override { return new FindClassesAction(ns); }
+    clang::FrontendAction *create() override { return new FindClassesAction(ns, outputDir); }
 };
 
 #endif /* defined(__SampleTranslator__FindClassesAction__) */
