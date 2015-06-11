@@ -7,24 +7,33 @@ namespace ProjectTranslator
 {
 	public static class XCodeConfiguration
 	{
-		static readonly string includes = "Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator8.4.sdk/System/Library/Frameworks/";
-		static readonly string frameworks = "Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator8.4.sdk/usr/include";
+		static readonly string sdk = "Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator8.4.sdk";
+		static readonly string includes = Path.Combine(sdk, "System/Library/Frameworks/");
+		static readonly string frameworks = Path.Combine(sdk, "/usr/include");
 
 		static string xcodePath;
+		static string XcodePath {
+			get {
+				xcodePath = xcodePath ?? FindLatestXcodeVersion ();
+				return xcodePath;
+			}
+		}
+
+		public static string SdkPath {
+			get {
+				return Path.Combine (XcodePath, sdk);
+			}
+		}
 
 		public static string PathToIncludes {
 			get {
-				if (string.IsNullOrEmpty (xcodePath))
-					xcodePath = FindLatestXcodeVersion ();
-				return Path.Combine (xcodePath, includes);
+				return Path.Combine (XcodePath, includes);
 			}
 		}
 
 		public static string PathToFramewroks {
 			get {
-				if (string.IsNullOrEmpty (xcodePath))
-					xcodePath = FindLatestXcodeVersion ();
-				return Path.Combine (xcodePath, frameworks);
+				return Path.Combine (XcodePath, frameworks);
 			}
 		}
 
