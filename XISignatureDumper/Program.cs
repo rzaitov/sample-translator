@@ -1,5 +1,7 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace XISignatureDumper
 {
@@ -13,11 +15,13 @@ namespace XISignatureDumper
 			var extruder = new SignatureExtruder (locator.GetAssemblyPath (Platform.iOS));
 
 			Dictionary<string, string> map = extruder.CollectSignatures ();
-			foreach (var kvp in map) {
-				Console.WriteLine (kvp.Key);
-				Console.WriteLine (kvp.Value);
-				Console.WriteLine ();
-			}
+			DumpSignatures (map, "signatures.txt");
+		}
+
+		static void DumpSignatures (Dictionary<string, string> map, string path)
+		{
+			IEnumerable<string> lines = map.Select (kvp => string.Format ("{0}\n{1}", kvp.Key, kvp.Value));
+			File.WriteAllLines (path, lines);
 		}
 	}
 }
