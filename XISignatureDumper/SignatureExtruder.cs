@@ -2,9 +2,9 @@
 
 namespace XISignatureDumper
 {
-	public class SignaturesExtruder
+	public class SignatureExtruder
 	{
-		public SignaturesExtruder ()
+		public SignatureExtruder ()
 		{
 		}
 	}
