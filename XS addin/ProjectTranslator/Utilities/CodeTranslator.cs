@@ -34,8 +34,8 @@ namespace ProjectTranslator
 			info.Arguments = string.Format (" -ns {0} -dir \"{1}\" {2} -- -ObjC -I{3} -F\"{4}\" -mios-simulator-version-min=8.4 {5}",
 				configuration.ProjectNamespace, configuration.ProjectPath,
 				configuration.FilesToString (), XCodeConfiguration.PathToFramewroks,
-				XCodeConfiguration.PathToIncludes, configuration.FramewroksToString ())
-			;
+				XCodeConfiguration.PathToIncludes, configuration.FramewroksToString ());
+			info.WorkingDirectory = "Utilities";
 			var p = Process.Start (info);
 			p.WaitForExit ();
 		}
