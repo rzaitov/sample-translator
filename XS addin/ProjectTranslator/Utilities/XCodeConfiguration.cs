@@ -8,8 +8,7 @@ namespace ProjectTranslator
 	public static class XCodeConfiguration
 	{
 		static readonly string sdk = "Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator8.4.sdk";
-		static readonly string includes = Path.Combine(sdk, "System/Library/Frameworks/");
-		static readonly string frameworks = Path.Combine(sdk, "/usr/include");
+		static readonly string frameworks = Path.Combine(sdk, "System/Library/Frameworks/");
 
 		static string xcodePath;
 		static string XcodePath {
@@ -22,12 +21,6 @@ namespace ProjectTranslator
 		public static string SdkPath {
 			get {
 				return Path.Combine (XcodePath, sdk);
-			}
-		}
-
-		public static string PathToIncludes {
-			get {
-				return Path.Combine (XcodePath, includes);
 			}
 		}
 
