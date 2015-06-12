@@ -41,289 +41,8 @@
     <Compile Include="Utilities\XCodeConfiguration.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Properties\Manifest.addin.xml" />
-    <EmbeddedResource Include="Resources\ProjectFileTemplate.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Metadata.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\README.md">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Entitlements.plist">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\LaunchImage.launchimage\Contents.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\LaunchImage.launchimage\Default.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\LaunchImage.launchimage\Default-568h%402x.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\LaunchImage.launchimage\Default-Landscape~ipad.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\LaunchImage.launchimage\Default-Portrait%402x~ipad.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\LaunchImage.launchimage\Default-Portrait~ipad.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\LaunchImage.launchimage\Default-Landscape%402x~ipad.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\LaunchImage.launchimage\Default%402x.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\AppIcon.appiconset\Contents.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\AppIcon.appiconset\Icon.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\AppIcon.appiconset\Icon%402x.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\AppIcon.appiconset\Icon-60%402x.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\AppIcon.appiconset\Icon-72.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\AppIcon.appiconset\Icon-72%402x.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\AppIcon.appiconset\Icon-76.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\AppIcon.appiconset\Icon-76%402x.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\AppIcon.appiconset\Icon-Small.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\AppIcon.appiconset\Icon-Small%402x.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\AppIcon.appiconset\Icon-Small-40.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\AppIcon.appiconset\Icon-Small-40%402x.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\AppIcon.appiconset\Icon-Small-50.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\AppIcon.appiconset\Icon-Small-50%402x.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\sample-translator">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\signatures.txt">
-      <DeployService-Deploy>True</DeployService-Deploy>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\resources\include\__stddef_max_align_t.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\resources\include\__wmmintrin_aes.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\resources\include\__wmmintrin_pclmul.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\resources\include\adxintrin.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\resources\include\altivec.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\resources\include\ammintrin.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\resources\include\arm_acle.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\resources\include\arm_neon.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\resources\include\avx2intrin.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\resources\include\avx512bwintrin.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\resources\include\avx512erintrin.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\resources\include\avx512fintrin.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\resources\include\avx512vlbwintrin.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\resources\include\avx512vlintrin.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\resources\include\avxintrin.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\resources\include\bmi2intrin.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\resources\include\bmiintrin.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\resources\include\cpuid.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\resources\include\emmintrin.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\resources\include\f16cintrin.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\resources\include\float.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\resources\include\fma4intrin.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\resources\include\fmaintrin.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\resources\include\ia32intrin.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\resources\include\immintrin.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\resources\include\Intrin.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\resources\include\iso646.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\resources\include\limits.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\resources\include\lzcntintrin.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\resources\include\mm_malloc.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\resources\include\mm3dnow.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\resources\include\mmintrin.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\resources\include\module.modulemap">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\resources\include\nmmintrin.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\resources\include\pmmintrin.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\resources\include\popcntintrin.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\resources\include\prfchwintrin.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\resources\include\rdseedintrin.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\resources\include\rtmintrin.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\resources\include\sanitizer\allocator_interface.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\resources\include\sanitizer\asan_interface.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\resources\include\sanitizer\common_interface_defs.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\resources\include\sanitizer\dfsan_interface.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\resources\include\sanitizer\linux_syscall_hooks.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\resources\include\sanitizer\lsan_interface.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\resources\include\sanitizer\msan_interface.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\resources\include\sanitizer\tsan_interface_atomic.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\resources\include\shaintrin.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\resources\include\smmintrin.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\resources\include\stdalign.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\resources\include\stdarg.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\resources\include\stdatomic.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\resources\include\stdbool.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\resources\include\stddef.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\resources\include\stdint.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\resources\include\stdnoreturn.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\resources\include\tbmintrin.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\resources\include\tgmath.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\resources\include\tmmintrin.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\resources\include\unwind.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\resources\include\vadefs.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\resources\include\varargs.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\resources\include\wmmintrin.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\resources\include\x86intrin.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\resources\include\xmmintrin.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\resources\include\xopintrin.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <EmbeddedResource Include="Properties\Manifest.addin.xml" >
+      <LogicalName>Manifest.addin.xml</LogicalName>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
@@ -346,11 +65,108 @@
     <Folder Include="Resources\" />
     <Folder Include="Resources\LaunchImage.launchimage\" />
     <Folder Include="Resources\AppIcon.appiconset\" />
-    <Folder Include="Utilities\sanitizer\" />
     <Folder Include="Utilities\resources\" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Net" />
     <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <AddinFile Include="Resources\Entitlements.plist" />
+    <AddinFile Include="Resources\Metadata.xml" />
+    <AddinFile Include="Resources\ProjectFileTemplate.xml" />
+    <AddinFile Include="Resources\README.md" />
+    <AddinFile Include="Resources\LaunchImage.launchimage\Contents.json" />
+    <AddinFile Include="Resources\LaunchImage.launchimage\Default.png" />
+    <AddinFile Include="Resources\LaunchImage.launchimage\Default%402x.png" />
+    <AddinFile Include="Resources\LaunchImage.launchimage\Default-568h%402x.png" />
+    <AddinFile Include="Resources\LaunchImage.launchimage\Default-Landscape%402x~ipad.png" />
+    <AddinFile Include="Resources\LaunchImage.launchimage\Default-Landscape~ipad.png" />
+    <AddinFile Include="Resources\LaunchImage.launchimage\Default-Portrait%402x~ipad.png" />
+    <AddinFile Include="Resources\LaunchImage.launchimage\Default-Portrait~ipad.png" />
+    <AddinFile Include="Resources\AppIcon.appiconset\Contents.json" />
+    <AddinFile Include="Resources\AppIcon.appiconset\Icon.png" />
+    <AddinFile Include="Resources\AppIcon.appiconset\Icon%402x.png" />
+    <AddinFile Include="Resources\AppIcon.appiconset\Icon-60%402x.png" />
+    <AddinFile Include="Resources\AppIcon.appiconset\Icon-72.png" />
+    <AddinFile Include="Resources\AppIcon.appiconset\Icon-72%402x.png" />
+    <AddinFile Include="Resources\AppIcon.appiconset\Icon-76.png" />
+    <AddinFile Include="Resources\AppIcon.appiconset\Icon-76%402x.png" />
+    <AddinFile Include="Resources\AppIcon.appiconset\Icon-Small.png" />
+    <AddinFile Include="Resources\AppIcon.appiconset\Icon-Small%402x.png" />
+    <AddinFile Include="Resources\AppIcon.appiconset\Icon-Small-40.png" />
+    <AddinFile Include="Resources\AppIcon.appiconset\Icon-Small-40%402x.png" />
+    <AddinFile Include="Resources\AppIcon.appiconset\Icon-Small-50.png" />
+    <AddinFile Include="Resources\AppIcon.appiconset\Icon-Small-50%402x.png" />
+    <AddinFile Include="Utilities\sample-translator" />
+    <AddinFile Include="Utilities\signatures.txt">
+      <DeployService-Deploy>True</DeployService-Deploy>
+    </AddinFile>
+    <AddinFile Include="Utilities\resources\include\sanitizer\allocator_interface.h" />
+    <AddinFile Include="Utilities\resources\include\sanitizer\asan_interface.h" />
+    <AddinFile Include="Utilities\resources\include\sanitizer\common_interface_defs.h" />
+    <AddinFile Include="Utilities\resources\include\sanitizer\dfsan_interface.h" />
+    <AddinFile Include="Utilities\resources\include\sanitizer\linux_syscall_hooks.h" />
+    <AddinFile Include="Utilities\resources\include\sanitizer\lsan_interface.h" />
+    <AddinFile Include="Utilities\resources\include\sanitizer\msan_interface.h" />
+    <AddinFile Include="Utilities\resources\include\sanitizer\tsan_interface_atomic.h" />
+    <AddinFile Include="Utilities\resources\include\__stddef_max_align_t.h" />
+    <AddinFile Include="Utilities\resources\include\__wmmintrin_aes.h" />
+    <AddinFile Include="Utilities\resources\include\__wmmintrin_pclmul.h" />
+    <AddinFile Include="Utilities\resources\include\adxintrin.h" />
+    <AddinFile Include="Utilities\resources\include\altivec.h" />
+    <AddinFile Include="Utilities\resources\include\ammintrin.h" />
+    <AddinFile Include="Utilities\resources\include\arm_acle.h" />
+    <AddinFile Include="Utilities\resources\include\arm_neon.h" />
+    <AddinFile Include="Utilities\resources\include\avx2intrin.h" />
+    <AddinFile Include="Utilities\resources\include\avx512bwintrin.h" />
+    <AddinFile Include="Utilities\resources\include\avx512erintrin.h" />
+    <AddinFile Include="Utilities\resources\include\avx512fintrin.h" />
+    <AddinFile Include="Utilities\resources\include\avx512vlbwintrin.h" />
+    <AddinFile Include="Utilities\resources\include\avx512vlintrin.h" />
+    <AddinFile Include="Utilities\resources\include\avxintrin.h" />
+    <AddinFile Include="Utilities\resources\include\bmi2intrin.h" />
+    <AddinFile Include="Utilities\resources\include\bmiintrin.h" />
+    <AddinFile Include="Utilities\resources\include\cpuid.h" />
+    <AddinFile Include="Utilities\resources\include\emmintrin.h" />
+    <AddinFile Include="Utilities\resources\include\f16cintrin.h" />
+    <AddinFile Include="Utilities\resources\include\float.h" />
+    <AddinFile Include="Utilities\resources\include\fma4intrin.h" />
+    <AddinFile Include="Utilities\resources\include\fmaintrin.h" />
+    <AddinFile Include="Utilities\resources\include\ia32intrin.h" />
+    <AddinFile Include="Utilities\resources\include\immintrin.h" />
+    <AddinFile Include="Utilities\resources\include\Intrin.h" />
+    <AddinFile Include="Utilities\resources\include\iso646.h" />
+    <AddinFile Include="Utilities\resources\include\limits.h" />
+    <AddinFile Include="Utilities\resources\include\lzcntintrin.h" />
+    <AddinFile Include="Utilities\resources\include\mm_malloc.h" />
+    <AddinFile Include="Utilities\resources\include\mm3dnow.h" />
+    <AddinFile Include="Utilities\resources\include\mmintrin.h" />
+    <AddinFile Include="Utilities\resources\include\module.modulemap" />
+    <AddinFile Include="Utilities\resources\include\nmmintrin.h" />
+    <AddinFile Include="Utilities\resources\include\pmmintrin.h" />
+    <AddinFile Include="Utilities\resources\include\popcntintrin.h" />
+    <AddinFile Include="Utilities\resources\include\prfchwintrin.h" />
+    <AddinFile Include="Utilities\resources\include\rdseedintrin.h" />
+    <AddinFile Include="Utilities\resources\include\rtmintrin.h" />
+    <AddinFile Include="Utilities\resources\include\shaintrin.h" />
+    <AddinFile Include="Utilities\resources\include\smmintrin.h" />
+    <AddinFile Include="Utilities\resources\include\stdalign.h" />
+    <AddinFile Include="Utilities\resources\include\stdarg.h" />
+    <AddinFile Include="Utilities\resources\include\stdatomic.h" />
+    <AddinFile Include="Utilities\resources\include\stdbool.h" />
+    <AddinFile Include="Utilities\resources\include\stddef.h" />
+    <AddinFile Include="Utilities\resources\include\stdint.h" />
+    <AddinFile Include="Utilities\resources\include\stdnoreturn.h" />
+    <AddinFile Include="Utilities\resources\include\tbmintrin.h" />
+    <AddinFile Include="Utilities\resources\include\tgmath.h" />
+    <AddinFile Include="Utilities\resources\include\tmmintrin.h" />
+    <AddinFile Include="Utilities\resources\include\unwind.h" />
+    <AddinFile Include="Utilities\resources\include\vadefs.h" />
+    <AddinFile Include="Utilities\resources\include\varargs.h" />
+    <AddinFile Include="Utilities\resources\include\wmmintrin.h" />
+    <AddinFile Include="Utilities\resources\include\x86intrin.h" />
+    <AddinFile Include="Utilities\resources\include\xmmintrin.h" />
+    <AddinFile Include="Utilities\resources\include\xopintrin.h" />
   </ItemGroup>
 </Project>
