@@ -11,7 +11,7 @@ using Mono.Addins.Description;
 )]
 
 [assembly:AddinName ("Project Convertor")]
-[assembly:AddinCategory ("IDE extensions")]
+[assembly:AddinCategory ("Project Import and Export")]
 [assembly:AddinDescription ("Convert Xcode project to Xamarin.iOS project")]
 [assembly:AddinAuthor ("Oleg Demchenko & Rustam Zaitov")]
 
