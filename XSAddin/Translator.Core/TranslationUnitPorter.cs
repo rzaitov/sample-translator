@@ -120,23 +120,21 @@ namespace Translator.Core
 
 			// TODO: add parameters
 
-			foreach (var c in children) {
-				if (c.kind != CXCursorKind.CXCursor_CompoundStmt)
-					continue;
-
-				string methodBody = c.GetBodyText ();
-				Console.WriteLine (methodBody);
-				IEnumerable<string> lines = MethodHelper.Comment (methodBody);
-				var trivias = lines.Select (l => SyntaxFactory.SyntaxTrivia (SyntaxKind.SingleLineCommentTrivia, l));
-//				SyntaxTrivia comment = SyntaxFactory.Comment (methodBody);
-//				mDecl = mDecl.AddBodyStatements ( comment);
-				mDecl = mDecl.AddBodyStatements (new StatementSyntax[0]);
-				SyntaxToken cl = mDecl.Body.CloseBraceToken.WithLeadingTrivia (trivias);
-				mDecl = mDecl.ReplaceToken(mDecl.Body.CloseBraceToken, cl);
-
-			}
+			var compoundStmt = children.First (c => c.kind == CXCursorKind.CXCursor_CompoundStmt);
+			mDecl = AddMethodBody (compoundStmt, mDecl);
 
 			return mDecl;
+		}
+
+		MethodDeclarationSyntax AddMethodBody (CXCursor compountStmt, MethodDeclarationSyntax mDecl)
+		{
+			string methodBody = compountStmt.GetBodyText ();
+			IEnumerable<string> lines = MethodHelper.Comment (methodBody);
+			var trivias = lines.Select (l => SyntaxFactory.SyntaxTrivia (SyntaxKind.SingleLineCommentTrivia, l));
+
+			mDecl = mDecl.AddBodyStatements (new StatementSyntax[0]);
+			SyntaxToken cl = mDecl.Body.CloseBraceToken.WithLeadingTrivia (trivias);
+			return mDecl.ReplaceToken(mDecl.Body.CloseBraceToken, cl);
 		}
 
 		static bool IsFromHeader (CXCursor cursor)
