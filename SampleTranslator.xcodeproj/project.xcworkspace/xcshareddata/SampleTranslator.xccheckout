@@ -10,6 +10,8 @@
 	<string>SampleTranslator</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
+		<key>0FF601B85D03242456BFAAA35FCD1FEA053F131E</key>
+		<string>github.com:rzaitov/sample-translator.git</string>
 		<key>2543CF1EF39F0BBDA75D5A64629EEEB92E4178C2</key>
 		<string>https://github.com/llvm-mirror/clang.git</string>
 		<key>4BD75C932C5424A5B785A1AA6753C6815D11E34A</key>
@@ -18,9 +20,11 @@
 		<string>https://github.com/llvm-mirror/clang-tools-extra.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>sample-translator/SampleTranslator.xcodeproj</string>
+	<string>SampleTranslator.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
+		<key>0FF601B85D03242456BFAAA35FCD1FEA053F131E</key>
+		<string>../..</string>
 		<key>2543CF1EF39F0BBDA75D5A64629EEEB92E4178C2</key>
 		<string>../../../../..</string>
 		<key>4BD75C932C5424A5B785A1AA6753C6815D11E34A</key>
@@ -29,13 +33,21 @@
 		<string>../../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>https://github.com/llvm-mirror/clang-tools-extra.git</string>
+	<string>github.com:rzaitov/sample-translator.git</string>
 	<key>IDESourceControlProjectVersion</key>
 	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>8A9D7AD34FFEA56696D91EFBA208E20707F857B4</string>
+	<string>0FF601B85D03242456BFAAA35FCD1FEA053F131E</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>8A9D7AD34FFEA56696D91EFBA208E20707F857B4</string>
+			<key>IDESourceControlWCCName</key>
+			<string></string>
+		</dict>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
@@ -56,9 +68,9 @@
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>8A9D7AD34FFEA56696D91EFBA208E20707F857B4</string>
+			<string>0FF601B85D03242456BFAAA35FCD1FEA053F131E</string>
 			<key>IDESourceControlWCCName</key>
-			<string>extra</string>
+			<string>sample-translator</string>
 		</dict>
 	</array>
 </dict>

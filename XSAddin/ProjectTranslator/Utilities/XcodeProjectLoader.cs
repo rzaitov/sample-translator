@@ -12,7 +12,8 @@ namespace ProjectTranslator
 			if (string.IsNullOrEmpty (filePath))
 				throw new ArgumentNullException ("filePath");
 
-			string fileContent = System.IO.File.ReadAllText (filePath);
+			var files = Directory.GetFiles (filePath, "*.pbxproj");
+			string fileContent = System.IO.File.ReadAllText (files [0]);
 			var xcodeProject = XcodeProjectReader.Parse (fileContent);
 			xcodeProject.FilePath = filePath;
 			return xcodeProject;

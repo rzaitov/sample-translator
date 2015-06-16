@@ -41,7 +41,7 @@
     <Compile Include="Utilities\XCodeConfiguration.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Properties\Manifest.addin.xml" >
+    <EmbeddedResource Include="Properties\Manifest.addin.xml">
       <LogicalName>Manifest.addin.xml</LogicalName>
     </EmbeddedResource>
   </ItemGroup>
