@@ -1,12 +1,12 @@
 ﻿using System;
-using Gtk;
 using System.Collections.Generic;
+using System.IO;
+using Gtk;
 using XcodeProjectParser;
 
 namespace ProjectTranslatorUI
 {
-	enum ActivePhase
-	{
+	enum ActivePhase {
 		None = 0,
 		AnalyzeXcodeProject,
 		GenerateCSharpProject
@@ -65,8 +65,7 @@ namespace ProjectTranslatorUI
 			fileFilter.AddPattern ("*.xcodeproj");
 
 			fileChooser = new FileChooserDialog ("Select Xcode project", this, FileChooserAction.SelectFolder, new object[] {
-				Stock.Cancel, ResponseType.Cancel, Stock.Ok, ResponseType.Ok
-			}) {
+				Stock.Cancel, ResponseType.Cancel, Stock.Ok, ResponseType.Ok }) {
 				SelectMultiple = false
 			};
 
@@ -89,11 +88,11 @@ namespace ProjectTranslatorUI
 		void ShowAlertDialog (string message)
 		{
 			var alert = new MessageDialog (this,
-				            DialogFlags.Modal,
-				            MessageType.Error,
-				            ButtonsType.Close,
-				            message
-			            );
+	            DialogFlags.Modal,
+	            MessageType.Error,
+	            ButtonsType.Close,
+	            message
+            );
 
 			alert.Title = "Error";
 
@@ -105,8 +104,7 @@ namespace ProjectTranslatorUI
 		{
 
 			fileChooser = new FileChooserDialog ("Select C# project output folder", this, FileChooserAction.SelectFolder, new object[] {
-				Stock.Cancel, ResponseType.Cancel, Stock.Ok, ResponseType.Ok
-			}) {
+				Stock.Cancel, ResponseType.Cancel, Stock.Ok, ResponseType.Ok }) {
 				SelectMultiple = false
 			};
 
@@ -152,9 +150,16 @@ namespace ProjectTranslatorUI
 				return;
 			}
 
+			var files = Directory.GetFiles (inputProjectEntry.Text, "*.pbxproj");
+
+			if (files.Length == 0) {
+				ShowAlertDialog ("*.pbxproj file not found inside *.xcodeproj folder");
+				return;
+			}
+
 			if (OnRunAnalysisButtonPressed != null) {
 				targets = OnRunAnalysisButtonPressed (new ConversionPreferences {
-					XcodeProjectPath = inputProjectEntry.Text,
+					XcodeProjectPath = files[0],
 					CSharpProjectFolderPath = outputProjectFolderEntry.Text,
 					OveriwriteLaunchImages = overwriteLaunchImages.Active,
 					OverwriteAppIcons = overwriteAppIcons.Active
