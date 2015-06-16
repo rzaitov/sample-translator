@@ -10,6 +10,8 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Formatting;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Options;
+using Microsoft.CodeAnalysis.CSharp.Formatting;
 
 namespace Translator.Core
 {
@@ -17,8 +19,6 @@ namespace Translator.Core
 	{
 		readonly CXCursor translationUnit;
 		CompilationUnitSyntax cu;
-
-		NamespaceDeclarationSyntax nsDecl;
 
 		public TranslationUnitPorter (CXCursor translationUnit, string ns)
 		{
@@ -31,16 +31,23 @@ namespace Translator.Core
 			this.translationUnit = translationUnit;
 			cu = SyntaxFactory.CompilationUnit ();
 
-			AddUsings ();
-			nsDecl = AddNamespace (ns);
-			PortClasses (ref nsDecl);
-//			nsDecl.SyntaxTree.ToString
+			IEnumerable<UsingDirectiveSyntax> usings = CreateUsings ();
+			foreach (var u in usings)
+				cu = cu.AddUsings (u);
+
+			var nsDecl = CreateNamespace (ns);
+			foreach (var c in PortClasses ())
+				nsDecl = nsDecl.AddMembers (c);
+
+			cu = cu.AddMembers (nsDecl);
 		}
 
-		void AddUsings ()
+		IEnumerable<UsingDirectiveSyntax> CreateUsings ()
 		{
 			// TODO: generate usings acording to included files
-			cu = cu.AddUsings (CreateUsing ("System"), CreateUsing ("UIKit"), CreateUsing ("Foundation"));
+			yield return CreateUsing ("System");
+			yield return CreateUsing ("UIKit");
+			yield return CreateUsing ("Foundation");
 		}
 
 		UsingDirectiveSyntax CreateUsing (string name)
@@ -48,30 +55,31 @@ namespace Translator.Core
 			return SyntaxFactory.UsingDirective (SyntaxFactory.IdentifierName (name));
 		}
 
-		NamespaceDeclarationSyntax AddNamespace (string ns)
+		NamespaceDeclarationSyntax CreateNamespace (string ns)
 		{
-			NamespaceDeclarationSyntax nsDecl = SyntaxFactory.NamespaceDeclaration (SyntaxFactory.IdentifierName (ns));
-			cu = cu.AddMembers (nsDecl);
-
-			return nsDecl;
+			return SyntaxFactory.NamespaceDeclaration (SyntaxFactory.IdentifierName (ns));
 		}
 
-		void PortClasses (ref NamespaceDeclarationSyntax nsDecl)
+		IEnumerable<ClassDeclarationSyntax> PortClasses ()
 		{
+			var classes = new List<ClassDeclarationSyntax> ();
 			IEnumerable<CXCursor> children = translationUnit.GetChildren ().Where (c => !IsFromHeader(c));
 
 			var unrecognized = new List<CXCursor> ();
 			foreach (var c in children) {
-				if (c.kind == CXCursorKind.CXCursor_ObjCImplementationDecl)
-					PortClass (c, ref nsDecl);
-				else
+				if (c.kind == CXCursorKind.CXCursor_ObjCImplementationDecl) {
+					classes.Add (PortClass (c));
+				} else {
 					unrecognized.Add (c);
+				}
 			}
 
 			// TODO: warn about unrecognized cursors
+
+			return classes;
 		}
 
-		void PortClass (CXCursor cursor, ref NamespaceDeclarationSyntax nsDecl)
+		ClassDeclarationSyntax PortClass (CXCursor cursor)
 		{
 			CXCursor super = cursor.GetSuperClass ();
 
@@ -81,19 +89,19 @@ namespace Translator.Core
 
 			var unrecognized = new List<CXCursor> ();
 			IEnumerable<CXCursor> children = cursor.GetChildren ();
-			foreach (var c in children) {
-				if (c.kind == CXCursorKind.CXCursor_ObjCInstanceMethodDecl || c.kind == CXCursorKind.CXCursor_ObjCClassMethodDecl)
-					PortMethod (c, ref classDecl);
+			foreach (var m in children) {
+				if (m.kind == CXCursorKind.CXCursor_ObjCInstanceMethodDecl || m.kind == CXCursorKind.CXCursor_ObjCClassMethodDecl)
+					classDecl = classDecl.AddMembers(PortMethod (m));
 				else
-					unrecognized.Add (c);
+					unrecognized.Add (m);
 			}
 
 			// TODO: warn about unrecognized cursors
 
-			nsDecl = nsDecl.AddMembers (classDecl);
+			return classDecl;
 		}
 
-		void PortMethod (CXCursor cursor, ref ClassDeclarationSyntax classDecl)
+		MethodDeclarationSyntax PortMethod (CXCursor cursor)
 		{
 			if (cursor.kind != CXCursorKind.CXCursor_ObjCInstanceMethodDecl &&
 			    cursor.kind != CXCursorKind.CXCursor_ObjCClassMethodDecl)
@@ -126,7 +134,7 @@ namespace Translator.Core
 //				mDecl = mDecl.AddBodyStatements ( comment);
 			}
 
-			classDecl = classDecl.AddMembers (mDecl);
+			return mDecl;
 		}
 
 		static bool IsFromHeader (CXCursor cursor)
@@ -136,18 +144,17 @@ namespace Translator.Core
 
 		public string Generate()
 		{
-			var projectId = ProjectId.CreateNewId();
-			var documentId = DocumentId.CreateNewId(projectId);
+			var ws = new AdhocWorkspace ();
+//			OptionSet options = ws.Options;
+//			options = options.WithChangedOption (CSharpFormattingOptions.);
+			var formattedNode = Formatter.Format (cu, ws);
 
-			var sln = new AdhocWorkspace ().CurrentSolution
-				.AddProject (projectId, "translator", "translator", LanguageNames.CSharp)
-				.AddDocument (documentId, "somefile.cs", cu.ToString ());
+			StringBuilder sb = new StringBuilder();
+			using (StringWriter writer = new StringWriter (sb))
+				formattedNode.WriteTo (writer);
 
-			Document document = sln.GetDocument (documentId);
-			return Formatter.FormatAsync (document).Result.ToString ();
-//			Formatter.Format(cu, new Wor
-//			return cu.SyntaxTree;
-//			return nsDecl.SyntaxTree.r
+			string result = sb.ToString ();
+			return result;
 		}
 	}
 }
