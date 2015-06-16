@@ -108,15 +108,10 @@ namespace Translator.Core
 				throw new ArgumentException ();
 
 			var children = cursor.GetChildren ();
-			var returnType = children.First ();
+			CXCursor returnType = children.First (c => c.kind == CXCursorKind.CXCursor_TypeRef);
 
 			string selector = cursor.ToString ();
-			string[] items = selector.Split (new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
-			string methodName = string.Join (string.Empty, items.Select (s => {
-				var chars = s.ToCharArray ();
-				chars [0] = char.ToUpper (chars [0]);
-				return new string (chars);
-			}));
+			string methodName = SelectorHelper.ConvertToMehtodName (selector);
 
 			MethodDeclarationSyntax mDecl = SyntaxFactory.MethodDeclaration (SyntaxFactory.ParseTypeName (returnType.ToString ()), methodName);
 			mDecl = mDecl.AddModifiers (SyntaxFactory.Token (SyntaxKind.PublicKeyword));
