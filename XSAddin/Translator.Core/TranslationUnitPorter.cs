@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using ClangSharp;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Formatting;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -16,6 +17,8 @@ namespace Translator.Core
 	{
 		readonly CXCursor translationUnit;
 		CompilationUnitSyntax cu;
+
+		NamespaceDeclarationSyntax nsDecl;
 
 		public TranslationUnitPorter (CXCursor translationUnit, string ns)
 		{
@@ -29,8 +32,9 @@ namespace Translator.Core
 			cu = SyntaxFactory.CompilationUnit ();
 
 			AddUsings ();
-			NamespaceDeclarationSyntax nsDecl = AddNamespace (ns);
+			nsDecl = AddNamespace (ns);
 			PortClasses (ref nsDecl);
+//			nsDecl.SyntaxTree.ToString
 		}
 
 		void AddUsings ()
@@ -132,7 +136,18 @@ namespace Translator.Core
 
 		public string Generate()
 		{
-			return cu.SyntaxTree.ToString ();
+			var projectId = ProjectId.CreateNewId();
+			var documentId = DocumentId.CreateNewId(projectId);
+
+			var sln = new AdhocWorkspace ().CurrentSolution
+				.AddProject (projectId, "translator", "translator", LanguageNames.CSharp)
+				.AddDocument (documentId, "somefile.cs", cu.ToString ());
+
+			Document document = sln.GetDocument (documentId);
+			return Formatter.FormatAsync (document).Result.ToString ();
+//			Formatter.Format(cu, new Wor
+//			return cu.SyntaxTree;
+//			return nsDecl.SyntaxTree.r
 		}
 	}
 }
