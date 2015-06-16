@@ -39,6 +39,28 @@ namespace XcodeProjectParser
 			}
 		}
 
+		IList<string> scnKitAssets;
+		public IList<string> ScnKitAssets {
+			get {
+				if (scnKitAssets == null)
+					scnKitAssets = Files.Where (c => c.FileType == PBXFileType.FileScp
+						|| c.FileType == PBXFileType.TextXmlDae
+						|| c.FileType == PBXFileType.FileBplist).
+					Select (c => ((PBXFileReference)c).Path).ToList<string> ();;
+				return scnKitAssets;
+			}
+		}
+
+		IList<string> textureAtlases;
+		public IList<string> TextureAtlases {
+			get {
+				if (textureAtlases == null)
+					textureAtlases = Files.Where (c => c.FileType == PBXFileType.FolderAssetAtlas).
+						Select (c => ((PBXFileReference)c).Path).ToList<string> ();
+				return textureAtlases;
+			}
+		}
+
 		IList<string> interfaceFiles;
 		public IList<string> InterfaceFiles {
 			get {

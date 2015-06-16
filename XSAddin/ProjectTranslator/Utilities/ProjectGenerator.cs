@@ -11,7 +11,10 @@ namespace ProjectTranslator
 {
 	public class ProjectGenerator
 	{
+		const string textureAtlasesFolderName = "Texture Atlases";
+		const string sceneKitAssetsFolderName = "Models.scnassets";
 		const string resourcesFolderName = "Resources";
+		const string imagesFolderName = "Images";
 		const string screenshotsFolderName = "Screenshots";
 		const string projectFileTemplateName = "ProjectFileTemplate.xml";
 		const string entitlmentsFileName = "Entitlements.plist";
@@ -71,6 +74,7 @@ namespace ProjectTranslator
 			AddShaderFiles (projectXml);
 			AddEntitlementsAndInfo (projectXml);
 			AddSceneKitAssets (projectXml);
+			AddImageAtlases (projectXml);
 
 			using (var stream = File.Create (Path.Combine (ProjectPath, projectName + ".csproj")))
 				projectXml.Save (stream);
@@ -78,21 +82,73 @@ namespace ProjectTranslator
 
 		void AddSceneKitAssets (XDocument projectXml)
 		{
-			// TODO
+			var sceneKitAssetsItemGroup = new XElement (xmlNamespace + "ItemGroup");
+			var scnKitAssetsFullPath = Path.Combine (ProjectPath, sceneKitAssetsFolderName);
+
+			if (!Directory.Exists (scnKitAssetsFullPath)
+			    && currentTarget.ScnKitAssets.Count > 0)
+				Directory.CreateDirectory (scnKitAssetsFullPath);
+
+			foreach (var assetPath in currentTarget.ScnKitAssets) {
+				string sourcePath = Path.Combine (Directory.GetParent (xcodeProjPath).FullName, assetPath);
+				string destinationPath = Path.Combine (scnKitAssetsFullPath, Path.GetFileName (assetPath));
+				File.Copy (sourcePath, destinationPath, true);
+
+				var index = destinationPath.IndexOf (sceneKitAssetsFolderName);
+				var resoursePath = destinationPath.Substring (index);
+
+				var sceneKitAssetElement = new XElement (xmlNamespace + "SceneKitAsset", new XAttribute ("Include", resoursePath.NormalizePath ()));
+				sceneKitAssetsItemGroup.Add (sceneKitAssetElement);
+			}
+
+			projectXml.Root.Add (sceneKitAssetsItemGroup);
 		}
 
 		void AddImageAtlases (XDocument projectXml)
 		{
-			// TODO
+			var textureAtlasesItemGroup = new XElement (xmlNamespace + "ItemGroup");
+			var textureAtlasesFullPath = Path.Combine (ProjectPath, textureAtlasesFolderName);
+
+			if (!Directory.Exists (textureAtlasesFullPath)
+			    && currentTarget.TextureAtlases.Count > 0)
+				Directory.CreateDirectory (textureAtlasesFullPath);
+
+			foreach (var assetPath in currentTarget.TextureAtlases) {
+				string sourcePath = Path.Combine (Directory.GetParent (xcodeProjPath).FullName, assetPath);
+				string destinationPath = Path.Combine (textureAtlasesFullPath, Path.GetFileName (assetPath));
+
+				if (!Directory.Exists (destinationPath)
+				    && currentTarget.TextureAtlases.Count > 0)
+					Directory.CreateDirectory (destinationPath);
+
+				var index = destinationPath.IndexOf (textureAtlasesFolderName);
+				var resoursePath = destinationPath.Substring (index);
+
+				var imageAtlasElement = new XElement (xmlNamespace + "AtlasTexture", new XAttribute ("Include", resoursePath.NormalizePath ()));
+				textureAtlasesItemGroup.Add (imageAtlasElement);
+
+				foreach (string newPath in Directory.GetFiles (sourcePath, "*.*", SearchOption.AllDirectories)) {
+					if (Path.GetFileName (newPath).Contains (".DS_Store"))
+						continue;
+					File.Copy (newPath, newPath.Replace (sourcePath, destinationPath), true);
+				}
+			}
+
+			projectXml.Root.Add (textureAtlasesItemGroup);
 		}
 
 		void AddImages (XDocument projectXml)
 		{
 			var imagesItemGroup = new XElement (xmlNamespace + "ItemGroup");
+			var imagesFullPath = Path.Combine (ProjectPath, resourcesFolderName, imagesFolderName);
+
+			if (!Directory.Exists (imagesFullPath)
+			    && currentTarget.ImageFiles.Count > 0)
+				Directory.CreateDirectory (imagesFullPath);
 
 			foreach (var imagePath in currentTarget.ImageFiles) {
 				string sourcePath = Path.Combine (Directory.GetParent (xcodeProjPath).FullName, imagePath);
-				string destinationPath = Path.Combine (ProjectPath, resourcesFolderName, Path.GetFileName (imagePath));
+				string destinationPath = Path.Combine (imagesFullPath, Path.GetFileName (imagePath));
 				File.Copy (sourcePath, destinationPath, true);
 
 				var index = destinationPath.IndexOf (resourcesFolderName);
@@ -183,7 +239,7 @@ namespace ProjectTranslator
 		{
 			var sourceFilesItemGroup = new XElement (xmlNamespace + "ItemGroup");
 
-			List<string> cSharpFiles = new List<string> ();
+			List<string> objcFiles = new List<string> ();
 
 			foreach (var sourceFile in currentTarget.SourceFiles) {
 				var sourceElement = new XElement (xmlNamespace + "Compile", new XAttribute ("Include", sourceFile.ConvertPathToSharpName ()));
@@ -193,8 +249,8 @@ namespace ProjectTranslator
 				if (!Directory.Exists (Path.GetDirectoryName (sourceFilePath)))
 					Directory.CreateDirectory (Path.GetDirectoryName (sourceFilePath));
 				
-				var sourceFiles = Path.Combine (Directory.GetParent (xcodeProjPath).FullName, sourceFile);
-				cSharpFiles.Add (sourceFiles);
+				sourceFilePath = Path.Combine (Directory.GetParent (xcodeProjPath).FullName, sourceFile);
+				objcFiles.Add (sourceFilePath);
 			}
 
 			projectXml.Root.Add (sourceFilesItemGroup);
@@ -202,7 +258,7 @@ namespace ProjectTranslator
 			var translationConfig = new CodeTranslationConfiguration {
 				ProjectNamespace = projectName,
 				ProjectPath = ProjectPath,
-				FilePaths = cSharpFiles,
+				FilePaths = objcFiles,
 				Frameworks = currentTarget.Frameworks
 			};
 
@@ -267,8 +323,8 @@ namespace ProjectTranslator
 
 				foreach (string newPath in Directory.GetFiles (sourcePath, "*.*", SearchOption.AllDirectories)) {
 					if (Path.GetFileName (newPath).Contains (".DS_Store")
-						|| (newPath.Contains ("AppIcon.appiconset") && settings.OverwriteAppIcons)
-						|| (newPath.Contains ("LaunchImage.launchimage") && settings.OveriwriteLaunchImages))
+					    || (newPath.Contains ("AppIcon.appiconset") && settings.OverwriteAppIcons)
+					    || (newPath.Contains ("LaunchImage.launchimage") && settings.OveriwriteLaunchImages))
 						continue;
 
 					File.Copy (newPath, newPath.Replace (sourcePath, destinationPath), true);
