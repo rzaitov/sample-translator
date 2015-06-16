@@ -82,11 +82,13 @@ namespace ProjectTranslator
 
 		void AddSceneKitAssets (XDocument projectXml)
 		{
+			if (currentTarget.ScnKitAssets.Count == 0)
+				return;
+
 			var sceneKitAssetsItemGroup = new XElement (xmlNamespace + "ItemGroup");
 			var scnKitAssetsFullPath = Path.Combine (ProjectPath, sceneKitAssetsFolderName);
 
-			if (!Directory.Exists (scnKitAssetsFullPath)
-			    && currentTarget.ScnKitAssets.Count > 0)
+			if (!Directory.Exists (scnKitAssetsFullPath))
 				Directory.CreateDirectory (scnKitAssetsFullPath);
 
 			foreach (var assetPath in currentTarget.ScnKitAssets) {
@@ -106,11 +108,13 @@ namespace ProjectTranslator
 
 		void AddImageAtlases (XDocument projectXml)
 		{
+			if (currentTarget.TextureAtlases.Count == 0)
+				return;
+
 			var textureAtlasesItemGroup = new XElement (xmlNamespace + "ItemGroup");
 			var textureAtlasesFullPath = Path.Combine (ProjectPath, textureAtlasesFolderName);
 
-			if (!Directory.Exists (textureAtlasesFullPath)
-			    && currentTarget.TextureAtlases.Count > 0)
+			if (!Directory.Exists (textureAtlasesFullPath))
 				Directory.CreateDirectory (textureAtlasesFullPath);
 
 			foreach (var assetPath in currentTarget.TextureAtlases) {
@@ -139,11 +143,13 @@ namespace ProjectTranslator
 
 		void AddImages (XDocument projectXml)
 		{
+			if (currentTarget.ImageFiles.Count == 0)
+				return;
+
 			var imagesItemGroup = new XElement (xmlNamespace + "ItemGroup");
 			var imagesFullPath = Path.Combine (ProjectPath, resourcesFolderName, imagesFolderName);
 
-			if (!Directory.Exists (imagesFullPath)
-			    && currentTarget.ImageFiles.Count > 0)
+			if (!Directory.Exists (imagesFullPath))
 				Directory.CreateDirectory (imagesFullPath);
 
 			foreach (var imagePath in currentTarget.ImageFiles) {
