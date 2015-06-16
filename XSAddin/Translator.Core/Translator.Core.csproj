@@ -94,7 +94,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TranslationUnitPorter.cs" />
     <Compile Include="Extensions\CXCursorExtensions.cs" />
-    <Compile Include="SelectorHelper.cs" />
+    <Compile Include="MethodHelper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

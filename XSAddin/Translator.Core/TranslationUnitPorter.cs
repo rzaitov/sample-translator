@@ -111,7 +111,7 @@ namespace Translator.Core
 			CXCursor returnType = children.First (c => c.kind == CXCursorKind.CXCursor_TypeRef);
 
 			string selector = cursor.ToString ();
-			string methodName = SelectorHelper.ConvertToMehtodName (selector);
+			string methodName = MethodHelper.ConvertToMehtodName (selector);
 
 			MethodDeclarationSyntax mDecl = SyntaxFactory.MethodDeclaration (SyntaxFactory.ParseTypeName (returnType.ToString ()), methodName);
 			mDecl = mDecl.AddModifiers (SyntaxFactory.Token (SyntaxKind.PublicKeyword));
@@ -124,9 +124,16 @@ namespace Translator.Core
 				if (c.kind != CXCursorKind.CXCursor_CompoundStmt)
 					continue;
 
-//				string methodBody = c.GetBodyText ();
+				string methodBody = c.GetBodyText ();
+				Console.WriteLine (methodBody);
+				IEnumerable<string> lines = MethodHelper.Comment (methodBody);
+				var trivias = lines.Select (l => SyntaxFactory.SyntaxTrivia (SyntaxKind.SingleLineCommentTrivia, l));
 //				SyntaxTrivia comment = SyntaxFactory.Comment (methodBody);
 //				mDecl = mDecl.AddBodyStatements ( comment);
+				mDecl = mDecl.AddBodyStatements (new StatementSyntax[0]);
+				SyntaxToken cl = mDecl.Body.CloseBraceToken.WithLeadingTrivia (trivias);
+				mDecl = mDecl.ReplaceToken(mDecl.Body.CloseBraceToken, cl);
+
 			}
 
 			return mDecl;
