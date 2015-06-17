@@ -113,8 +113,21 @@ namespace Translator.Core
 				throw new ArgumentException ();
 
 			var children = cursor.GetChildren ();
-			CXCursor returnType = children.First (c => c.kind == CXCursorKind.CXCursor_TypeRef);
-			string returnTypeName = returnType.ToString ();
+//			Console.WriteLine (cursor.ToString ()); // selector
+//			foreach (var c in children) {
+//				Console.WriteLine (c.kind);
+//				if(c.kind == CXCursorKind.CXCursor_FirstAttr)
+//					foreach (var item in c.GetChildren()) {
+//						Console.WriteLine ("--> {0}", item.kind);
+//					}
+//			}
+//			Console.WriteLine ();
+
+//			CXCursor returnType = children.FirstOrDefault (c => c.kind == CXCursorKind.CXCursor_TypeRef);
+			string returnTypeName;
+			CXCursor returnType = children.First ();
+			returnTypeName = returnType.kind != CXCursorKind.CXCursor_UnexposedAttr ? returnType.ToString () : "void";
+//			Console.WriteLine (returnType.kind);
 
 			string selector = cursor.ToString ();
 			string methodName = MethodHelper.ConvertToMehtodName (selector);

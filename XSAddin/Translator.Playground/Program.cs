@@ -11,7 +11,7 @@ namespace Translator.Playground
 		public static void Main (string[] args)
 		{
 			string[] clangArgs = new string[] {
-				//				"-v",
+				"-v",
 				"-ObjC",
 				"-I/Applications/Xcode-beta.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator8.4.sdk/usr/include",
 				"-F/Applications/Xcode-beta.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator8.4.sdk/System/Library/Frameworks/",
@@ -29,7 +29,10 @@ namespace Translator.Playground
 			CXIndex index = clang.createIndex (1, 1);
 
 			CXUnsavedFile unsavedFiles;
-			CXTranslationUnit translationUnit = clang.parseTranslationUnit(index, "test/Cell.m", clangArgs, clangArgs.Length, out unsavedFiles, 0, 0);
+			CXTranslationUnit translationUnit = clang.parseTranslationUnit(index, "test/ViewController.m", clangArgs, clangArgs.Length, out unsavedFiles, 0, 0);
+			if (translationUnit.Pointer == IntPtr.Zero)
+				throw new InvalidOperationException ();
+
 			CXString spell = clang.getTranslationUnitSpelling (translationUnit);
 
 			CXCursor cursor = clang.getTranslationUnitCursor (translationUnit);
