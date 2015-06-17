@@ -128,7 +128,7 @@ namespace Translator.Core
 
 		MethodDeclarationSyntax AddMethodBody (CXCursor compountStmt, MethodDeclarationSyntax mDecl)
 		{
-			string methodBody = compountStmt.GetBodyText ();
+			string methodBody = MethodHelper.GetTextFromCompoundStmt (compountStmt);
 			IEnumerable<string> lines = MethodHelper.Comment (methodBody);
 			var trivias = lines.Select (l => SyntaxFactory.SyntaxTrivia (SyntaxKind.SingleLineCommentTrivia, l));
 
