@@ -118,12 +118,23 @@ namespace Translator.Core
 			if(cursor.kind == CXCursorKind.CXCursor_ObjCClassMethodDecl)
 				mDecl = mDecl.AddModifiers (SyntaxFactory.Token (SyntaxKind.StaticKeyword));
 
-			// TODO: add parameters
+			var mParams = children.Where(c => c.kind == CXCursorKind.CXCursor_ParmDecl);
+			var paramList = mParams.Select (PortParameter).ToArray ();
+			mDecl = mDecl.AddParameterListParameters (paramList);
 
 			var compoundStmt = children.First (c => c.kind == CXCursorKind.CXCursor_CompoundStmt);
 			mDecl = AddMethodBody (compoundStmt, mDecl);
 
 			return mDecl;
+		}
+
+		ParameterSyntax PortParameter (CXCursor parmDecl)
+		{
+			string paramName = parmDecl.ToString ();
+			CXCursor typeRef = parmDecl.GetChildren ().First ();
+
+			return SyntaxFactory.Parameter(SyntaxFactory.Identifier(paramName))
+				.WithType(SyntaxFactory.ParseTypeName(typeRef.ToString ()));
 		}
 
 		MethodDeclarationSyntax AddMethodBody (CXCursor compountStmt, MethodDeclarationSyntax mDecl)
