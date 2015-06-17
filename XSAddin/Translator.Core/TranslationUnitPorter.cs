@@ -20,6 +20,8 @@ namespace Translator.Core
 		readonly CXCursor translationUnit;
 		CompilationUnitSyntax cu;
 
+		CXCursor currentClass;
+
 		public TranslationUnitPorter (CXCursor translationUnit, string ns)
 		{
 			if (translationUnit.kind != CXCursorKind.CXCursor_TranslationUnit)
@@ -81,7 +83,10 @@ namespace Translator.Core
 
 		ClassDeclarationSyntax PortClass (CXCursor cursor)
 		{
-			CXCursor super = cursor.GetSuperClass ();
+			if (cursor.kind != CXCursorKind.CXCursor_ObjCImplementationDecl)
+				throw new ArgumentException ();
+			currentClass = cursor;
+			CXCursor super = cursor.GetSuperClass (); // CXCursor_ObjCSuperClassRef
 
 			ClassDeclarationSyntax classDecl = SyntaxFactory.ClassDeclaration (cursor.ToString ());
 			classDecl = classDecl.AddModifiers (SyntaxFactory.Token (SyntaxKind.PublicKeyword));
@@ -109,11 +114,13 @@ namespace Translator.Core
 
 			var children = cursor.GetChildren ();
 			CXCursor returnType = children.First (c => c.kind == CXCursorKind.CXCursor_TypeRef);
+			string returnTypeName = returnType.ToString ();
 
 			string selector = cursor.ToString ();
 			string methodName = MethodHelper.ConvertToMehtodName (selector);
 
-			MethodDeclarationSyntax mDecl = SyntaxFactory.MethodDeclaration (SyntaxFactory.ParseTypeName (returnType.ToString ()), methodName);
+			TypeSyntax typeSyntax = SyntaxFactory.ParseTypeName (PrettifyTypeName(returnTypeName));
+			MethodDeclarationSyntax mDecl = SyntaxFactory.MethodDeclaration (typeSyntax, methodName);
 			mDecl = mDecl.AddModifiers (SyntaxFactory.Token (SyntaxKind.PublicKeyword));
 			if(cursor.kind == CXCursorKind.CXCursor_ObjCClassMethodDecl)
 				mDecl = mDecl.AddModifiers (SyntaxFactory.Token (SyntaxKind.StaticKeyword));
@@ -131,7 +138,7 @@ namespace Translator.Core
 		ParameterSyntax PortParameter (CXCursor parmDecl)
 		{
 			string paramName = parmDecl.ToString ();
-			CXCursor typeRef = parmDecl.GetChildren ().First ();
+			CXCursor typeRef = parmDecl.GetChildren ().First (); // CXCursor_TypeRef
 
 			return SyntaxFactory.Parameter(SyntaxFactory.Identifier(paramName))
 				.WithType(SyntaxFactory.ParseTypeName(typeRef.ToString ()));
@@ -146,6 +153,14 @@ namespace Translator.Core
 			mDecl = mDecl.AddBodyStatements (new StatementSyntax[0]);
 			SyntaxToken cl = mDecl.Body.CloseBraceToken.WithLeadingTrivia (trivias);
 			return mDecl.ReplaceToken(mDecl.Body.CloseBraceToken, cl);
+		}
+
+		string PrettifyTypeName (string rawTypeName)
+		{
+			if (rawTypeName == "id")
+				return currentClass.ToString ();
+
+			return rawTypeName;
 		}
 
 		static bool IsFromHeader (CXCursor cursor)
