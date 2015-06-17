@@ -152,9 +152,10 @@ namespace Translator.Core
 		{
 			string paramName = parmDecl.ToString ();
 			CXCursor typeRef = parmDecl.GetChildren ().First (); // CXCursor_TypeRef
+			string typeName = typeRef.ToString ();
 
 			return SyntaxFactory.Parameter(SyntaxFactory.Identifier(paramName))
-				.WithType(SyntaxFactory.ParseTypeName(typeRef.ToString ()));
+				.WithType(SyntaxFactory.ParseTypeName(PrettifyTypeName(typeName)));
 		}
 
 		MethodDeclarationSyntax AddMethodBody (CXCursor compountStmt, MethodDeclarationSyntax mDecl)
