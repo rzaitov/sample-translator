@@ -26,8 +26,8 @@ namespace Translator.Playground
 				"-resource-dir", "/Users/rzaitov/llvm-clang/build/bin/../lib/clang/3.6.2"
 			};
 
-//			string file = "test/Cell.m";
-			string file = "/Users/rzaitov/Documents/Apps/Xamarin/apple-samples/AddressBookCocoa/AddressBookCocoa.m";
+			string file = "test/Cell.m";
+//			string file = "/Users/rzaitov/Documents/Apps/Xamarin/apple-samples/AddressBookCocoa/AddressBookCocoa.m";
 //			string file = "/Users/rzaitov/Documents/Apps/Xamarin/apple-samples/HomeKitCatalogCreatingHomesPairingandControllingAccessoriesandSettingUpTriggers/HMCatalog/Supporting Files/Utilities/UITableView+Updating.m";
 //			string file = "/Users/rzaitov/Documents/Apps/Xamarin/apple-samples/LayoutManagerDemo/LayoutManagerDemo/main.m";
 
@@ -42,6 +42,24 @@ namespace Translator.Playground
 			CXString spell = clang.getTranslationUnitSpelling (translationUnit);
 
 			CXCursor cursor = clang.getTranslationUnitCursor (translationUnit);
+
+			cursor.Dump ();
+			var f = cursor.GetChildren ().First(c => c.kind == CXCursorKind.CXCursor_ObjCImplementationDecl).GetChildren().First (c => c.ToString() == "initWithCoder:");
+			f.Dump ();
+
+			var def = clang.getCursorDefinition (f);
+			def.Dump ();
+
+			CXType type = clang.getCursorResultType (f);
+			Console.WriteLine ("type {0}", type.ToString ());
+			Console.WriteLine ("type kind {0}", type.kind);
+
+//
+//			var cs = f.GetChildren ().First (c => c.kind == CXCursorKind.CXCursor_CompoundStmt);
+//			var ch = cs.GetChildren ().ToArray ();
+//			Console.WriteLine (ch.Length);
+//
+//			cs.Dump ();
 
 			TranslationUnitPorter porter = new TranslationUnitPorter (cursor, "TestNS");
 			Console.WriteLine (porter.Generate ());

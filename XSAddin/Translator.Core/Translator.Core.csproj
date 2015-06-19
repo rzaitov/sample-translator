@@ -109,6 +109,8 @@
     <Compile Include="MethodHelper.cs" />
     <Compile Include="BindingLocator\BindingLocator.cs" />
     <Compile Include="BindingLocator\XamarinAttributesExtensions.cs" />
+    <Compile Include="BindingLocator\IBindingLocator.cs" />
+    <Compile Include="BindingLocator\EmptyBindingLocator.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

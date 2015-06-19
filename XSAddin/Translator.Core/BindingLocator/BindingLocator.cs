@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Translator.Core
 {
-	public class BindingLocator
+	public class BindingLocator : IBindingLocator
 	{
 		readonly ModuleDefinition[] modules;
 
