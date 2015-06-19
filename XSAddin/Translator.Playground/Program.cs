@@ -3,6 +3,7 @@
 using ClangSharp;
 
 using Translator.Core;
+using System.Linq;
 
 namespace Translator.Playground
 {
@@ -25,11 +26,16 @@ namespace Translator.Playground
 				"-resource-dir", "/Users/rzaitov/llvm-clang/build/bin/../lib/clang/3.6.2"
 			};
 
+//			string file = "test/Cell.m";
+			string file = "/Users/rzaitov/Documents/Apps/Xamarin/apple-samples/AddressBookCocoa/AddressBookCocoa.m";
+//			string file = "/Users/rzaitov/Documents/Apps/Xamarin/apple-samples/HomeKitCatalogCreatingHomesPairingandControllingAccessoriesandSettingUpTriggers/HMCatalog/Supporting Files/Utilities/UITableView+Updating.m";
+//			string file = "/Users/rzaitov/Documents/Apps/Xamarin/apple-samples/LayoutManagerDemo/LayoutManagerDemo/main.m";
+
 			Console.WriteLine ("Hello World!");
 			CXIndex index = clang.createIndex (1, 1);
 
 			CXUnsavedFile unsavedFiles;
-			CXTranslationUnit translationUnit = clang.parseTranslationUnit(index, "test/ViewController.m", clangArgs, clangArgs.Length, out unsavedFiles, 0, 0);
+			CXTranslationUnit translationUnit = clang.parseTranslationUnit(index, file, clangArgs, clangArgs.Length, out unsavedFiles, 0, 0);
 			if (translationUnit.Pointer == IntPtr.Zero)
 				throw new InvalidOperationException ();
 
