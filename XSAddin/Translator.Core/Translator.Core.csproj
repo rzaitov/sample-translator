@@ -111,6 +111,7 @@
     <Compile Include="BindingLocator\XamarinAttributesExtensions.cs" />
     <Compile Include="BindingLocator\IBindingLocator.cs" />
     <Compile Include="BindingLocator\EmptyBindingLocator.cs" />
+    <Compile Include="Generator\MethodBuilder.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -320,6 +321,7 @@
     <Folder Include="clang\" />
     <Folder Include="Extensions\" />
     <Folder Include="BindingLocator\" />
+    <Folder Include="Generator\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
