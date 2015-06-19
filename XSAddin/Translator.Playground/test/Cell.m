@@ -63,4 +63,9 @@
     return self;
 }
 
+- (void)dummy
+{
+   return 777;
+}
+
 @end

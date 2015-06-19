@@ -123,13 +123,8 @@ namespace Translator.Core
 //			}
 //			Console.WriteLine ();
 
-//			CXCursor returnType = children.FirstOrDefault (c => c.kind == CXCursorKind.CXCursor_TypeRef);
-			string returnTypeName;
-			CXCursor returnType = children.First ();
-			returnTypeName = returnType.kind != CXCursorKind.CXCursor_UnexposedAttr ? returnType.ToString () : "void";
-//			Console.WriteLine (returnType.kind);
-
 			string selector = cursor.ToString ();
+			string returnTypeName = clang.getCursorResultType(cursor).ToString ();
 			string methodName = MethodHelper.ConvertToMehtodName (selector);
 
 			TypeSyntax typeSyntax = SyntaxFactory.ParseTypeName (PrettifyTypeName(returnTypeName));
