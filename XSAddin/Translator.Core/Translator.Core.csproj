@@ -114,7 +114,10 @@
     <Compile Include="Generator\MethodBuilder.cs" />
     <Compile Include="BindingLocator\XamarinPathLocator.cs" />
     <Compile Include="Platform.cs" />
-    <Compile Include="ObjCMethod.cs" />
+    <Compile Include="TypeNamePrettifiers\ObjCTypeNamePrettifier.cs" />
+    <Compile Include="CursorWrappers\ObjCMethod.cs" />
+    <Compile Include="Extensions\Roslyn\ConstructorDeclarationSyntaxExtensions.cs" />
+    <Compile Include="Extensions\Roslyn\MethodDeclarationSyntaxExtensions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -325,6 +328,9 @@
     <Folder Include="Extensions\" />
     <Folder Include="BindingLocator\" />
     <Folder Include="Generator\" />
+    <Folder Include="TypeNamePrettifiers\" />
+    <Folder Include="CursorWrappers\" />
+    <Folder Include="Extensions\Roslyn\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

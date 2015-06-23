@@ -12,7 +12,7 @@ namespace Translator.Playground
 		public static void Main (string[] args)
 		{
 			string[] clangArgs = new string[] {
-				"-v",
+//				"-v",
 				"-ObjC",
 				"-I/Applications/Xcode-beta.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator8.4.sdk/usr/include",
 				"-F/Applications/Xcode-beta.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator8.4.sdk/System/Library/Frameworks/",

@@ -26,6 +26,31 @@ namespace Translator.Core
 		CompilationUnitSyntax cu;
 
 		CXCursor currentClass;
+		CXCursor baseClass;
+
+		CXCursor CurrentClass {
+			get {
+				return currentClass;
+			}
+			set {
+				currentClass = value;
+				baseClass = currentClass.GetSuperClass ();
+			}
+		}
+
+		string CurrentClassName {
+			get {
+				return CurrentClass.ToString ();
+			}
+		}
+
+		string BaseClassName {
+			get {
+				return baseClass.ToString ();
+			}
+		}
+
+		ObjCTypeNamePrettifier ObjCPrettifier { get; set; }
 
 		public TranslationUnitPorter (CXCursor translationUnit, string ns, BindingLocator bindingLocator)
 		{
@@ -95,12 +120,13 @@ namespace Translator.Core
 		{
 			if (cursor.kind != CXCursorKind.CXCursor_ObjCImplementationDecl)
 				throw new ArgumentException ();
-			currentClass = cursor;
-			CXCursor super = cursor.GetSuperClass (); // CXCursor_ObjCSuperClassRef
 
-			ClassDeclarationSyntax classDecl = SyntaxFactory.ClassDeclaration (cursor.ToString ());
+			CurrentClass = cursor;
+			ObjCPrettifier = new ObjCTypeNamePrettifier (CurrentClassName);
+
+			ClassDeclarationSyntax classDecl = SyntaxFactory.ClassDeclaration (CurrentClassName);
 			classDecl = classDecl.AddModifiers (SyntaxFactory.Token (SyntaxKind.PublicKeyword));
-			classDecl = classDecl.AddBaseListTypes (SyntaxFactory.SimpleBaseType (SyntaxFactory.ParseTypeName(super.ToString())));
+			classDecl = classDecl.AddBaseListTypes (SyntaxFactory.SimpleBaseType (SyntaxFactory.ParseTypeName(BaseClassName)));
 
 			var unrecognized = new List<CXCursor> ();
 			IEnumerable<CXCursor> children = cursor.GetChildren ();
@@ -116,11 +142,9 @@ namespace Translator.Core
 			return classDecl;
 		}
 
-		MethodDeclarationSyntax PortMethod (CXCursor cursor)
+		BaseMethodDeclarationSyntax PortMethod (CXCursor cursor)
 		{
 			var objcMethod = new ObjCMethod (cursor);
-
-			string baseClassName = currentClass.GetSuperClass ().ToString ();
 
 			IEnumerable<CXCursor> children = cursor.GetChildren ();
 			IEnumerable<Tuple<string, string>> mParams = children
@@ -128,31 +152,41 @@ namespace Translator.Core
 				.Select (CreateParamInfo);
 
 			MethodDefinition mDef;
-			MethodDeclarationSyntax mDecl;
+			MethodDeclarationSyntax mDecl = null;
+			ConstructorDeclarationSyntax ctorDecl = null;
 
-			if (bindingLocator.TryFindMethod (baseClassName, objcMethod.Selector, out mDef)) {
-				var mb = new MethodBuilder ();
-				mDecl = mb.BuildDeclaration (mDef, mParams);
+			var mb = new MethodBuilder ();
+			var isBound = bindingLocator.TryFindMethod (BaseClassName, objcMethod.Selector, out mDef);
+			if (isBound) {
+				if (mDef.IsConstructor)
+					ctorDecl = mb.BuildCtor (mDef, CurrentClassName, mParams);
+				else
+					mDecl = mb.BuildDeclaration (mDef, mParams);
 			} else {
-				mDecl = BuildDefaultDeclaration (objcMethod, mParams);
+				if (objcMethod.IsInitializer)
+					ctorDecl = mb.BuildCtor (CurrentClassName, mParams);
+				else
+					mDecl = BuildDefaultDeclaration (objcMethod, mParams);
 			}
 
 			var compoundStmt = children.First (c => c.kind == CXCursorKind.CXCursor_CompoundStmt);
-			mDecl = AddMethodBody (compoundStmt, mDecl);
 
-			return mDecl;
+			if (ctorDecl != null)
+				return AddBody (compoundStmt, ctorDecl);
+			else
+				return AddBody (compoundStmt, mDecl);
 		}
 
 		MethodDeclarationSyntax BuildDefaultDeclaration (ObjCMethod objcMethod, IEnumerable<Tuple<string, string>> mParams)
 		{
-			string retTypeName = PrettifyTypeName (objcMethod.ReturnType.ToString ());
+			string retTypeName = ObjCPrettifier.Prettify (objcMethod.ReturnType.ToString ());
 			string methodName = MethodHelper.ConvertToMehtodName (objcMethod.Selector);
 
 			var mb = new MethodBuilder ();
 			MethodDeclarationSyntax mDecl = mb.BuildDefaultDeclaration (retTypeName, methodName, mParams);
 
-			if(objcMethod.IsStatic)
-				mDecl = mDecl.AddModifiers (SF.Token (SyntaxKind.StaticKeyword));
+			if (objcMethod.IsStatic)
+				mDecl = mDecl.WithStaticKeyword ();
 
 			return mDecl;
 		}
@@ -173,26 +207,28 @@ namespace Translator.Core
 			string typeName = typeRef.ToString ();
 
 			return SyntaxFactory.Parameter(SyntaxFactory.Identifier(paramName))
-				.WithType(SyntaxFactory.ParseTypeName(PrettifyTypeName(typeName)));
+				.WithType(SyntaxFactory.ParseTypeName(ObjCPrettifier.Prettify(typeName)));
 		}
 
-		MethodDeclarationSyntax AddMethodBody (CXCursor compountStmt, MethodDeclarationSyntax mDecl)
+		MethodDeclarationSyntax AddBody (CXCursor compountStmt, MethodDeclarationSyntax mDecl)
 		{
-			string methodBody = MethodHelper.GetTextFromCompoundStmt (compountStmt);
-			IEnumerable<string> lines = MethodHelper.Comment (methodBody);
-			var trivias = lines.Select (l => SyntaxFactory.SyntaxTrivia (SyntaxKind.SingleLineCommentTrivia, l));
-
 			mDecl = mDecl.AddBodyStatements (new StatementSyntax[0]);
-			SyntaxToken cl = mDecl.Body.CloseBraceToken.WithLeadingTrivia (trivias);
+			SyntaxToken cl = mDecl.Body.CloseBraceToken.WithLeadingTrivia (FetchTrivias (compountStmt));
 			return mDecl.ReplaceToken(mDecl.Body.CloseBraceToken, cl);
 		}
 
-		string PrettifyTypeName (string rawTypeName)
+		ConstructorDeclarationSyntax AddBody (CXCursor compountStmt, ConstructorDeclarationSyntax ctorDecl)
 		{
-			if (rawTypeName == "id")
-				return currentClass.ToString ();
+			ctorDecl = ctorDecl.AddBodyStatements (new StatementSyntax[0]);
+			SyntaxToken cl = ctorDecl.Body.CloseBraceToken.WithLeadingTrivia (FetchTrivias (compountStmt));
+			return ctorDecl.ReplaceToken(ctorDecl.Body.CloseBraceToken, cl);
+		}
 
-			return rawTypeName;
+		IEnumerable<SyntaxTrivia> FetchTrivias (CXCursor compountStmt)
+		{
+			string methodBody = MethodHelper.GetTextFromCompoundStmt (compountStmt);
+			IEnumerable<string> lines = MethodHelper.Comment (methodBody);
+			return lines.Select (l => SyntaxFactory.SyntaxTrivia (SyntaxKind.SingleLineCommentTrivia, l));
 		}
 
 		static bool IsFromHeader (CXCursor cursor)

@@ -18,29 +18,40 @@ namespace Translator.Core
 		{
 		}
 
-		public MethodDeclarationSyntax BuildDeclaration (MethodDefinition methodDef, IEnumerable<Tuple<string, string>> paramsInfo)
+		public MethodDeclarationSyntax BuildDeclaration (MethodDefinition baseMethodDef, IEnumerable<Tuple<string, string>> paramsInfo)
 		{
-			if (methodDef == null || methodDef.IsConstructor)
+			if (baseMethodDef == null || baseMethodDef.IsConstructor)
 				throw new ArgumentNullException ();
 
-			MethodDeclarationSyntax mDecl = CreateDeclaration (methodDef.ReturnType.Name, methodDef.Name);
-			mDecl = mDecl.AddModifiers (FetchModifiers (methodDef));
+			MethodDeclarationSyntax mDecl = CreateDeclaration (baseMethodDef.ReturnType.Name, baseMethodDef.Name);
+			mDecl = mDecl.AddModifiers (FetchModifiers (baseMethodDef));
 
-			ParameterSyntax[] parameters = BuildParameters (ReplaceTypes (methodDef, paramsInfo));
+			ParameterSyntax[] parameters = BuildParameters (ReplaceTypes (baseMethodDef, paramsInfo));
 			mDecl = mDecl.AddParameterListParameters (parameters);
 
 			return mDecl;
 		}
 
-		public ConstructorDeclarationSyntax BuildCtor (MethodDefinition ctorDef, string className, IEnumerable<Tuple<string, string>> paramsInfo)
+		public ConstructorDeclarationSyntax BuildCtor (MethodDefinition baseCtorDef, string className, IEnumerable<Tuple<string, string>> paramsInfo)
 		{
-			if (ctorDef == null || !ctorDef.IsConstructor)
+			if (baseCtorDef == null || !baseCtorDef.IsConstructor)
 				throw new ArgumentNullException ();
 
 			ConstructorDeclarationSyntax ctorDecl = SF.ConstructorDeclaration (className);
-			ctorDecl = ctorDecl.AddModifiers (FetchModifiers (ctorDef));
+			ctorDecl = ctorDecl.AddModifiers (FetchModifiers (baseCtorDef));
 
-			ParameterSyntax[] parameters = BuildParameters (ReplaceTypes (ctorDef, paramsInfo));
+			ParameterSyntax[] parameters = BuildParameters (ReplaceTypes (baseCtorDef, paramsInfo));
+			ctorDecl = ctorDecl.AddParameterListParameters (parameters);
+
+			return ctorDecl;
+		}
+
+		public ConstructorDeclarationSyntax BuildCtor (string className, IEnumerable<Tuple<string, string>> paramsInfo)
+		{
+			ConstructorDeclarationSyntax ctorDecl = SF.ConstructorDeclaration (className)
+				.AddModifiers(SF.Token (SyntaxKind.PublicKeyword));
+
+			ParameterSyntax[] parameters = BuildParameters (paramsInfo);
 			ctorDecl = ctorDecl.AddParameterListParameters (parameters);
 
 			return ctorDecl;

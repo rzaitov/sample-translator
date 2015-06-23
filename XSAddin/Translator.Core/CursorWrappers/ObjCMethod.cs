@@ -33,6 +33,12 @@ namespace Translator.Core
 			}
 		}
 
+		public bool IsInitializer {
+			get {
+				return Selector.StartsWith ("init");
+			}
+		}
+
 		public ObjCMethod (CXCursor cursor)
 		{
 			AssertKind (cursor);
