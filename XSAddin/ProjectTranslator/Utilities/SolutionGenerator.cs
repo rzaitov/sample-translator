@@ -3,6 +3,11 @@ using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 
+using MonoDevelop.Core.ProgressMonitoring;
+
+using MonoDevelop.Ide;
+using MonoDevelop.Projects;
+
 using ProjectTranslatorUI;
 using XcodeProjectParser;
 
@@ -36,6 +41,33 @@ namespace ProjectTranslator
 			GenerateMetadata ();
 			GenerateReadme ();
 			GenerateProjects ();
+			GenerateSolution ();
+		}
+
+		void GenerateSolution ()
+		{
+			var solution = new Solution {
+				Name = projectName
+			};
+
+			var progressMonitor = new SimpleProgressMonitor ();
+			var solutionPath = Path.Combine (rootFolder, projectName, solution.Name);
+
+			foreach (var target in xcodeProjectModel.Targets) {
+				var projectPath = Path.Combine (rootFolder, projectName, target.Name, target.Name + ".csproj");
+				var project = Project.LoadProject (projectPath, progressMonitor);
+				solution.RootFolder.AddItem (project);
+			}
+
+			solution.AddConfiguration ("Debug|iPhoneSimulator", true);
+			solution.AddConfiguration ("Release|iPhoneSimulator", true);
+			solution.AddConfiguration ("Debug|iPhone", true);
+			solution.AddConfiguration ("Release|iPhone", true);
+			solution.AddConfiguration ("Ad-Hoc|iPhone", true);
+			solution.AddConfiguration ("AppStore|iPhone", true);
+
+			solution.Save (solutionPath, progressMonitor);
+			IdeApp.Workspace.OpenWorkspaceItem (solutionPath + ".sln");
 		}
 
 		void GenerateProjects ()
