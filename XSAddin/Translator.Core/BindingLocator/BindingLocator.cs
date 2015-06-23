@@ -23,13 +23,5 @@ namespace Translator.Core
 
 			return mDef != null;
 		}
-
-		bool HasRegisterAttribute(TypeDefinition typeDef, string className)
-		{
-			if (!typeDef.HasCustomAttributes)
-				return false;
-
-			return typeDef.CustomAttributes.Where (ca => ca.IsRegister (className)).Any ();
-		}
 	}
 }

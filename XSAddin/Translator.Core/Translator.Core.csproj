@@ -112,6 +112,9 @@
     <Compile Include="BindingLocator\IBindingLocator.cs" />
     <Compile Include="BindingLocator\EmptyBindingLocator.cs" />
     <Compile Include="Generator\MethodBuilder.cs" />
+    <Compile Include="BindingLocator\XamarinPathLocator.cs" />
+    <Compile Include="Platform.cs" />
+    <Compile Include="ObjCMethod.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

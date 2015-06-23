@@ -6,6 +6,8 @@ using System.Collections.Generic;
 
 using ClangSharp;
 
+using Mono.Cecil;
+
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Formatting;
 using Microsoft.CodeAnalysis.CSharp;
@@ -13,16 +15,19 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Options;
 using Microsoft.CodeAnalysis.CSharp.Formatting;
 
+using SF = Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
+
 namespace Translator.Core
 {
 	public class TranslationUnitPorter
 	{
+		readonly BindingLocator bindingLocator;
 		readonly CXCursor translationUnit;
 		CompilationUnitSyntax cu;
 
 		CXCursor currentClass;
 
-		public TranslationUnitPorter (CXCursor translationUnit, string ns)
+		public TranslationUnitPorter (CXCursor translationUnit, string ns, BindingLocator bindingLocator)
 		{
 			if (translationUnit.kind != CXCursorKind.CXCursor_TranslationUnit)
 				throw new ArgumentException ();
@@ -30,7 +35,12 @@ namespace Translator.Core
 			if (string.IsNullOrWhiteSpace (ns))
 				throw new ArgumentException ();
 
+			if (bindingLocator == null)
+				throw new ArgumentNullException ();
+
 			this.translationUnit = translationUnit;
+			this.bindingLocator = bindingLocator;
+
 			cu = SyntaxFactory.CompilationUnit ();
 
 			IEnumerable<UsingDirectiveSyntax> usings = CreateUsings ();
@@ -108,39 +118,52 @@ namespace Translator.Core
 
 		MethodDeclarationSyntax PortMethod (CXCursor cursor)
 		{
-			if (cursor.kind != CXCursorKind.CXCursor_ObjCInstanceMethodDecl &&
-			    cursor.kind != CXCursorKind.CXCursor_ObjCClassMethodDecl)
-				throw new ArgumentException ();
+			var objcMethod = new ObjCMethod (cursor);
 
-			var children = cursor.GetChildren ();
-//			Console.WriteLine (cursor.ToString ()); // selector
-//			foreach (var c in children) {
-//				Console.WriteLine (c.kind);
-//				if(c.kind == CXCursorKind.CXCursor_FirstAttr)
-//					foreach (var item in c.GetChildren()) {
-//						Console.WriteLine ("--> {0}", item.kind);
-//					}
-//			}
-//			Console.WriteLine ();
+			string baseClassName = currentClass.GetSuperClass ().ToString ();
 
-			string selector = cursor.ToString ();
-			string returnTypeName = clang.getCursorResultType(cursor).ToString ();
-			string methodName = MethodHelper.ConvertToMehtodName (selector);
+			IEnumerable<CXCursor> children = cursor.GetChildren ();
+			IEnumerable<Tuple<string, string>> mParams = children
+				.Where (c => c.kind == CXCursorKind.CXCursor_ParmDecl)
+				.Select (CreateParamInfo);
 
-			TypeSyntax typeSyntax = SyntaxFactory.ParseTypeName (PrettifyTypeName(returnTypeName));
-			MethodDeclarationSyntax mDecl = SyntaxFactory.MethodDeclaration (typeSyntax, methodName);
-			mDecl = mDecl.AddModifiers (SyntaxFactory.Token (SyntaxKind.PublicKeyword));
-			if(cursor.kind == CXCursorKind.CXCursor_ObjCClassMethodDecl)
-				mDecl = mDecl.AddModifiers (SyntaxFactory.Token (SyntaxKind.StaticKeyword));
+			MethodDefinition mDef;
+			MethodDeclarationSyntax mDecl;
 
-			var mParams = children.Where(c => c.kind == CXCursorKind.CXCursor_ParmDecl);
-			var paramList = mParams.Select (PortParameter).ToArray ();
-			mDecl = mDecl.AddParameterListParameters (paramList);
+			if (bindingLocator.TryFindMethod (baseClassName, objcMethod.Selector, out mDef)) {
+				var mb = new MethodBuilder ();
+				mDecl = mb.BuildDeclaration (mDef, mParams);
+			} else {
+				mDecl = BuildDefaultDeclaration (objcMethod, mParams);
+			}
 
 			var compoundStmt = children.First (c => c.kind == CXCursorKind.CXCursor_CompoundStmt);
 			mDecl = AddMethodBody (compoundStmt, mDecl);
 
 			return mDecl;
+		}
+
+		MethodDeclarationSyntax BuildDefaultDeclaration (ObjCMethod objcMethod, IEnumerable<Tuple<string, string>> mParams)
+		{
+			string retTypeName = PrettifyTypeName (objcMethod.ReturnType.ToString ());
+			string methodName = MethodHelper.ConvertToMehtodName (objcMethod.Selector);
+
+			var mb = new MethodBuilder ();
+			MethodDeclarationSyntax mDecl = mb.BuildDefaultDeclaration (retTypeName, methodName, mParams);
+
+			if(objcMethod.IsStatic)
+				mDecl = mDecl.AddModifiers (SF.Token (SyntaxKind.StaticKeyword));
+
+			return mDecl;
+		}
+
+		Tuple<string, string> CreateParamInfo (CXCursor parmDecl)
+		{
+			string paramName = parmDecl.ToString ();
+			CXCursor typeRef = parmDecl.GetChildren ().First (); // CXCursor_TypeRef
+			string typeName = typeRef.ToString ();
+
+			return new Tuple<string, string> (typeName, paramName);
 		}
 
 		ParameterSyntax PortParameter (CXCursor parmDecl)

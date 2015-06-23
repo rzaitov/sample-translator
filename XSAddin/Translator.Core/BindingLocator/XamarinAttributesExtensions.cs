@@ -16,21 +16,22 @@ namespace Translator.Core
 			return selector == selectorValue;
 		}
 
-		public static bool IsRegister(this CustomAttribute attribute, string className)
-		{
-			if (attribute.AttributeType.FullName != "Foundation.RegisterAttribute")
-				return false;
-
-			var selectorValue = (string)attribute.ConstructorArguments [0].Value;
-			return className == selectorValue;
-		}
-
 		public static bool IsRegistered (this TypeDefinition typeDef, string className)
 		{
 			if (!typeDef.HasCustomAttributes)
 				return false;
 
-			return typeDef.CustomAttributes.Where (ca => ca.IsRegister (className)).Any ();
+			var register = typeDef.CustomAttributes
+				.Where (ca => ca.AttributeType.FullName == "Foundation.RegisterAttribute")
+				.FirstOrDefault ();
+
+			if (register == null)
+				return false;
+
+			if (register.HasConstructorArguments)
+				return (string)register.ConstructorArguments [0].Value == className;
+
+			return typeDef.Name == className;
 		}
 
 		public static bool IsExported (this MethodDefinition mDef, string selector)

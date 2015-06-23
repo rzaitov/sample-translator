@@ -44,15 +44,15 @@ namespace Translator.Playground
 			CXCursor cursor = clang.getTranslationUnitCursor (translationUnit);
 
 			cursor.Dump ();
-			var f = cursor.GetChildren ().First(c => c.kind == CXCursorKind.CXCursor_ObjCImplementationDecl).GetChildren().First (c => c.ToString() == "initWithCoder:");
-			f.Dump ();
-
-			var def = clang.getCursorDefinition (f);
-			def.Dump ();
-
-			CXType type = clang.getCursorResultType (f);
-			Console.WriteLine ("type {0}", type.ToString ());
-			Console.WriteLine ("type kind {0}", type.kind);
+//			var f = cursor.GetChildren ().First(c => c.kind == CXCursorKind.CXCursor_ObjCImplementationDecl).GetChildren().First (c => c.ToString() == "initWithCoder:");
+//			f.Dump ();
+//
+//			var def = clang.getCursorDefinition (f);
+//			def.Dump ();
+//
+//			CXType type = clang.getCursorResultType (f);
+//			Console.WriteLine ("type {0}", type.ToString ());
+//			Console.WriteLine ("type kind {0}", type.kind);
 
 //
 //			var cs = f.GetChildren ().First (c => c.kind == CXCursorKind.CXCursor_CompoundStmt);
@@ -61,7 +61,12 @@ namespace Translator.Playground
 //
 //			cs.Dump ();
 
-			TranslationUnitPorter porter = new TranslationUnitPorter (cursor, "TestNS");
+			var pathLocator = new XamarinPathLocator ();
+			string xi = pathLocator.GetAssemblyPath (Platform.iOS);
+
+			var locator = new BindingLocator (new string[] { xi });
+
+			TranslationUnitPorter porter = new TranslationUnitPorter (cursor, "TestNS", locator);
 			Console.WriteLine (porter.Generate ());
 		}
 	}

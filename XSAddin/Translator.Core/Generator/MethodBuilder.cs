@@ -18,18 +18,32 @@ namespace Translator.Core
 		{
 		}
 
-		public MethodDeclarationSyntax BuildDeclaration (MethodDefinition boundedMethodDef, IEnumerable<string> paramNames)
+		public MethodDeclarationSyntax BuildDeclaration (MethodDefinition methodDef, IEnumerable<Tuple<string, string>> paramsInfo)
 		{
-			if (boundedMethodDef == null)
+			if (methodDef == null || methodDef.IsConstructor)
 				throw new ArgumentNullException ();
 
-			MethodDeclarationSyntax mDecl = CreateDeclaration (boundedMethodDef.ReturnType.Name, boundedMethodDef.Name);
-			mDecl = mDecl.AddModifiers (FetchModifiers (boundedMethodDef));
+			MethodDeclarationSyntax mDecl = CreateDeclaration (methodDef.ReturnType.Name, methodDef.Name);
+			mDecl = mDecl.AddModifiers (FetchModifiers (methodDef));
 
-			ParameterSyntax[] parameters = BuildParameters (FetchParamsInfo (boundedMethodDef, paramNames));
+			ParameterSyntax[] parameters = BuildParameters (ReplaceTypes (methodDef, paramsInfo));
 			mDecl = mDecl.AddParameterListParameters (parameters);
 
 			return mDecl;
+		}
+
+		public ConstructorDeclarationSyntax BuildCtor (MethodDefinition ctorDef, string className, IEnumerable<Tuple<string, string>> paramsInfo)
+		{
+			if (ctorDef == null || !ctorDef.IsConstructor)
+				throw new ArgumentNullException ();
+
+			ConstructorDeclarationSyntax ctorDecl = SF.ConstructorDeclaration (className);
+			ctorDecl = ctorDecl.AddModifiers (FetchModifiers (ctorDef));
+
+			ParameterSyntax[] parameters = BuildParameters (ReplaceTypes (ctorDef, paramsInfo));
+			ctorDecl = ctorDecl.AddParameterListParameters (parameters);
+
+			return ctorDecl;
 		}
 
 		SyntaxToken[] FetchModifiers (MethodDefinition boundedMethodDef)
@@ -44,20 +58,23 @@ namespace Translator.Core
 			if (boundedMethodDef.IsVirtual)
 				modifiers.Add (SF.Token (SyntaxKind.OverrideKeyword));
 
+			if (boundedMethodDef.IsStatic)
+				modifiers.Add (SF.Token (SyntaxKind.StaticKeyword));
+
 			return modifiers.ToArray ();
 		}
 
-		IEnumerable<Tuple<string, string>> FetchParamsInfo (MethodDefinition mDef, IEnumerable<string> paramNames)
+		IEnumerable<Tuple<string, string>> ReplaceTypes (MethodDefinition mDef, IEnumerable<Tuple<string, string>> paramsInfo)
 		{
 			IEnumerator<ParameterDefinition> typesEnumerator = ((IEnumerable<ParameterDefinition>)mDef.Parameters).GetEnumerator ();
-			var namesEnumerator = paramNames.GetEnumerator ();
+			var paramsEnumerator = paramsInfo.GetEnumerator ();
 
 			while (typesEnumerator.MoveNext ()) {
-				if (!namesEnumerator.MoveNext ())
+				if (!paramsEnumerator.MoveNext ())
 					throw new ArgumentException ();
 
 				string typeName = typesEnumerator.Current.ParameterType.Name;
-				yield return new Tuple<string, string> (typeName, namesEnumerator.Current);
+				yield return new Tuple<string, string> (typeName, paramsEnumerator.Current.Item2);
 			}
 		}
 

@@ -84,6 +84,11 @@ namespace Translator.Core
 			int probe = 1 << i;
 			return (mask & probe) == probe;
 		}
+
+		public static bool IsObjCClassMethod (this CXCursor cursor)
+		{
+			return cursor.kind == CXCursorKind.CXCursor_ObjCClassMethodDecl;
+		}
 	}
 }
 
