@@ -11,7 +11,7 @@ namespace XcodeProjectParser
 
 		public string Name { get; set; }
 
-		public string ProjectTypeGuid { get; set; }
+		public SharpProjectType ProjectType { get; set; }
 
 		public List<PBXFileReference> Files { get; set; }
 

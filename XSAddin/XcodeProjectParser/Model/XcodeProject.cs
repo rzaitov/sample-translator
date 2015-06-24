@@ -50,7 +50,8 @@ namespace XcodeProjectParser
 
 			var result = new Target {
 				Name = nativeTarget.Name.Replace ("\"", string.Empty),
-				ID = nativeTarget.ID	
+				ID = nativeTarget.ID,
+				ProjectType = nativeTarget.ProductType.Replace ("\"", string.Empty).GetEnumMemberByDescription<SharpProjectType> ()
 			};
 
 			foreach (var dependencyID in nativeTarget.Dependencies) {

@@ -375,7 +375,7 @@ namespace ProjectTranslator
 		{
 			var projectGuid = projectXml.Descendants ().
 				Where (p => p.Name.LocalName == "ProjectTypeGuids").First ();
-			projectGuid.Value = settings.TargetProject.ProjectTypeGuid;
+			projectGuid.Value = settings.TargetProject.ProjectType.GetProjectTypeGuid ();
 		}
 
 		void AddProjectTypeGuid (XDocument projectXml)

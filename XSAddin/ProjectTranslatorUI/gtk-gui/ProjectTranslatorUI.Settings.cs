@@ -33,14 +33,6 @@ namespace ProjectTranslatorUI
 		private global::Gtk.ComboBox setProjectTypeCombobox;
 		
 		private global::Gtk.Button analyzeXcodeProjectButton;
-		
-		private global::Gtk.RadioButton iosRadio;
-		
-		private global::Gtk.RadioButton extensionRadio;
-		
-		private global::Gtk.RadioButton watchRadio;
-		
-		private global::Gtk.RadioButton macRadio;
 
 		protected virtual void Build ()
 		{
@@ -197,50 +189,6 @@ namespace ProjectTranslatorUI
 			global::Gtk.Fixed.FixedChild w14 = ((global::Gtk.Fixed.FixedChild)(this.fixed3 [this.analyzeXcodeProjectButton]));
 			w14.X = 12;
 			w14.Y = 125;
-			// Container child fixed3.Gtk.Fixed+FixedChild
-			this.iosRadio = new global::Gtk.RadioButton (global::Mono.Unix.Catalog.GetString ("iOS app"));
-			this.iosRadio.CanFocus = true;
-			this.iosRadio.Name = "iosRadio";
-			this.iosRadio.DrawIndicator = true;
-			this.iosRadio.UseUnderline = true;
-			this.iosRadio.Group = new global::GLib.SList (global::System.IntPtr.Zero);
-			this.fixed3.Add (this.iosRadio);
-			global::Gtk.Fixed.FixedChild w15 = ((global::Gtk.Fixed.FixedChild)(this.fixed3 [this.iosRadio]));
-			w15.X = 115;
-			w15.Y = 200;
-			// Container child fixed3.Gtk.Fixed+FixedChild
-			this.extensionRadio = new global::Gtk.RadioButton (global::Mono.Unix.Catalog.GetString ("Extension"));
-			this.extensionRadio.CanFocus = true;
-			this.extensionRadio.Name = "extensionRadio";
-			this.extensionRadio.DrawIndicator = true;
-			this.extensionRadio.UseUnderline = true;
-			this.extensionRadio.Group = this.iosRadio.Group;
-			this.fixed3.Add (this.extensionRadio);
-			global::Gtk.Fixed.FixedChild w16 = ((global::Gtk.Fixed.FixedChild)(this.fixed3 [this.extensionRadio]));
-			w16.X = 115;
-			w16.Y = 220;
-			// Container child fixed3.Gtk.Fixed+FixedChild
-			this.watchRadio = new global::Gtk.RadioButton (global::Mono.Unix.Catalog.GetString ("Watch App"));
-			this.watchRadio.CanFocus = true;
-			this.watchRadio.Name = "watchRadio";
-			this.watchRadio.DrawIndicator = true;
-			this.watchRadio.UseUnderline = true;
-			this.watchRadio.Group = this.iosRadio.Group;
-			this.fixed3.Add (this.watchRadio);
-			global::Gtk.Fixed.FixedChild w17 = ((global::Gtk.Fixed.FixedChild)(this.fixed3 [this.watchRadio]));
-			w17.X = 256;
-			w17.Y = 200;
-			// Container child fixed3.Gtk.Fixed+FixedChild
-			this.macRadio = new global::Gtk.RadioButton (global::Mono.Unix.Catalog.GetString ("Mac"));
-			this.macRadio.CanFocus = true;
-			this.macRadio.Name = "macRadio";
-			this.macRadio.DrawIndicator = true;
-			this.macRadio.UseUnderline = true;
-			this.macRadio.Group = this.iosRadio.Group;
-			this.fixed3.Add (this.macRadio);
-			global::Gtk.Fixed.FixedChild w18 = ((global::Gtk.Fixed.FixedChild)(this.fixed3 [this.macRadio]));
-			w18.X = 256;
-			w18.Y = 220;
 			this.Add (this.fixed3);
 			if ((this.Child != null)) {
 				this.Child.ShowAll ();
@@ -251,12 +199,7 @@ namespace ProjectTranslatorUI
 			this.selectButton.Clicked += new global::System.EventHandler (this.SelectInputProject);
 			this.runButton.Clicked += new global::System.EventHandler (this.RunUtility);
 			this.selectOuputFolderButton.Clicked += new global::System.EventHandler (this.SelectSharpSolutionFolder);
-			this.setProjectTypeCombobox.Changed += new global::System.EventHandler (this.ProjectSelectionChanged);
 			this.analyzeXcodeProjectButton.Clicked += new global::System.EventHandler (this.AnalyzeXcodeProject);
-			this.iosRadio.Toggled += new global::System.EventHandler (this.ProjectTypeChanged);
-			this.extensionRadio.Toggled += new global::System.EventHandler (this.ProjectTypeChanged);
-			this.watchRadio.Toggled += new global::System.EventHandler (this.ProjectTypeChanged);
-			this.macRadio.Toggled += new global::System.EventHandler (this.ProjectTypeChanged);
 		}
 	}
 }

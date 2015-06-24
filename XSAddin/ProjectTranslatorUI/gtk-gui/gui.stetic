@@ -5,7 +5,7 @@
   </configuration>
   <import>
     <widget-library name="glade-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
-    <widget-library name="../bin/Release/ProjectTranslatorUI.exe" internal="true" />
+    <widget-library name="../bin/Debug/ProjectTranslatorUI.dll" internal="true" />
   </import>
   <widget class="Gtk.Window" id="ProjectTranslatorUI.Settings" design-size="480 300">
     <property name="MemberName" />
@@ -184,7 +184,6 @@
             <property name="WidthRequest">330</property>
             <property name="IsTextCombo">True</property>
             <property name="Items" translatable="yes" />
-            <signal name="Changed" handler="ProjectSelectionChanged" />
           </widget>
           <packing>
             <property name="X">116</property>
@@ -204,71 +203,6 @@
           <packing>
             <property name="X">12</property>
             <property name="Y">125</property>
-          </packing>
-        </child>
-        <child>
-          <widget class="Gtk.RadioButton" id="iosRadio">
-            <property name="MemberName" />
-            <property name="CanFocus">True</property>
-            <property name="Label" translatable="yes">iOS app</property>
-            <property name="Active">True</property>
-            <property name="DrawIndicator">True</property>
-            <property name="HasLabel">True</property>
-            <property name="UseUnderline">True</property>
-            <property name="Group">group1</property>
-            <signal name="Toggled" handler="ProjectTypeChanged" />
-          </widget>
-          <packing>
-            <property name="X">115</property>
-            <property name="Y">200</property>
-          </packing>
-        </child>
-        <child>
-          <widget class="Gtk.RadioButton" id="extensionRadio">
-            <property name="MemberName" />
-            <property name="CanFocus">True</property>
-            <property name="Label" translatable="yes">Extension</property>
-            <property name="DrawIndicator">True</property>
-            <property name="HasLabel">True</property>
-            <property name="UseUnderline">True</property>
-            <property name="Group">group1</property>
-            <signal name="Toggled" handler="ProjectTypeChanged" />
-          </widget>
-          <packing>
-            <property name="X">115</property>
-            <property name="Y">220</property>
-          </packing>
-        </child>
-        <child>
-          <widget class="Gtk.RadioButton" id="watchRadio">
-            <property name="MemberName" />
-            <property name="CanFocus">True</property>
-            <property name="Label" translatable="yes">Watch App</property>
-            <property name="DrawIndicator">True</property>
-            <property name="HasLabel">True</property>
-            <property name="UseUnderline">True</property>
-            <property name="Group">group1</property>
-            <signal name="Toggled" handler="ProjectTypeChanged" />
-          </widget>
-          <packing>
-            <property name="X">256</property>
-            <property name="Y">200</property>
-          </packing>
-        </child>
-        <child>
-          <widget class="Gtk.RadioButton" id="macRadio">
-            <property name="MemberName" />
-            <property name="CanFocus">True</property>
-            <property name="Label" translatable="yes">Mac</property>
-            <property name="DrawIndicator">True</property>
-            <property name="HasLabel">True</property>
-            <property name="UseUnderline">True</property>
-            <property name="Group">group1</property>
-            <signal name="Toggled" handler="ProjectTypeChanged" />
-          </widget>
-          <packing>
-            <property name="X">256</property>
-            <property name="Y">220</property>
           </packing>
         </child>
       </widget>

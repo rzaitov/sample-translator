@@ -42,16 +42,8 @@ namespace ProjectTranslatorUI
 			generationPhaseControls = new List<Widget> {
 				setProjectTypeLabel,
 				setProjectTypeCombobox,
-				runButton,
-				iosRadio,
-				extensionRadio,
-				macRadio,
-				watchRadio
+				runButton
 			};
-
-			iosRadio.Group.Append (extensionRadio);
-			iosRadio.Group.Append (macRadio);
-			iosRadio.Group.Append (watchRadio);
 
 			SetActivePhase (ActivePhase.AnalyzeXcodeProject);
 		}
@@ -88,12 +80,13 @@ namespace ProjectTranslatorUI
 
 		void ShowAlertDialog (string message)
 		{
-			var alert = new MessageDialog (this,
-				            DialogFlags.Modal,
-				            MessageType.Error,
-				            ButtonsType.Close,
-				            message
-			            );
+			var alert = new MessageDialog (
+				this,
+	            DialogFlags.Modal,
+	            MessageType.Error,
+	            ButtonsType.Close,
+	            message
+            );
 
 			alert.Title = "Error";
 
@@ -160,54 +153,13 @@ namespace ProjectTranslatorUI
 					OverwriteAppIcons = overwriteAppIcons.Active
 				});
 
-				foreach (var target in targets) {
-					setProjectTypeCombobox.AppendText (target.Name);
-					target.ProjectTypeGuid = SharpProjectType.iOSAppTypeGuid;
-				}
+				foreach (var target in targets)
+					setProjectTypeCombobox.AppendText (target.Name + ": " + target.ProjectType.ToString ());
 
-				setProjectTypeCombobox.Changed += ProjectSelectionChanged;
 				setProjectTypeCombobox.Active = 0;
 			}
 			
 			SetActivePhase (ActivePhase.GenerateCSharpProject);
-		}
-
-		void ProjectSelectionChanged (object o, EventArgs args)
-		{
-			if (targets [setProjectTypeCombobox.Active].ProjectTypeGuid == SharpProjectType.iOSAppTypeGuid) {
-				iosRadio.Active = true;
-				iosRadio.Toggle ();
-			}
-
-			if (targets [setProjectTypeCombobox.Active].ProjectTypeGuid == SharpProjectType.AppExtensionTypeGuid) {
-				extensionRadio.Active = true;
-				extensionRadio.Toggle ();
-			}
-
-			if (targets [setProjectTypeCombobox.Active].ProjectTypeGuid == SharpProjectType.MacTypeGuid) {
-				macRadio.Active = true;
-				macRadio.Toggle ();
-			}
-
-			if (targets [setProjectTypeCombobox.Active].ProjectTypeGuid == SharpProjectType.WatchAppTypeGuid) {
-				watchRadio.Active = true;
-				watchRadio.Toggle ();
-			}
-		}
-
-		protected void ProjectTypeChanged (object sender, EventArgs e)
-		{
-			if (iosRadio.Active)
-				targets [setProjectTypeCombobox.Active].ProjectTypeGuid = SharpProjectType.iOSAppTypeGuid;
-
-			if (extensionRadio.Active)
-				targets [setProjectTypeCombobox.Active].ProjectTypeGuid = SharpProjectType.AppExtensionTypeGuid;
-
-			if (macRadio.Active)
-				targets [setProjectTypeCombobox.Active].ProjectTypeGuid = SharpProjectType.MacTypeGuid;
-
-			if (watchRadio.Active)
-				targets [setProjectTypeCombobox.Active].ProjectTypeGuid = SharpProjectType.WatchAppTypeGuid;
 		}
 	}
 }
