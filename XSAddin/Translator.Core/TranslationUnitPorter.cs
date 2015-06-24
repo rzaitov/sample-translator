@@ -28,7 +28,7 @@ namespace Translator.Core
 		ObjCImplementationDeclContext ImplContext { get; set; }
 		ObjCCategoryImplDeclContext CategoryImplContext { get; set; }
 
-		ObjCTypeNamePrettifier ObjCPrettifier { get; set; }
+		ObjCTypePorter TypePorter { get; set; }
 
 		public TranslationUnitPorter (CXCursor translationUnit, string ns, IBindingLocator bindingLocator)
 		{
@@ -103,7 +103,7 @@ namespace Translator.Core
 				throw new ArgumentException ();
 
 			ImplContext = new ObjCImplementationDeclContext (cursor);
-			ObjCPrettifier = new ObjCTypeNamePrettifier (ImplContext.ClassName);
+			TypePorter = new ObjCTypePorter (ImplContext.ClassName);
 
 			ClassDeclarationSyntax classDecl = SF.ClassDeclaration (ImplContext.ClassName);
 			classDecl = classDecl.AddModifiers (SF.Token (SyntaxKind.PublicKeyword));
@@ -129,7 +129,7 @@ namespace Translator.Core
 				throw new ArgumentException ();
 
 			CategoryImplContext = new ObjCCategoryImplDeclContext (cursor);
-			ObjCPrettifier = new ObjCTypeNamePrettifier (CategoryImplContext.ExtendedClassName);
+			TypePorter = new ObjCTypePorter (CategoryImplContext.ExtendedClassName);
 
 			string className = string.Format ("{0}{1}Extensions", CategoryImplContext.ExtendedClassName, CategoryImplContext.CategoryName);
 			ClassDeclarationSyntax classDecl = SF.ClassDeclaration (className);
@@ -152,16 +152,17 @@ namespace Translator.Core
 		MethodDeclarationSyntax PortCategoryMethod (CXCursor cursor)
 		{
 			var objcMethod = new ObjCMethod (cursor);
-			IEnumerable<Tuple<string, string>> mParams = FetchParamInfos (cursor);
+			IEnumerable<ParameterSyntax> mParams = FetchParamInfos (cursor);
 
-			var thisParam = new Tuple<string, string> (CategoryImplContext.ExtendedClassName, "self");
-			mParams = (new Tuple<string, string>[] { thisParam }).Concat (mParams);
+			ParameterSyntax thisParam = SF.Parameter (SF.Identifier ("self"))
+				.WithType (SF.ParseTypeName (CategoryImplContext.ExtendedClassName));
+			mParams = (new ParameterSyntax[] { thisParam }).Concat (mParams);
 
-			string retTypeName = ObjCPrettifier.Prettify (objcMethod.ReturnType);
+			TypeSyntax retType = TypePorter.PortType (objcMethod.ReturnType);
 			string methodName = MethodHelper.ConvertToMehtodName (objcMethod.Selector);
 
 			var mb = new MethodBuilder ();
-			MethodDeclarationSyntax mDecl = mb.BuildExtensionMethod (retTypeName, methodName, mParams);
+			MethodDeclarationSyntax mDecl = mb.BuildExtensionMethod (retType, methodName, mParams);
 
 			IEnumerable<CXCursor> children = cursor.GetChildren ();
 			var compoundStmt = children.First (c => c.kind == CXCursorKind.CXCursor_CompoundStmt);
@@ -171,7 +172,7 @@ namespace Translator.Core
 		BaseMethodDeclarationSyntax PortMethod (CXCursor cursor)
 		{
 			var objcMethod = new ObjCMethod (cursor);
-			IEnumerable<Tuple<string, string>> mParams = FetchParamInfos (cursor);
+			IEnumerable<ParameterSyntax> mParams = FetchParamInfos (cursor);
 
 			MethodDefinition mDef;
 			MethodDeclarationSyntax mDecl = null;
@@ -200,13 +201,13 @@ namespace Translator.Core
 				return AddBody (compoundStmt, mDecl);
 		}
 
-		MethodDeclarationSyntax BuildDefaultDeclaration (ObjCMethod objcMethod, IEnumerable<Tuple<string, string>> mParams)
+		MethodDeclarationSyntax BuildDefaultDeclaration (ObjCMethod objcMethod, IEnumerable<ParameterSyntax> mParams)
 		{
-			string retTypeName = ObjCPrettifier.Prettify (objcMethod.ReturnType);
+			TypeSyntax retType = TypePorter.PortType (objcMethod.ReturnType);
 			string methodName = MethodHelper.ConvertToMehtodName (objcMethod.Selector);
 
 			var mb = new MethodBuilder ();
-			MethodDeclarationSyntax mDecl = mb.BuildDeclaration (retTypeName, methodName, mParams);
+			MethodDeclarationSyntax mDecl = mb.BuildDeclaration (retType, methodName, mParams);
 
 			if (objcMethod.IsStatic)
 				mDecl = mDecl.WithStaticKeyword ();
@@ -214,35 +215,11 @@ namespace Translator.Core
 			return mDecl;
 		}
 
-		IEnumerable<Tuple<string, string>> FetchParamInfos (CXCursor methodCursor)
+		IEnumerable<ParameterSyntax> FetchParamInfos (CXCursor methodCursor)
 		{
 			return methodCursor.GetChildren ()
 				.Where (c => c.kind == CXCursorKind.CXCursor_ParmDecl)
-				.Select (CreateParamInfo);
-		}
-
-		Tuple<string, string> CreateParamInfo (CXCursor parmDecl)
-		{
-			string paramName = parmDecl.ToString ();
-			CXType type = clang.getCursorType (parmDecl);
-			CXType pointee = clang.getPointeeType (type);
-
-//			type.Dump ();
-//			pointee.Dump ();
-//			Console.WriteLine ();
-
-			string typeName = pointee.kind != CXTypeKind.CXType_Invalid 
-				? ObjCPrettifier.Prettify (pointee)
-				: ObjCPrettifier.Prettify (type);
-
-			return new Tuple<string, string> (typeName, paramName);
-		}
-
-		ParameterSyntax PortParameter (CXCursor parmDecl)
-		{
-			var paramInfo = CreateParamInfo (parmDecl);
-			return SF.Parameter(SF.Identifier(paramInfo.Item1))
-				.WithType(SF.ParseTypeName(paramInfo.Item2));
+				.Select (TypePorter.PortParameter);
 		}
 
 		MethodDeclarationSyntax AddBody (CXCursor compountStmt, MethodDeclarationSyntax mDecl)

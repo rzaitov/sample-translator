@@ -114,7 +114,6 @@
     <Compile Include="Generator\MethodBuilder.cs" />
     <Compile Include="BindingLocator\XamarinPathLocator.cs" />
     <Compile Include="Platform.cs" />
-    <Compile Include="TypeNamePrettifiers\ObjCTypeNamePrettifier.cs" />
     <Compile Include="CursorWrappers\ObjCMethod.cs" />
     <Compile Include="Extensions\Roslyn\ConstructorDeclarationSyntaxExtensions.cs" />
     <Compile Include="Extensions\Roslyn\MethodDeclarationSyntaxExtensions.cs" />
@@ -122,6 +121,8 @@
     <Compile Include="Context\ObjCCategoryImplDeclContext.cs" />
     <Compile Include="SourceCodeTranslator.cs" />
     <Compile Include="Extensions\CXType.cs" />
+    <Compile Include="CommonTypes.cs" />
+    <Compile Include="TypeNamePrettifiers\ObjCTypePorter.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

@@ -18,35 +18,36 @@ namespace Translator.Core
 		{
 		}
 
-		public MethodDeclarationSyntax BuildDeclaration (MethodDefinition baseMethodDef, IEnumerable<Tuple<string, string>> paramsInfo)
+		public MethodDeclarationSyntax BuildDeclaration (MethodDefinition baseMethodDef, IEnumerable<ParameterSyntax> paramsInfo)
 		{
 			if (baseMethodDef == null || baseMethodDef.IsConstructor)
 				throw new ArgumentNullException ();
 
-			MethodDeclarationSyntax mDecl = CreateDeclaration (baseMethodDef.ReturnType.Name, baseMethodDef.Name);
+			var retType = Convert (baseMethodDef.ReturnType);
+			MethodDeclarationSyntax mDecl = SF.MethodDeclaration (retType, baseMethodDef.Name);
 			mDecl = mDecl.AddModifiers (FetchModifiers (baseMethodDef));
 
-			ParameterSyntax[] parameters = BuildParameters (ReplaceTypes (baseMethodDef, paramsInfo));
+			ParameterSyntax[] parameters = ReplaceTypes (baseMethodDef, paramsInfo).ToArray ();
 			mDecl = mDecl.AddParameterListParameters (parameters);
 
 			return mDecl;
 		}
 
-		public MethodDeclarationSyntax BuildDeclaration (string returnTypeName, string name, IEnumerable<Tuple<string, string>> paramsInfo)
+		public MethodDeclarationSyntax BuildDeclaration (TypeSyntax returnType, string name, IEnumerable<ParameterSyntax> paramsInfo)
 		{
-			MethodDeclarationSyntax mDecl = CreateDeclaration (returnTypeName, name);
+			MethodDeclarationSyntax mDecl = SF.MethodDeclaration (returnType, name);
 			mDecl = mDecl.AddModifiers (SF.Token (SyntaxKind.PublicKeyword));
-			mDecl = mDecl.AddParameterListParameters (BuildParameters (paramsInfo));
+			mDecl = mDecl.AddParameterListParameters (paramsInfo.ToArray ());
 
 			return mDecl;
 		}
 
-		public MethodDeclarationSyntax BuildExtensionMethod (string returnTypeName, string name, IEnumerable<Tuple<string, string>> paramsInfo)
+		public MethodDeclarationSyntax BuildExtensionMethod (TypeSyntax returnType, string name, IEnumerable<ParameterSyntax> paramsInfo)
 		{
-			MethodDeclarationSyntax mDecl = CreateDeclaration (returnTypeName, name);
+			MethodDeclarationSyntax mDecl = SF.MethodDeclaration (returnType, name);
 			mDecl = mDecl.AddModifiers (SF.Token (SyntaxKind.PublicKeyword), SF.Token (SyntaxKind.StaticKeyword));
 
-			ParameterSyntax[] parameterSyntax = BuildParameters (paramsInfo);
+			ParameterSyntax[] parameterSyntax = paramsInfo.ToArray ();
 			ParameterSyntax thisParam = parameterSyntax [0];
 			parameterSyntax [0] = thisParam.WithModifiers (SF.TokenList ((SF.Token (SyntaxKind.ThisKeyword))));
 
@@ -55,7 +56,7 @@ namespace Translator.Core
 			return mDecl;
 		}
 
-		public ConstructorDeclarationSyntax BuildCtor (MethodDefinition baseCtorDef, string className, IEnumerable<Tuple<string, string>> paramsInfo)
+		public ConstructorDeclarationSyntax BuildCtor (MethodDefinition baseCtorDef, string className, IEnumerable<ParameterSyntax> paramsInfo)
 		{
 			if (baseCtorDef == null || !baseCtorDef.IsConstructor)
 				throw new ArgumentNullException ();
@@ -63,18 +64,18 @@ namespace Translator.Core
 			ConstructorDeclarationSyntax ctorDecl = SF.ConstructorDeclaration (className);
 			ctorDecl = ctorDecl.AddModifiers (FetchModifiers (baseCtorDef));
 
-			ParameterSyntax[] parameters = BuildParameters (ReplaceTypes (baseCtorDef, paramsInfo));
+			ParameterSyntax[] parameters = ReplaceTypes (baseCtorDef, paramsInfo).ToArray ();
 			ctorDecl = ctorDecl.AddParameterListParameters (parameters);
 
 			return ctorDecl;
 		}
 
-		public ConstructorDeclarationSyntax BuildCtor (string className, IEnumerable<Tuple<string, string>> paramsInfo)
+		public ConstructorDeclarationSyntax BuildCtor (string className, IEnumerable<ParameterSyntax> paramsInfo)
 		{
 			ConstructorDeclarationSyntax ctorDecl = SF.ConstructorDeclaration (className)
 				.AddModifiers(SF.Token (SyntaxKind.PublicKeyword));
 
-			ParameterSyntax[] parameters = BuildParameters (paramsInfo);
+			ParameterSyntax[] parameters = paramsInfo.ToArray ();
 			ctorDecl = ctorDecl.AddParameterListParameters (parameters);
 
 			return ctorDecl;
@@ -98,7 +99,7 @@ namespace Translator.Core
 			return modifiers.ToArray ();
 		}
 
-		IEnumerable<Tuple<string, string>> ReplaceTypes (MethodDefinition mDef, IEnumerable<Tuple<string, string>> paramsInfo)
+		IEnumerable<ParameterSyntax> ReplaceTypes (MethodDefinition mDef, IEnumerable<ParameterSyntax> paramsInfo)
 		{
 			IEnumerator<ParameterDefinition> typesEnumerator = ((IEnumerable<ParameterDefinition>)mDef.Parameters).GetEnumerator ();
 			var paramsEnumerator = paramsInfo.GetEnumerator ();
@@ -108,27 +109,20 @@ namespace Translator.Core
 					throw new ArgumentException ();
 
 				string typeName = typesEnumerator.Current.ParameterType.Name;
-				yield return new Tuple<string, string> (typeName, paramsEnumerator.Current.Item2);
+				yield return paramsEnumerator.Current.WithType (SF.ParseTypeName (typeName));
 			}
 		}
 
-		MethodDeclarationSyntax CreateDeclaration (string returnTypeName, string name)
+		TypeSyntax Convert(TypeReference typeRef)
 		{
-			TypeSyntax returnType = SF.ParseTypeName (returnTypeName);
-			return SF.MethodDeclaration (returnType, name);
-		}
+			switch (typeRef.FullName) {
+				case "System.Void":
+					return CommonTypes.VoidTypeSyntax;
 
-		ParameterSyntax[] BuildParameters (IEnumerable<Tuple<string, string>> paramsInfo)
-		{
-			ParameterSyntax[] paramList = paramsInfo.Select (BuildParameter).ToArray ();
-			return paramList;
-		}
+				default:
+					return SF.ParseTypeName (typeRef.Name);
+			}
 
-		// (type, name)
-		ParameterSyntax BuildParameter (Tuple<string, string> paramInfo)
-		{
-			return SF.Parameter (SF.Identifier (paramInfo.Item2)).WithType (SF.ParseTypeName (paramInfo.Item1));
 		}
 	}
 }
-
