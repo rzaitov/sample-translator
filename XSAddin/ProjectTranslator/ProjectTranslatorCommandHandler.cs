@@ -11,13 +11,14 @@ namespace ProjectTranslator
 {
 	public class ProjectTranslatorCommandHandler : CommandHandler
 	{
+		ProjectTranslatorUI.Settings window;
 		XcodeProject xcodeProjectModel;
 		ConversionPreferences preferences;
 
 		protected override void Run ()
 		{
 			base.Run ();
-			var window = new ProjectTranslatorUI.Settings ();
+			window = new ProjectTranslatorUI.Settings ();
 			window.OnRunAnalysisButtonPressed += HandleRunAnalysisButtonClick;
 			window.OnRunGenerationButtonPressed += HandleRunGenerationButtonClick;
 			window.Show ();
@@ -44,6 +45,7 @@ namespace ProjectTranslator
 			xcodeProjectModel.Targets = targets;
 			var solutionGenerator = new SolutionGenerator (xcodeProjectModel, preferences);
 			solutionGenerator.Run ();
+			window.Destroy ();
 		}
 	}
 }
