@@ -26,10 +26,10 @@ namespace Translator.Playground
 				"-resource-dir", "/Users/rzaitov/llvm-clang/build/bin/../lib/clang/3.6.2"
 			};
 
-			string file = "test/Cell.m";
-//			string file = "/Users/rzaitov/Documents/Apps/Xamarin/apple-samples/AddressBookCocoa/AddressBookCocoa.m";
-//			string file = "/Users/rzaitov/Documents/Apps/Xamarin/apple-samples/HomeKitCatalogCreatingHomesPairingandControllingAccessoriesandSettingUpTriggers/HMCatalog/Supporting Files/Utilities/UITableView+Updating.m";
-//			string file = "/Users/rzaitov/Documents/Apps/Xamarin/apple-samples/LayoutManagerDemo/LayoutManagerDemo/main.m";
+//			string file = "test/Cell.m";
+//			string file = "/Users/rzaitov/Documents/Apps/Xamarin/samples/apple-samples/AddressBookCocoa/AddressBookCocoa.m";
+			string file = "/Users/rzaitov/Documents/Apps/Xamarin/samples/apple-samples/HomeKitCatalogCreatingHomesPairingandControllingAccessoriesandSettingUpTriggers/HMCatalog/Supporting Files/Utilities/UITableView+Updating.m";
+			//string file = "/Users/rzaitov/Documents/Apps/Xamarin/samples/apple-samples/LayoutManagerDemo/LayoutManagerDemo/main.m";
 
 			Console.WriteLine ("Hello World!");
 			CXIndex index = clang.createIndex (1, 1);

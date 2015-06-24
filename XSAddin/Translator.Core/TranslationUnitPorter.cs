@@ -25,30 +25,33 @@ namespace Translator.Core
 		readonly CXCursor translationUnit;
 		CompilationUnitSyntax cu;
 
-		CXCursor currentClass;
-		CXCursor baseClass;
+//		CXCursor currentClass;
+//		CXCursor baseClass;
 
-		CXCursor CurrentClass {
-			get {
-				return currentClass;
-			}
-			set {
-				currentClass = value;
-				baseClass = currentClass.GetSuperClass ();
-			}
-		}
+//		CXCursor CurrentClass {
+//			get {
+//				return currentClass;
+//			}
+//			set {
+//				currentClass = value;
+//				baseClass = currentClass.GetSuperClass ();
+//			}
+//		}
 
-		string CurrentClassName {
-			get {
-				return CurrentClass.ToString ();
-			}
-		}
+//		string CurrentClassName {
+//			get {
+//				return CurrentClass.ToString ();
+//			}
+//		}
+//
+//		string BaseClassName {
+//			get {
+//				return baseClass.ToString ();
+//			}
+//		}
 
-		string BaseClassName {
-			get {
-				return baseClass.ToString ();
-			}
-		}
+		ObjCImplementationDeclContext ImplContext { get; set; }
+		ObjCCategoryImplDeclContext CategoryImplContext { get; set; }
 
 		ObjCTypeNamePrettifier ObjCPrettifier { get; set; }
 
@@ -104,8 +107,11 @@ namespace Translator.Core
 
 			var unrecognized = new List<CXCursor> ();
 			foreach (var c in children) {
+				ImplContext = null;
 				if (c.kind == CXCursorKind.CXCursor_ObjCImplementationDecl) {
 					classes.Add (PortClass (c));
+				} else if (c.kind == CXCursorKind.CXCursor_ObjCCategoryImplDecl) {
+					classes.Add (PortCategory (c));
 				} else {
 					unrecognized.Add (c);
 				}
@@ -121,12 +127,12 @@ namespace Translator.Core
 			if (cursor.kind != CXCursorKind.CXCursor_ObjCImplementationDecl)
 				throw new ArgumentException ();
 
-			CurrentClass = cursor;
-			ObjCPrettifier = new ObjCTypeNamePrettifier (CurrentClassName);
+			ImplContext = new ObjCImplementationDeclContext (cursor);
+			ObjCPrettifier = new ObjCTypeNamePrettifier (ImplContext.ClassName);
 
-			ClassDeclarationSyntax classDecl = SyntaxFactory.ClassDeclaration (CurrentClassName);
-			classDecl = classDecl.AddModifiers (SyntaxFactory.Token (SyntaxKind.PublicKeyword));
-			classDecl = classDecl.AddBaseListTypes (SyntaxFactory.SimpleBaseType (SyntaxFactory.ParseTypeName(BaseClassName)));
+			ClassDeclarationSyntax classDecl = SF.ClassDeclaration (ImplContext.ClassName);
+			classDecl = classDecl.AddModifiers (SF.Token (SyntaxKind.PublicKeyword));
+			classDecl = classDecl.AddBaseListTypes (SF.SimpleBaseType (SF.ParseTypeName(ImplContext.SuperClassName)));
 
 			var unrecognized = new List<CXCursor> ();
 			IEnumerable<CXCursor> children = cursor.GetChildren ();
@@ -142,33 +148,75 @@ namespace Translator.Core
 			return classDecl;
 		}
 
+		ClassDeclarationSyntax PortCategory (CXCursor cursor)
+		{
+			if (cursor.kind != CXCursorKind.CXCursor_ObjCCategoryImplDecl)
+				throw new ArgumentException ();
+
+			CategoryImplContext = new ObjCCategoryImplDeclContext (cursor);
+			ObjCPrettifier = new ObjCTypeNamePrettifier (CategoryImplContext.ExtendedClassName);
+
+			string className = string.Format ("{0}{1}Extensions", CategoryImplContext.ExtendedClassName, CategoryImplContext.CategoryName);
+			ClassDeclarationSyntax classDecl = SF.ClassDeclaration (className);
+			classDecl = classDecl.AddModifiers (SF.Token (SyntaxKind.PublicKeyword), SF.Token (SyntaxKind.StaticKeyword));
+
+			var unrecognized = new List<CXCursor> ();
+			IEnumerable<CXCursor> children = cursor.GetChildren ();
+			foreach (var m in children) {
+				if (m.kind == CXCursorKind.CXCursor_ObjCInstanceMethodDecl || m.kind == CXCursorKind.CXCursor_ObjCClassMethodDecl)
+					classDecl = classDecl.AddMembers(PortCategoryMethod (m));
+				else
+					unrecognized.Add (m);
+			}
+
+			// TODO: warn about unrecognized cursors
+
+			return classDecl;
+		}
+
+		MethodDeclarationSyntax PortCategoryMethod (CXCursor cursor)
+		{
+			var objcMethod = new ObjCMethod (cursor);
+			IEnumerable<Tuple<string, string>> mParams = FetchParamInfos (cursor);
+
+			var thisParam = new Tuple<string, string> (CategoryImplContext.ExtendedClassName, "self");
+			mParams = (new Tuple<string, string>[] { thisParam }).Concat (mParams);
+
+			string retTypeName = ObjCPrettifier.Prettify (objcMethod.ReturnType.ToString ());
+			string methodName = MethodHelper.ConvertToMehtodName (objcMethod.Selector);
+
+			var mb = new MethodBuilder ();
+			MethodDeclarationSyntax mDecl = mb.BuildExtensionMethod (retTypeName, methodName, mParams);
+
+			IEnumerable<CXCursor> children = cursor.GetChildren ();
+			var compoundStmt = children.First (c => c.kind == CXCursorKind.CXCursor_CompoundStmt);
+			return AddBody (compoundStmt, mDecl);
+		}
+
 		BaseMethodDeclarationSyntax PortMethod (CXCursor cursor)
 		{
 			var objcMethod = new ObjCMethod (cursor);
-
-			IEnumerable<CXCursor> children = cursor.GetChildren ();
-			IEnumerable<Tuple<string, string>> mParams = children
-				.Where (c => c.kind == CXCursorKind.CXCursor_ParmDecl)
-				.Select (CreateParamInfo);
+			IEnumerable<Tuple<string, string>> mParams = FetchParamInfos (cursor);
 
 			MethodDefinition mDef;
 			MethodDeclarationSyntax mDecl = null;
 			ConstructorDeclarationSyntax ctorDecl = null;
 
 			var mb = new MethodBuilder ();
-			var isBound = bindingLocator.TryFindMethod (BaseClassName, objcMethod.Selector, out mDef);
+			var isBound = bindingLocator.TryFindMethod (ImplContext.SuperClassName, objcMethod.Selector, out mDef);
 			if (isBound) {
 				if (mDef.IsConstructor)
-					ctorDecl = mb.BuildCtor (mDef, CurrentClassName, mParams);
+					ctorDecl = mb.BuildCtor (mDef, ImplContext.ClassName, mParams);
 				else
 					mDecl = mb.BuildDeclaration (mDef, mParams);
 			} else {
 				if (objcMethod.IsInitializer)
-					ctorDecl = mb.BuildCtor (CurrentClassName, mParams);
+					ctorDecl = mb.BuildCtor (ImplContext.ClassName, mParams);
 				else
 					mDecl = BuildDefaultDeclaration (objcMethod, mParams);
 			}
 
+			IEnumerable<CXCursor> children = cursor.GetChildren ();
 			var compoundStmt = children.First (c => c.kind == CXCursorKind.CXCursor_CompoundStmt);
 
 			if (ctorDecl != null)
@@ -183,12 +231,19 @@ namespace Translator.Core
 			string methodName = MethodHelper.ConvertToMehtodName (objcMethod.Selector);
 
 			var mb = new MethodBuilder ();
-			MethodDeclarationSyntax mDecl = mb.BuildDefaultDeclaration (retTypeName, methodName, mParams);
+			MethodDeclarationSyntax mDecl = mb.BuildDeclaration (retTypeName, methodName, mParams);
 
 			if (objcMethod.IsStatic)
 				mDecl = mDecl.WithStaticKeyword ();
 
 			return mDecl;
+		}
+
+		IEnumerable<Tuple<string, string>> FetchParamInfos (CXCursor methodCursor)
+		{
+			return methodCursor.GetChildren ()
+				.Where (c => c.kind == CXCursorKind.CXCursor_ParmDecl)
+				.Select (CreateParamInfo);
 		}
 
 		Tuple<string, string> CreateParamInfo (CXCursor parmDecl)

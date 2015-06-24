@@ -34,12 +34,6 @@ namespace Translator.Core
 			return state.Children;
 		}
 
-		public static CXCursor GetSuperClass (this CXCursor cursor)
-		{
-			CXCursor canonical = clang.getCanonicalCursor (cursor);
-			return canonical.GetChildren ().Where (c => c.kind == CXCursorKind.CXCursor_ObjCSuperClassRef).First ();
-		}
-
 		public static CXSourceLocation Location (this CXCursor cursor)
 		{
 			return clang.getCursorLocation (cursor);

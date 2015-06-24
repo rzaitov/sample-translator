@@ -118,6 +118,8 @@
     <Compile Include="CursorWrappers\ObjCMethod.cs" />
     <Compile Include="Extensions\Roslyn\ConstructorDeclarationSyntaxExtensions.cs" />
     <Compile Include="Extensions\Roslyn\MethodDeclarationSyntaxExtensions.cs" />
+    <Compile Include="Context\ObjCImplementationDeclContext.cs" />
+    <Compile Include="Context\ObjCCategoryImplDeclContext.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -331,6 +333,7 @@
     <Folder Include="TypeNamePrettifiers\" />
     <Folder Include="CursorWrappers\" />
     <Folder Include="Extensions\Roslyn\" />
+    <Folder Include="Context\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

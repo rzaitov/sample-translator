@@ -32,6 +32,29 @@ namespace Translator.Core
 			return mDecl;
 		}
 
+		public MethodDeclarationSyntax BuildDeclaration (string returnTypeName, string name, IEnumerable<Tuple<string, string>> paramsInfo)
+		{
+			MethodDeclarationSyntax mDecl = CreateDeclaration (returnTypeName, name);
+			mDecl = mDecl.AddModifiers (SF.Token (SyntaxKind.PublicKeyword));
+			mDecl = mDecl.AddParameterListParameters (BuildParameters (paramsInfo));
+
+			return mDecl;
+		}
+
+		public MethodDeclarationSyntax BuildExtensionMethod (string returnTypeName, string name, IEnumerable<Tuple<string, string>> paramsInfo)
+		{
+			MethodDeclarationSyntax mDecl = CreateDeclaration (returnTypeName, name);
+			mDecl = mDecl.AddModifiers (SF.Token (SyntaxKind.PublicKeyword), SF.Token (SyntaxKind.StaticKeyword));
+
+			ParameterSyntax[] parameterSyntax = BuildParameters (paramsInfo);
+			ParameterSyntax thisParam = parameterSyntax [0];
+			parameterSyntax [0] = thisParam.WithModifiers (SF.TokenList ((SF.Token (SyntaxKind.ThisKeyword))));
+
+			mDecl = mDecl.AddParameterListParameters (parameterSyntax);
+
+			return mDecl;
+		}
+
 		public ConstructorDeclarationSyntax BuildCtor (MethodDefinition baseCtorDef, string className, IEnumerable<Tuple<string, string>> paramsInfo)
 		{
 			if (baseCtorDef == null || !baseCtorDef.IsConstructor)
@@ -87,15 +110,6 @@ namespace Translator.Core
 				string typeName = typesEnumerator.Current.ParameterType.Name;
 				yield return new Tuple<string, string> (typeName, paramsEnumerator.Current.Item2);
 			}
-		}
-
-		public MethodDeclarationSyntax BuildDefaultDeclaration (string returnTypeName, string name, IEnumerable<Tuple<string, string>> paramsInfo)
-		{
-			MethodDeclarationSyntax mDecl = CreateDeclaration (returnTypeName, name);
-			mDecl = mDecl.AddModifiers (SF.Token (SyntaxKind.PublicKeyword));
-			mDecl = mDecl.AddParameterListParameters (BuildParameters (paramsInfo));
-
-			return mDecl;
 		}
 
 		MethodDeclarationSyntax CreateDeclaration (string returnTypeName, string name)
