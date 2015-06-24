@@ -37,7 +37,9 @@ namespace Translator.Core
 			clang.getFileLocation (end, out file, out line2, out column2, out offset2);
 
 			string filePath = clang.getFileName (file).ToString ();
-			string result = File.ReadAllText (filePath).Substring ((int)offset1, (int)(offset2 - offset1 + 1));
+
+			// offset in file starts from 1 (1 column)
+			string result = File.ReadAllText (filePath).Substring ((int)offset1-1, (int)(offset2 - offset1 + 1));
 			return result;
 		}
 
