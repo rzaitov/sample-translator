@@ -157,7 +157,7 @@ namespace Translator.Core
 			var thisParam = new Tuple<string, string> (CategoryImplContext.ExtendedClassName, "self");
 			mParams = (new Tuple<string, string>[] { thisParam }).Concat (mParams);
 
-			string retTypeName = ObjCPrettifier.Prettify (objcMethod.ReturnType.ToString ());
+			string retTypeName = ObjCPrettifier.Prettify (objcMethod.ReturnType);
 			string methodName = MethodHelper.ConvertToMehtodName (objcMethod.Selector);
 
 			var mb = new MethodBuilder ();
@@ -202,7 +202,7 @@ namespace Translator.Core
 
 		MethodDeclarationSyntax BuildDefaultDeclaration (ObjCMethod objcMethod, IEnumerable<Tuple<string, string>> mParams)
 		{
-			string retTypeName = ObjCPrettifier.Prettify (objcMethod.ReturnType.ToString ());
+			string retTypeName = ObjCPrettifier.Prettify (objcMethod.ReturnType);
 			string methodName = MethodHelper.ConvertToMehtodName (objcMethod.Selector);
 
 			var mb = new MethodBuilder ();
@@ -224,29 +224,25 @@ namespace Translator.Core
 		Tuple<string, string> CreateParamInfo (CXCursor parmDecl)
 		{
 			string paramName = parmDecl.ToString ();
-//			Console.WriteLine ("Debug !!!!");
-//			Console.WriteLine (parmDecl.ToString ());
 			CXType type = clang.getCursorType (parmDecl);
-//			Console.WriteLine ("type:      {0}", type.ToString ());
-//			Console.WriteLine ("type kind: {0}", type.kind);
-			var pointee = clang.getPointeeType (type);
-//			Console.WriteLine ("pointee type:   {0}", pointee);
-//			Console.WriteLine ("pointee kind:   {0}", pointee.kind);
+			CXType pointee = clang.getPointeeType (type);
+
+//			type.Dump ();
+//			pointee.Dump ();
+//			Console.WriteLine ();
+
 			string typeName = pointee.kind != CXTypeKind.CXType_Invalid 
-				? ObjCPrettifier.Prettify (pointee.ToString ())
-				: ObjCPrettifier.Prettify (type.ToString ());
+				? ObjCPrettifier.Prettify (pointee)
+				: ObjCPrettifier.Prettify (type);
 
 			return new Tuple<string, string> (typeName, paramName);
 		}
 
 		ParameterSyntax PortParameter (CXCursor parmDecl)
 		{
-			string paramName = parmDecl.ToString ();
-			CXCursor typeRef = parmDecl.GetChildren ().First (); // CXCursor_TypeRef
-			string typeName = typeRef.ToString ();
-
-			return SyntaxFactory.Parameter(SyntaxFactory.Identifier(paramName))
-				.WithType(SyntaxFactory.ParseTypeName(ObjCPrettifier.Prettify(typeName)));
+			var paramInfo = CreateParamInfo (parmDecl);
+			return SyntaxFactory.Parameter(SyntaxFactory.Identifier(paramInfo.Item1))
+				.WithType(SyntaxFactory.ParseTypeName(paramInfo.Item2));
 		}
 
 		MethodDeclarationSyntax AddBody (CXCursor compountStmt, MethodDeclarationSyntax mDecl)

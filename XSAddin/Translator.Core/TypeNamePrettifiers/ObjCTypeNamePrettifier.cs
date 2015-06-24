@@ -1,4 +1,5 @@
 ﻿using System;
+using ClangSharp;
 
 namespace Translator.Core
 {
@@ -11,18 +12,19 @@ namespace Translator.Core
 			this.idTypeName = idTypeName;
 		}
 
-		public string Prettify (string rawTypeName)
+		public string Prettify (CXType type)
 		{
-			switch (rawTypeName) {
-			case "id":
+			if(type.kind == CXTypeKind.CXType_ObjCId)
 				return idTypeName;
 
-			case "CGFloat":
+			if (type.kind == CXTypeKind.CXType_Void)
+				return "void";
+
+			string typeName = type.ToString ();
+			if (type.kind == CXTypeKind.CXType_Typedef && typeName == "CGFloat")
 				return "nfloat";
 
-			default:
-				return rawTypeName;
-			}
+			return type.ToString ();
 		}
 	}
 }

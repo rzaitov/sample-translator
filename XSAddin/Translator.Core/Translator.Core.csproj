@@ -121,6 +121,7 @@
     <Compile Include="Context\ObjCImplementationDeclContext.cs" />
     <Compile Include="Context\ObjCCategoryImplDeclContext.cs" />
     <Compile Include="SourceCodeTranslator.cs" />
+    <Compile Include="Extensions\CXType.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
