@@ -224,8 +224,17 @@ namespace Translator.Core
 		Tuple<string, string> CreateParamInfo (CXCursor parmDecl)
 		{
 			string paramName = parmDecl.ToString ();
-			CXCursor typeRef = parmDecl.GetChildren ().First (); // CXCursor_TypeRef
-			string typeName = typeRef.ToString ();
+//			Console.WriteLine ("Debug !!!!");
+//			Console.WriteLine (parmDecl.ToString ());
+			CXType type = clang.getCursorType (parmDecl);
+//			Console.WriteLine ("type:      {0}", type.ToString ());
+//			Console.WriteLine ("type kind: {0}", type.kind);
+			var pointee = clang.getPointeeType (type);
+//			Console.WriteLine ("pointee type:   {0}", pointee);
+//			Console.WriteLine ("pointee kind:   {0}", pointee.kind);
+			string typeName = pointee.kind != CXTypeKind.CXType_Invalid 
+				? ObjCPrettifier.Prettify (pointee.ToString ())
+				: ObjCPrettifier.Prettify (type.ToString ());
 
 			return new Tuple<string, string> (typeName, paramName);
 		}

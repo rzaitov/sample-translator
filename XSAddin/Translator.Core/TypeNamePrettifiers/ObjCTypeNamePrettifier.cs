@@ -13,11 +13,16 @@ namespace Translator.Core
 
 		public string Prettify (string rawTypeName)
 		{
-			if (rawTypeName == "id")
+			switch (rawTypeName) {
+			case "id":
 				return idTypeName;
 
-			return rawTypeName;
+			case "CGFloat":
+				return "nfloat";
+
+			default:
+				return rawTypeName;
+			}
 		}
 	}
 }
-
