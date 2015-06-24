@@ -241,8 +241,8 @@ namespace Translator.Core
 		ParameterSyntax PortParameter (CXCursor parmDecl)
 		{
 			var paramInfo = CreateParamInfo (parmDecl);
-			return SyntaxFactory.Parameter(SyntaxFactory.Identifier(paramInfo.Item1))
-				.WithType(SyntaxFactory.ParseTypeName(paramInfo.Item2));
+			return SF.Parameter(SF.Identifier(paramInfo.Item1))
+				.WithType(SF.ParseTypeName(paramInfo.Item2));
 		}
 
 		MethodDeclarationSyntax AddBody (CXCursor compountStmt, MethodDeclarationSyntax mDecl)

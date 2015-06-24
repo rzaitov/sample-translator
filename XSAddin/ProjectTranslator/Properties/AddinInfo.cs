@@ -15,3 +15,5 @@ using Mono.Addins.Description;
 [assembly:AddinDescription ("Convert Xcode project to Xamarin.iOS project")]
 [assembly:AddinAuthor ("Oleg Demchenko & Rustam Zaitov")]
 
+[assembly:ImportAddinAssembly("Microsoft.CodeAnalysis.CSharp.Workspaces.dll")]
+

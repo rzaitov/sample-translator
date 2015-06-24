@@ -1,5 +1,10 @@
 ﻿using System;
+
 using ClangSharp;
+
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+
+using SF = Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace Translator.Core
 {
