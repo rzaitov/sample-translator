@@ -59,6 +59,10 @@
       <Project>{109CCF31-CECC-454A-95BD-8EE1E7B7AE7B}</Project>
       <Name>XcodeProjectParser</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Translator.Core\Translator.Core.csproj">
+      <Project>{B6607DBC-D9A7-4803-9A58-1A7D254672CB}</Project>
+      <Name>Translator.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Utilities\" />
