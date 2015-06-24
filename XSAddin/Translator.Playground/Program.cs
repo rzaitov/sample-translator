@@ -4,6 +4,7 @@ using ClangSharp;
 
 using Translator.Core;
 using System.Linq;
+using System.IO;
 
 namespace Translator.Playground
 {
@@ -26,48 +27,26 @@ namespace Translator.Playground
 				"-resource-dir", "/Users/rzaitov/llvm-clang/build/bin/../lib/clang/3.6.2"
 			};
 
-//			string file = "test/Cell.m";
+			// iOS samples:
+			string file = "test/Cell.m";
+//			string file = "/Users/rzaitov/Documents/Apps/Xamarin/samples/apple-samples/HomeKitCatalogCreatingHomesPairingandControllingAccessoriesandSettingUpTriggers/HMCatalog/Supporting Files/Utilities/UITableView+Updating.m";
+
+			// Mac samples
 //			string file = "/Users/rzaitov/Documents/Apps/Xamarin/samples/apple-samples/AddressBookCocoa/AddressBookCocoa.m";
-			string file = "/Users/rzaitov/Documents/Apps/Xamarin/samples/apple-samples/HomeKitCatalogCreatingHomesPairingandControllingAccessoriesandSettingUpTriggers/HMCatalog/Supporting Files/Utilities/UITableView+Updating.m";
-			//string file = "/Users/rzaitov/Documents/Apps/Xamarin/samples/apple-samples/LayoutManagerDemo/LayoutManagerDemo/main.m";
+//			string file = "/Users/rzaitov/Documents/Apps/Xamarin/samples/apple-samples/LayoutManagerDemo/LayoutManagerDemo/main.m";
 
-			Console.WriteLine ("Hello World!");
-			CXIndex index = clang.createIndex (1, 1);
-
-			CXUnsavedFile unsavedFiles;
-			CXTranslationUnit translationUnit = clang.parseTranslationUnit(index, file, clangArgs, clangArgs.Length, out unsavedFiles, 0, 0);
-			if (translationUnit.Pointer == IntPtr.Zero)
-				throw new InvalidOperationException ();
-
-			CXString spell = clang.getTranslationUnitSpelling (translationUnit);
-
-			CXCursor cursor = clang.getTranslationUnitCursor (translationUnit);
-
-			cursor.Dump ();
-//			var f = cursor.GetChildren ().First(c => c.kind == CXCursorKind.CXCursor_ObjCImplementationDecl).GetChildren().First (c => c.ToString() == "initWithCoder:");
-//			f.Dump ();
-//
-//			var def = clang.getCursorDefinition (f);
-//			def.Dump ();
-//
-//			CXType type = clang.getCursorResultType (f);
-//			Console.WriteLine ("type {0}", type.ToString ());
-//			Console.WriteLine ("type kind {0}", type.kind);
-
-//
-//			var cs = f.GetChildren ().First (c => c.kind == CXCursorKind.CXCursor_CompoundStmt);
-//			var ch = cs.GetChildren ().ToArray ();
-//			Console.WriteLine (ch.Length);
-//
-//			cs.Dump ();
+			Console.WriteLine ("**Playground**");
 
 			var pathLocator = new XamarinPathLocator ();
 			string xi = pathLocator.GetAssemblyPath (Platform.iOS);
-
 			var locator = new BindingLocator (new string[] { xi });
 
-			TranslationUnitPorter porter = new TranslationUnitPorter (cursor, "TestNS", locator);
-			Console.WriteLine (porter.Generate ());
+			var sw = new StringWriter ();
+			var srcTranslator = new SourceCodeTranslator (clangArgs, locator);
+			srcTranslator.Translate (file, "TestNamespace", sw);
+
+			Console.WriteLine (sw.ToString ());
+
 		}
 	}
 }

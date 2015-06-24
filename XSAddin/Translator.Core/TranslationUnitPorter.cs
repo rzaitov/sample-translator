@@ -21,41 +21,16 @@ namespace Translator.Core
 {
 	public class TranslationUnitPorter
 	{
-		readonly BindingLocator bindingLocator;
+		readonly IBindingLocator bindingLocator;
 		readonly CXCursor translationUnit;
 		CompilationUnitSyntax cu;
-
-//		CXCursor currentClass;
-//		CXCursor baseClass;
-
-//		CXCursor CurrentClass {
-//			get {
-//				return currentClass;
-//			}
-//			set {
-//				currentClass = value;
-//				baseClass = currentClass.GetSuperClass ();
-//			}
-//		}
-
-//		string CurrentClassName {
-//			get {
-//				return CurrentClass.ToString ();
-//			}
-//		}
-//
-//		string BaseClassName {
-//			get {
-//				return baseClass.ToString ();
-//			}
-//		}
 
 		ObjCImplementationDeclContext ImplContext { get; set; }
 		ObjCCategoryImplDeclContext CategoryImplContext { get; set; }
 
 		ObjCTypeNamePrettifier ObjCPrettifier { get; set; }
 
-		public TranslationUnitPorter (CXCursor translationUnit, string ns, BindingLocator bindingLocator)
+		public TranslationUnitPorter (CXCursor translationUnit, string ns, IBindingLocator bindingLocator)
 		{
 			if (translationUnit.kind != CXCursorKind.CXCursor_TranslationUnit)
 				throw new ArgumentException ();

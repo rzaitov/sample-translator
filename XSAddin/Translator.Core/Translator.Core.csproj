@@ -120,6 +120,7 @@
     <Compile Include="Extensions\Roslyn\MethodDeclarationSyntaxExtensions.cs" />
     <Compile Include="Context\ObjCImplementationDeclContext.cs" />
     <Compile Include="Context\ObjCCategoryImplDeclContext.cs" />
+    <Compile Include="SourceCodeTranslator.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
