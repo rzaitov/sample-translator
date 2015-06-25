@@ -1,4 +1,4 @@
-﻿namespace ProjectTranslatorUI
+﻿namespace Translator.UI
 {
 	public class ConversionPreferences
 	{

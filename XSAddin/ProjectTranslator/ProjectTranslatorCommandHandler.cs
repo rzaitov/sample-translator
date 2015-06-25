@@ -4,21 +4,21 @@ using System.Collections.Generic;
 using Gtk;
 using MonoDevelop.Components.Commands;
 
-using ProjectTranslatorUI;
-using XcodeProjectParser;
+using Translator.Parser;
+using Translator.UI;
 
-namespace ProjectTranslator
+namespace Translator.Addin
 {
 	public class ProjectTranslatorCommandHandler : CommandHandler
 	{
-		ProjectTranslatorUI.Settings window;
+		Translator.UI.Settings window;
 		XcodeProject xcodeProjectModel;
 		ConversionPreferences preferences;
 
 		protected override void Run ()
 		{
 			base.Run ();
-			window = new ProjectTranslatorUI.Settings ();
+			window = new Translator.UI.Settings ();
 			window.OnRunAnalysisButtonPressed += HandleRunAnalysisButtonClick;
 			window.OnRunGenerationButtonPressed += HandleRunGenerationButtonClick;
 			window.Show ();
@@ -30,7 +30,7 @@ namespace ProjectTranslator
 			info.Enabled = true;
 		}
 
-		List<XcodeProjectParser.Target> HandleRunAnalysisButtonClick (ConversionPreferences preferences)
+		List<Translator.Parser.Target> HandleRunAnalysisButtonClick (ConversionPreferences preferences)
 		{
 			this.preferences = preferences;
 			xcodeProjectModel = XcodeProjectLoader.LoadProject (preferences.XcodeProjectPath);
@@ -40,7 +40,7 @@ namespace ProjectTranslator
 			return xcodeProjectModel.Targets;
 		}
 
-		void HandleRunGenerationButtonClick (List<XcodeProjectParser.Target> targets)
+		void HandleRunGenerationButtonClick (List<Translator.Parser.Target> targets)
 		{
 			xcodeProjectModel.Targets = targets;
 			var solutionGenerator = new SolutionGenerator (xcodeProjectModel, preferences);

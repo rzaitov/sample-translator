@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace XcodeProjectParser
+namespace Translator.Parser
 {
 	public class TreeNode<T> : IEnumerable<TreeNode<T>>
 	{

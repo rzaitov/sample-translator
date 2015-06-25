@@ -5,9 +5,9 @@ using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 
-using XcodeProjectParser;
+using Translator.Parser;
 
-namespace ProjectTranslator
+namespace Translator.Addin
 {
 	public class ProjectGenerator
 	{

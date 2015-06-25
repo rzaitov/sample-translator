@@ -2,7 +2,7 @@
 
 using Antlr4.Runtime;
 
-namespace XcodeProjectParser
+namespace Translator.Parser
 {
 	public class ParsingErrorListener : IAntlrErrorListener<IToken>
 	{

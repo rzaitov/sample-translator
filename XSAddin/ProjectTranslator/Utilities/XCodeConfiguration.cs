@@ -4,7 +4,7 @@ using System.Linq;
 using System.Xml.Linq;
 using System.Collections.Generic;
 
-namespace ProjectTranslator
+namespace Translator.Addin
 {
 	public static class XCodeConfiguration
 	{

@@ -1,9 +1,9 @@
 ﻿using System;
 using Gtk;
 using System.Collections.Generic;
-using XcodeProjectParser;
+using Translator.Parser;
 
-namespace ProjectTranslatorUI
+namespace Translator.UI
 {
 	enum ActivePhase
 	{
@@ -14,13 +14,13 @@ namespace ProjectTranslatorUI
 
 	public partial class Settings : Window
 	{
-		List<XcodeProjectParser.Target> targets;
+		List<Translator.Parser.Target> targets;
 		List<Widget> analysisPhaseControls;
 		List<Widget> generationPhaseControls;
 		FileChooserDialog fileChooser;
 
-		public Func<ConversionPreferences, List<XcodeProjectParser.Target>> OnRunAnalysisButtonPressed;
-		public Action<List<XcodeProjectParser.Target>> OnRunGenerationButtonPressed;
+		public Func<ConversionPreferences, List<Translator.Parser.Target>> OnRunAnalysisButtonPressed;
+		public Action<List<Translator.Parser.Target>> OnRunGenerationButtonPressed;
 
 		public Settings () :
 			base (Gtk.WindowType.Toplevel)

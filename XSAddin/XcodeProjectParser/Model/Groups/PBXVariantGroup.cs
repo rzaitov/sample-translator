@@ -1,4 +1,4 @@
-﻿namespace XcodeProjectParser
+﻿namespace Translator.Parser
 {
     public class PBXVariantGroup : PBXGroupBase
     {

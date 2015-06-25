@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 
-namespace XcodeProjectParser
+namespace Translator.Parser
 {
 	public class PBXProject : IPBXElement
 	{

@@ -5,7 +5,7 @@ using Antlr4.Runtime;
 using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
 
-namespace XcodeProjectParser
+namespace Translator.Parser
 {
 	public class XcodeProjectReader
 	{

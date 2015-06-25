@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 
-namespace XcodeProjectParser
+namespace Translator.Parser
 {
 	public class PBXTargetDependency : IPBXElement
 	{

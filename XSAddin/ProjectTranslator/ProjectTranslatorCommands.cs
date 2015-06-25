@@ -1,4 +1,4 @@
-﻿namespace ProjectTranslator
+﻿namespace Translator.Addin
 {
 	public enum ProjectTranslatorCommands {
 		OpenSettings

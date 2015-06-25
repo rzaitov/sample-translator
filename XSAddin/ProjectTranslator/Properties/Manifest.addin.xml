@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <ExtensionModel>
 	<Extension path = "/MonoDevelop/Ide/Commands">
-        <Command id = "ProjectTranslator.ProjectTranslatorCommands.OpenSettings"
+        <Command id = "Translator.Addin.ProjectTranslatorCommands.OpenSettings"
              _label = "Convert Xcode project"
              _description = "This tool converts Xcode project to Xamarin.iOS project"
-             defaultHandler = "ProjectTranslator.ProjectTranslatorCommandHandler" />
+             defaultHandler = "Translator.Addin.ProjectTranslatorCommandHandler" />
     </Extension>
     <Extension path = "/MonoDevelop/Ide/MainMenu/Tools">
-        <CommandItem id= "ProjectTranslator.ProjectTranslatorCommands.OpenSettings" />
+        <CommandItem id= "Translator.Addin.ProjectTranslatorCommands.OpenSettings" />
     </Extension>
 </ExtensionModel>

@@ -4,7 +4,7 @@ using Mono.Addins.Description;
 
 [assembly:Addin (
 	"Project Convertor", 
-	Namespace = "ProjectTranslator",
+	Namespace = "Translator.Addin",
 	Category = "Project Import and Export",
 	Url = "http://xamarin.com/",
 	Version = "1.0"

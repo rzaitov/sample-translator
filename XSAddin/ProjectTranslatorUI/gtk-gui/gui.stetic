@@ -7,7 +7,7 @@
     <widget-library name="glade-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
     <widget-library name="../bin/Debug/ProjectTranslatorUI.dll" internal="true" />
   </import>
-  <widget class="Gtk.Window" id="ProjectTranslatorUI.Settings" design-size="480 300">
+  <widget class="Gtk.Window" id="Translator.UI.Settings" design-size="480 300">
     <property name="MemberName" />
     <property name="WidthRequest">460</property>
     <property name="Title" translatable="yes">Convertor settings</property>

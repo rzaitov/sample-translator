@@ -1,9 +1,9 @@
 ﻿using System;
 using System.IO;
 
-using XcodeProjectParser;
+using Translator.Parser;
 
-namespace ProjectTranslator
+namespace Translator.Addin
 {
 	public class XcodeProjectLoader
 	{

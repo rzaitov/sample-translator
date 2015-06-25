@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace XcodeProjectParser
+namespace Translator.Parser
 {
 	public class Target
 	{

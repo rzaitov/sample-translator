@@ -58,8 +58,8 @@
     <Compile Include="gtk-gui\generated.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />
-    <Compile Include="gtk-gui\ProjectTranslatorUI.Settings.cs" />
     <Compile Include="ConversionPreferences.cs" />
+    <Compile Include="gtk-gui\Translator.UI.Settings.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

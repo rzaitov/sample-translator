@@ -8,7 +8,7 @@ using System.Text;
 using System.Reflection;
 using Translator.Core;
 
-namespace ProjectTranslator
+namespace Translator.Addin
 {
 	public sealed class CodeTranslator
 	{

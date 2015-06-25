@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace XcodeProjectParser
+namespace Translator.Parser
 {
 	public enum PBXFileType {
 		None = 0,

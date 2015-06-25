@@ -5,7 +5,7 @@ using System.Linq;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
 
-namespace XcodeProjectParser
+namespace Translator.Parser
 {
 	class ProjectParserListener : XcodeProjectBaseListener
 	{

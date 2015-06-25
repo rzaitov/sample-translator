@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Reflection;
 
-namespace XcodeProjectParser
+namespace Translator.Parser
 {
 	public enum IsaType
 	{

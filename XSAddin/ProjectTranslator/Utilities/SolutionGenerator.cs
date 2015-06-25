@@ -8,10 +8,10 @@ using MonoDevelop.Core.ProgressMonitoring;
 using MonoDevelop.Ide;
 using MonoDevelop.Projects;
 
-using ProjectTranslatorUI;
-using XcodeProjectParser;
+using Translator.UI;
+using Translator.Parser;
 
-namespace ProjectTranslator
+namespace Translator.Addin
 {
 	public class SolutionGenerator
 	{
