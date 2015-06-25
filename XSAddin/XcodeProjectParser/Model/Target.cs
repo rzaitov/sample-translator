@@ -28,6 +28,17 @@ namespace Translator.Parser
 			}
 		}
 
+		IList<string> headerFiles;
+		public IList<string> SourceHeaderFiles {
+			get {
+				if (headerFiles == null)
+					headerFiles = Files.Where (c => c.FileType == PBXFileType.SourcecodeCH
+						|| c.FileType == PBXFileType.SourcecodeCppH).
+						Select (c => c.Path).ToList<string> ();
+				return headerFiles;
+			}
+		}
+
 		IList<string> imageFiles;
 		public IList<string> ImageFiles {
 			get {
