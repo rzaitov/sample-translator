@@ -160,10 +160,6 @@
     <AddinFile Include="Resources\AppIcon.appiconset\Icon-Small-40%402x.png" />
     <AddinFile Include="Resources\AppIcon.appiconset\Icon-Small-50.png" />
     <AddinFile Include="Resources\AppIcon.appiconset\Icon-Small-50%402x.png" />
-    <AddinFile Include="Utilities\sample-translator" />
-    <AddinFile Include="Utilities\signatures.txt">
-      <DeployService-Deploy>True</DeployService-Deploy>
-    </AddinFile>
     <AddinFile Include="Utilities\resources\include\sanitizer\allocator_interface.h" />
     <AddinFile Include="Utilities\resources\include\sanitizer\asan_interface.h" />
     <AddinFile Include="Utilities\resources\include\sanitizer\common_interface_defs.h" />

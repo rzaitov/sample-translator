@@ -262,7 +262,7 @@ namespace Translator.Addin
 				Frameworks = currentTarget.Frameworks
 			};
 
-			CodeTranslator.Default.Translate (translationConfig);
+			CodeTranslator.Translate (translationConfig);
 		}
 
 		void AddImageAssets (XDocument projectXml)

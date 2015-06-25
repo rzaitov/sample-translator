@@ -9,7 +9,7 @@ namespace Translator.Addin
 	public static class XCodeConfiguration
 	{
 		static readonly string sdk = "Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator{0}.sdk";
-		static readonly string frameworks = Path.Combine(SdkPath, "System/Library/Frameworks/");
+		static readonly string frameworks = Path.Combine (SdkPath, "System/Library/Frameworks/");
 
 		static string xcodePath;
 		static string XcodePath {
