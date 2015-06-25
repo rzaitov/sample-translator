@@ -14,18 +14,11 @@ namespace Translator.Addin
 	{
 		public static void Translate (CodeTranslationConfiguration configuration)
 		{
-			UriBuilder uri = new UriBuilder (Assembly.GetExecutingAssembly ().GetName ().CodeBase);
-			string path = Uri.UnescapeDataString (uri.Path);
-
-			string strAppDir = Path.GetDirectoryName (path);
-			string utilsPath = Path.Combine (strAppDir, "Utilities");
-			string resources = Path.Combine (utilsPath, "resources");
-
 			var argBuilder = new ClangArgBuilder {
 				PathToFrameworks = XCodeConfiguration.PathToFramewroks,
 				SimMinVersion = XCodeConfiguration.SdkVersion,
 				SysRoot = XCodeConfiguration.SdkPath,
-				ResourceDir = resources
+				ResourceDir = FetchResourceDir ()
 			};
 			argBuilder.Frameworks.AddRange (configuration.Frameworks);
 
@@ -38,10 +31,7 @@ namespace Translator.Addin
 
 			foreach (var file in configuration.FilePaths) {
 				Console.WriteLine (file);
-				string fileName = Path.GetFileNameWithoutExtension (file);
-				fileName = Path.ChangeExtension (fileName, "cs");
-				var dstPath = Path.Combine (configuration.ProjectPath, fileName);
-
+				var dstPath = GetDestanation (file, configuration.ProjectPath);
 				using (var textWriter = File.CreateText (dstPath)) {
 					srcTranslator.Translate (file, configuration.ProjectNamespace, textWriter);
 				}
@@ -52,6 +42,24 @@ namespace Translator.Addin
 		{
 			return headerPaths.Select (hf => Path.GetDirectoryName (hf)).Distinct ();
 		}
+
+		static string GetDestanation(string srcFileName, string dstDir)
+		{
+			string fileName = Path.ChangeExtension (srcFileName, "cs");
+			var dstPath = Path.Combine (dstDir, fileName);
+			return dstPath;
+		}
+
+		static string FetchResourceDir ()
+		{
+			UriBuilder uri = new UriBuilder (Assembly.GetExecutingAssembly ().GetName ().CodeBase);
+			string path = Uri.UnescapeDataString (uri.Path);
+
+			string strAppDir = Path.GetDirectoryName (path);
+			string utilsPath = Path.Combine (strAppDir, "Utilities");
+			string resourceDir = Path.Combine (utilsPath, "resources");
+
+			return resourceDir;
+		}
 	}
 }
-
