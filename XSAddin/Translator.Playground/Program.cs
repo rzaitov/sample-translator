@@ -28,8 +28,9 @@ namespace Translator.Playground
 			};
 
 			// iOS samples:
-			string file = "test/Cell.m";
+//			string file = "test/Cell.m";
 //			string file = "/Users/rzaitov/Documents/Apps/Xamarin/samples/apple-samples/HomeKitCatalogCreatingHomesPairingandControllingAccessoriesandSettingUpTriggers/HMCatalog/Supporting Files/Utilities/UITableView+Updating.m";
+			string file = "/Users/rzaitov/Documents/Apps/Xamarin/samples/apple-samples/SoZoomy/SoZoomy/ViewController.m";
 
 			// Mac samples
 //			string file = "/Users/rzaitov/Documents/Apps/Xamarin/samples/apple-samples/AddressBookCocoa/AddressBookCocoa.m";

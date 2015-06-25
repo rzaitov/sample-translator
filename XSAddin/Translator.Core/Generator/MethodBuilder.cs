@@ -108,8 +108,8 @@ namespace Translator.Core
 				if (!paramsEnumerator.MoveNext ())
 					throw new ArgumentException ();
 
-				string typeName = typesEnumerator.Current.ParameterType.Name;
-				yield return paramsEnumerator.Current.WithType (SF.ParseTypeName (typeName));
+				var type = Convert (typesEnumerator.Current.ParameterType);
+				yield return paramsEnumerator.Current.WithType (type);
 			}
 		}
 
@@ -119,10 +119,21 @@ namespace Translator.Core
 				case "System.Void":
 					return CommonTypes.VoidTypeSyntax;
 
+				case "System.Boolean":
+					return CommonTypes.BoolTypeSyntax;
+
+				case "System.Int32":
+					return CommonTypes.IntTypeSyntax;
+
+				case "System.Single":
+					return CommonTypes.FloatTypeSyntax;
+
+				case "System.Double":
+					return CommonTypes.DoubleTypeSyntax;
+
 				default:
 					return SF.ParseTypeName (typeRef.Name);
 			}
-
 		}
 	}
 }
