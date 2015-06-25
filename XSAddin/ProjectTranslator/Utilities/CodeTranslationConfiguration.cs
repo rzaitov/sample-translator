@@ -14,6 +14,9 @@ namespace Translator.Addin
 			}
 		}
 
+		// TODO this is hack: all inforamtion about header files should be extracted from Xcode project
+		public string XcodeProjectPath { get; set; }
+
 		public string ProjectPath { get; set; }
 
 		public IList<string> FilePaths { get; set; }

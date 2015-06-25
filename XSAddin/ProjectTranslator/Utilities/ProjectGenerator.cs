@@ -256,6 +256,7 @@ namespace Translator.Addin
 			projectXml.Root.Add (sourceFilesItemGroup);
 
 			var translationConfig = new CodeTranslationConfiguration {
+				XcodeProjectPath = xcodeProjPath,
 				ProjectNamespace = projectName,
 				ProjectPath = ProjectPath,
 				FilePaths = objcFiles,
