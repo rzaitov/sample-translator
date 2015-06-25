@@ -58,7 +58,7 @@ namespace ProjectTranslator
 			List<string> clangArgs = new List<string> {
 				"-ObjC",
 				string.Format ("-F\"{0}\"", XCodeConfiguration.PathToFramewroks),
-				"-mios-simulator-version-min=8.4",
+				string.Format ("-mios-simulator-version-min={0}", XCodeConfiguration.SdkVersion),
 				"-fmodules",  // enable modules
 				"-fobjc-arc", // enable ARC
 				"-isysroot", XCodeConfiguration.SdkPath,
