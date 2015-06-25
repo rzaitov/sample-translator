@@ -123,6 +123,7 @@
     <Compile Include="Extensions\CXType.cs" />
     <Compile Include="CommonTypes.cs" />
     <Compile Include="TypeNamePrettifiers\ObjCTypePorter.cs" />
+    <Compile Include="ClangArgBuilder.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

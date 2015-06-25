@@ -20,26 +20,20 @@ namespace Translator.Addin
 			string utilsPath = Path.Combine (strAppDir, "Utilities");
 			string resources = Path.Combine (utilsPath, "resources");
 
-			var clangArgs = new List<string> {
-				"-ObjC",
-				string.Format ("-F\"{0}\"", XCodeConfiguration.PathToFramewroks),
-				string.Format ("-mios-simulator-version-min={0}", XCodeConfiguration.SdkVersion),
-				"-fmodules",  // enable modules
-				"-fobjc-arc", // enable ARC
-				"-isysroot", XCodeConfiguration.SdkPath,
-				"-resource-dir", resources
+			var argBuilder = new ClangArgBuilder {
+				PathToFrameworks = XCodeConfiguration.PathToFramewroks,
+				SimMinVersion = XCodeConfiguration.SdkVersion,
+				SysRoot = XCodeConfiguration.SdkPath,
+				ResourceDir = resources
 			};
-
-			foreach (var f in configuration.Frameworks) {
-				clangArgs.Add ("-framework");
-				clangArgs.Add (f);
-			}
+			argBuilder.Frameworks.AddRange (configuration.Frameworks);
 
 			var pathLocator = new XamarinPathLocator ();
 			string xi = pathLocator.GetAssemblyPath (Platform.iOS);
 			var locator = new BindingLocator (new string[] { xi });
 
-			var srcTranslator = new SourceCodeTranslator (clangArgs.ToArray (), locator);
+			string[] clangArgs = argBuilder.Build ();
+			var srcTranslator = new SourceCodeTranslator (clangArgs, locator);
 
 			foreach (var file in configuration.FilePaths) {
 				Console.WriteLine (file);
