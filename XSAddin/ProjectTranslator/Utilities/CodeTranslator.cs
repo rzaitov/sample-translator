@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text;
 
 using Translator.Core;
+using System.Linq;
 
 namespace Translator.Addin
 {
@@ -45,6 +46,11 @@ namespace Translator.Addin
 					srcTranslator.Translate (file, configuration.ProjectNamespace, textWriter);
 				}
 			}
+		}
+
+		static IEnumerable<string> FetchHeaderDirs (IEnumerable<string> headerPaths)
+		{
+			return headerPaths.Select (hf => Path.GetDirectoryName (hf)).Distinct ();
 		}
 	}
 }
