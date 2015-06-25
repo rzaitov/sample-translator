@@ -63,9 +63,9 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\XcodeProjectParser\XcodeProjectParser.csproj">
+    <ProjectReference Include="..\XcodeProjectParser\Translator.Parser.csproj">
       <Project>{109CCF31-CECC-454A-95BD-8EE1E7B7AE7B}</Project>
-      <Name>XcodeProjectParser</Name>
+      <Name>Translator.Parser</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>

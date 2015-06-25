@@ -51,17 +51,17 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ProjectTranslatorUI\ProjectTranslatorUI.csproj">
-      <Project>{6E046429-4481-4532-989E-60C565FCA680}</Project>
-      <Name>ProjectTranslatorUI</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\XcodeProjectParser\XcodeProjectParser.csproj">
-      <Project>{109CCF31-CECC-454A-95BD-8EE1E7B7AE7B}</Project>
-      <Name>XcodeProjectParser</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Translator.Core\Translator.Core.csproj">
       <Project>{B6607DBC-D9A7-4803-9A58-1A7D254672CB}</Project>
       <Name>Translator.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\XcodeProjectParser\Translator.Parser.csproj">
+      <Project>{109CCF31-CECC-454A-95BD-8EE1E7B7AE7B}</Project>
+      <Name>Translator.Parser</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ProjectTranslatorUI\Translator.UI.csproj">
+      <Project>{6E046429-4481-4532-989E-60C565FCA680}</Project>
+      <Name>Translator.UI</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

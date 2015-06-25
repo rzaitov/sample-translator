@@ -1,15 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectTranslator", "ProjectTranslator\ProjectTranslator.csproj", "{AFA2AD62-714B-4178-ACBE-E191EEC26268}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Translator.Addin", "ProjectTranslator\Translator.Addin.csproj", "{AFA2AD62-714B-4178-ACBE-E191EEC26268}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectTranslatorUI", "ProjectTranslatorUI\ProjectTranslatorUI.csproj", "{6E046429-4481-4532-989E-60C565FCA680}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Translator.UI", "ProjectTranslatorUI\Translator.UI.csproj", "{6E046429-4481-4532-989E-60C565FCA680}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XcodeProjectParser", "XcodeProjectParser\XcodeProjectParser.csproj", "{109CCF31-CECC-454A-95BD-8EE1E7B7AE7B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Translator.Parser", "XcodeProjectParser\Translator.Parser.csproj", "{109CCF31-CECC-454A-95BD-8EE1E7B7AE7B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Translator.Core", "Translator.Core\Translator.Core.csproj", "{B6607DBC-D9A7-4803-9A58-1A7D254672CB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TranslatorPlayground", "Translator.Playground\TranslatorPlayground.csproj", "{CF4EFB56-9575-43A5-9769-0B03F76C7CF5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Translator.Playground", "Translator.Playground\Translator.Playground.csproj", "{CF4EFB56-9575-43A5-9769-0B03F76C7CF5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
