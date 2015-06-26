@@ -40,12 +40,12 @@ namespace Translator.Core
 			if (!string.IsNullOrWhiteSpace (PathToFrameworks))
 				clangArgs.Add (string.Format ("-F{0}", PathToFrameworks));
 
-			if (string.IsNullOrWhiteSpace (SysRoot)) {
+			if (!string.IsNullOrWhiteSpace (SysRoot)) {
 				clangArgs.Add ("-isysroot");
 				clangArgs.Add (SysRoot);
 			}
 
-			if (string.IsNullOrWhiteSpace (ResourceDir)) {
+			if (!string.IsNullOrWhiteSpace (ResourceDir)) {
 				clangArgs.Add ("-resource-dir");
 				clangArgs.Add (ResourceDir);
 			}

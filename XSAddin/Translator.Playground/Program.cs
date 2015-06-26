@@ -15,7 +15,7 @@ namespace Translator.Playground
 			string[] clangArgs = new string[] {
 				"-v",
 				"-ObjC",
-				"-I/Applications/Xcode-beta.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator8.4.sdk/usr/include",
+//				"-I/Applications/Xcode-beta.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator8.4.sdk/usr/include",
 				"-F/Applications/Xcode-beta.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator8.4.sdk/System/Library/Frameworks/",
 				"-mios-simulator-version-min=8.4",
 				"-fobjc-arc",
@@ -32,7 +32,8 @@ namespace Translator.Playground
 //			string file = "/Users/rzaitov/Documents/Apps/Xamarin/samples/apple-samples/HomeKitCatalogCreatingHomesPairingandControllingAccessoriesandSettingUpTriggers/HMCatalog/Supporting Files/Utilities/UITableView+Updating.m";
 //			string file = "/Users/rzaitov/Documents/Apps/Xamarin/samples/apple-samples/SoZoomy/SoZoomy/ViewController.m";
 //			string file = "/Users/rzaitov/Documents/Apps/Xamarin/samples/apple-samples/SoZoomy/SoZoomy/PreviewView.m";
-			string file = "/Users/rzaitov/Documents/Apps/Xamarin/samples/apple-samples/SoZoomy/SoZoomy/FaceView.m";
+//			string file = "/Users/rzaitov/Documents/Apps/Xamarin/samples/apple-samples/SoZoomy/SoZoomy/FaceView.m";
+			string file = "/Users/rzaitov/Documents/Apps/Xamarin/samples/apple-samples/LazyTableImages/Classes/LazyTableAppDelegate.m";
 
 			// Mac samples
 //			string file = "/Users/rzaitov/Documents/Apps/Xamarin/samples/apple-samples/AddressBookCocoa/AddressBookCocoa.m";
