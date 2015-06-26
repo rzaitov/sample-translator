@@ -20,10 +20,9 @@ namespace Translator.Parser
 		IList<string> sourceFiles;
 		public IList<string> SourceFiles {
 			get {
-				if (sourceFiles == null)
-					sourceFiles = Files.Where (c => c.FileType == PBXFileType.SourcecodeCObjc
-							|| c.FileType == PBXFileType.SourcecodeCppObjcpp).
-						Select (c => c.Path).ToList<string> ();
+				sourceFiles = Files.Where (c => c.FileType == PBXFileType.SourcecodeCObjc
+						|| c.FileType == PBXFileType.SourcecodeCppObjcpp).
+					Select (c => c.Path).ToList<string> ();
 				return sourceFiles;
 			}
 		}
