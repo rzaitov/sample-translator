@@ -22,35 +22,40 @@ namespace Translator.Core
 		public ClangArgBuilder ()
 		{
 			Frameworks = new List<string> ();
+			IncludeDirs = new List<string> ();
 		}
 
 		public string[] Build ()
 		{
-			if (string.IsNullOrWhiteSpace (SimMinVersion))
-				throw new InvalidOperationException ();
-
-			if (string.IsNullOrWhiteSpace (PathToFrameworks))
-				throw new InvalidOperationException ();
-
-			if (string.IsNullOrWhiteSpace(SysRoot))
-				throw new InvalidOperationException ();
-
-			if(string.IsNullOrWhiteSpace(ResourceDir))
-				throw new InvalidOperationException ();
-
 			var clangArgs = new List<string> {
 				"-ObjC",
-				string.Format ("-F\"{0}\"", PathToFrameworks),
-				string.Format ("-mios-simulator-version-min={0}", SimMinVersion),
 				"-fmodules",  // enable modules
 				"-fobjc-arc", // enable ARC
-				"-isysroot", SysRoot,
-				"-resource-dir", ResourceDir
 			};
+
+			if (!string.IsNullOrWhiteSpace (SimMinVersion))
+				string.Format ("-mios-simulator-version-min={0}", SimMinVersion);
+
+			if (!string.IsNullOrWhiteSpace (PathToFrameworks))
+				string.Format ("-F\"{0}\"", PathToFrameworks);
+
+			if (string.IsNullOrWhiteSpace (SysRoot)) {
+				clangArgs.Add ("-isysroot");
+				clangArgs.Add (SysRoot);
+			}
+
+			if (string.IsNullOrWhiteSpace (ResourceDir)) {
+				clangArgs.Add ("-resource-dir");
+				clangArgs.Add (ResourceDir);
+			}
 
 			foreach (var f in Frameworks) {
 				clangArgs.Add ("-framework");
 				clangArgs.Add (f);
+			}
+
+			foreach (var include in IncludeDirs) {
+				clangArgs.Add (string.Format ("-I\"{0}\"", include));
 			}
 
 			return clangArgs.ToArray ();

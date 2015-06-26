@@ -21,6 +21,7 @@ namespace Translator.Addin
 				ResourceDir = FetchResourceDir ()
 			};
 			argBuilder.Frameworks.AddRange (configuration.Frameworks);
+			argBuilder.IncludeDirs.AddRange (FetchHeaderDirs (configuration.HeaderFilePaths));
 
 			var pathLocator = new XamarinPathLocator ();
 			string xi = pathLocator.GetAssemblyPath (Platform.iOS);
