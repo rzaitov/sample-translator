@@ -13,7 +13,7 @@ namespace Translator.Playground
 		public static void Main (string[] args)
 		{
 			string[] clangArgs = new string[] {
-//				"-v",
+				"-v",
 				"-ObjC",
 				"-I/Applications/Xcode-beta.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator8.4.sdk/usr/include",
 				"-F/Applications/Xcode-beta.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator8.4.sdk/System/Library/Frameworks/",
@@ -30,7 +30,9 @@ namespace Translator.Playground
 			// iOS samples:
 //			string file = "test/Cell.m";
 //			string file = "/Users/rzaitov/Documents/Apps/Xamarin/samples/apple-samples/HomeKitCatalogCreatingHomesPairingandControllingAccessoriesandSettingUpTriggers/HMCatalog/Supporting Files/Utilities/UITableView+Updating.m";
-			string file = "/Users/rzaitov/Documents/Apps/Xamarin/samples/apple-samples/SoZoomy/SoZoomy/ViewController.m";
+//			string file = "/Users/rzaitov/Documents/Apps/Xamarin/samples/apple-samples/SoZoomy/SoZoomy/ViewController.m";
+//			string file = "/Users/rzaitov/Documents/Apps/Xamarin/samples/apple-samples/SoZoomy/SoZoomy/PreviewView.m";
+			string file = "/Users/rzaitov/Documents/Apps/Xamarin/samples/apple-samples/SoZoomy/SoZoomy/FaceView.m";
 
 			// Mac samples
 //			string file = "/Users/rzaitov/Documents/Apps/Xamarin/samples/apple-samples/AddressBookCocoa/AddressBookCocoa.m";
@@ -44,6 +46,8 @@ namespace Translator.Playground
 
 			var sw = new StringWriter ();
 			var srcTranslator = new SourceCodeTranslator (clangArgs, locator);
+			var tu = srcTranslator.GetTranslationUnit (file);
+			tu.Dump ();
 			srcTranslator.Translate (file, "TestNamespace", sw);
 
 			Console.WriteLine (sw.ToString ());

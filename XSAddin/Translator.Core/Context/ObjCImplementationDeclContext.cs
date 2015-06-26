@@ -6,6 +6,7 @@ namespace Translator.Core
 {
 	public class ObjCImplementationDeclContext
 	{
+		public CXCursor DeclCursor { get; private set; }
 		public CXCursor ImplCursor { get; private set; }
 		public CXCursor SuperClassRef { get; private set; }
 
@@ -27,13 +28,13 @@ namespace Translator.Core
 				throw new ArgumentException ();
 
 			ImplCursor = cursor;
-			SuperClassRef = GetSuperClass (cursor);
+			DeclCursor = clang.getCanonicalCursor (cursor);
+			SuperClassRef = GetSuperClass (DeclCursor);
 		}
 
-		static CXCursor GetSuperClass (CXCursor cursor)
+		static CXCursor GetSuperClass (CXCursor interfaceDecl)
 		{
-			CXCursor canonical = clang.getCanonicalCursor (cursor);
-			return canonical.GetChildren ().Where (c => c.kind == CXCursorKind.CXCursor_ObjCSuperClassRef).Single ();
+			return interfaceDecl.GetChildren ().Where (c => c.kind == CXCursorKind.CXCursor_ObjCSuperClassRef).Single ();
 		}
 	}
 }

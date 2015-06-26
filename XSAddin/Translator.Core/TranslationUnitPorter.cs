@@ -109,6 +109,10 @@ namespace Translator.Core
 			classDecl = classDecl.AddModifiers (SF.Token (SyntaxKind.PublicKeyword));
 			classDecl = classDecl.AddBaseListTypes (SF.SimpleBaseType (SF.ParseTypeName(ImplContext.SuperClassName)));
 
+			var propDecls = ImplContext.DeclCursor.GetChildren ().Where (c => c.kind == CXCursorKind.CXCursor_ObjCPropertyDecl);
+			foreach (var pDecl in propDecls)
+				classDecl = classDecl.AddMembers (CreatePropertyFromPropertyDecl (pDecl));
+
 			var unrecognized = new List<CXCursor> ();
 			IEnumerable<CXCursor> children = cursor.GetChildren ();
 			foreach (var m in children) {
@@ -167,6 +171,25 @@ namespace Translator.Core
 			IEnumerable<CXCursor> children = cursor.GetChildren ();
 			var compoundStmt = children.First (c => c.kind == CXCursorKind.CXCursor_CompoundStmt);
 			return AddBody (compoundStmt, mDecl);
+		}
+
+		PropertyDeclarationSyntax CreatePropertyFromPropertyDecl (CXCursor propDecl)
+		{
+			CXType propType = clang.getCursorType (propDecl);
+			TypeSyntax propTypeSyntax = TypePorter.PortType (propType);
+
+			PropertyDeclarationSyntax propSyntax = SF.PropertyDeclaration (propTypeSyntax, propDecl.ToString())
+				.AddModifiers (SF.Token (SyntaxKind.PublicKeyword));
+
+			propSyntax = propSyntax.AddAccessorListAccessors (
+				SF.AccessorDeclaration (SyntaxKind.GetAccessorDeclaration)
+				.WithSemicolonToken (SF.Token (SyntaxKind.SemicolonToken)),
+
+				SF.AccessorDeclaration (SyntaxKind.SetAccessorDeclaration)
+				.WithSemicolonToken (SF.Token (SyntaxKind.SemicolonToken))
+			);
+
+			return propSyntax;
 		}
 
 		BaseMethodDeclarationSyntax PortMethod (CXCursor cursor)
