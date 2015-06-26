@@ -69,7 +69,9 @@ namespace Translator.Addin
 
 			foreach (var xcode in xcodes) {
 				var currentXcodeVersion = GetXcodeVersion (xcode);
-				if (currentXcodeVersion > maximumVersion) {
+
+				// TODO: currently Xcode 7 beta and higher versions of Xcode are not supported
+				if (currentXcodeVersion > maximumVersion && currentXcodeVersion < 7.0) {
 					maximumVersion = currentXcodeVersion;
 					result = xcode;
 				}
