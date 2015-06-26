@@ -96,13 +96,13 @@ namespace Translator.Addin
 
 		void GenerateReadme ()
 		{
-			string templateContent = System.IO.File.ReadAllText (Path.Combine (resourcesFolderName, readmeFileName));
+			string templateContent = File.ReadAllText (Path.Combine (resourcesFolderName, readmeFileName));
 			File.WriteAllText (Path.Combine (rootFolder, projectName, readmeFileName), templateContent);
 		}
 
 		void GenerateMetadata ()
 		{
-			string templateContent = System.IO.File.ReadAllText (Path.Combine (resourcesFolderName, metadataFileName));
+			string templateContent = File.ReadAllText (Path.Combine (resourcesFolderName, metadataFileName));
 			var metadata = XDocument.Parse (templateContent);
 			var idElement = metadata.Descendants ().
 				Where (p => p.Name.LocalName == "ID").First ();

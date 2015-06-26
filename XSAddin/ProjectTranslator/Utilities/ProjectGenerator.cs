@@ -250,7 +250,11 @@ namespace Translator.Addin
 					Directory.CreateDirectory (Path.GetDirectoryName (sourceFilePath));
 				
 				sourceFilePath = Path.Combine (Directory.GetParent (xcodeProjPath).FullName, sourceFile);
-				objcSourceFiles.Add (sourceFilePath);
+
+				if (Path.GetFileName (sourceFile) == "main.m")
+					AddMainFileToProject (sourceFilePath);
+				else
+					objcSourceFiles.Add (sourceFilePath);
 			}
 
 			var objcHeaderFiles = new List<string> ();
@@ -273,6 +277,14 @@ namespace Translator.Addin
 			};
 
 			CodeTranslator.Translate (translationConfig);
+		}
+
+		void AddMainFileToProject (string mainFilePath)
+		{
+			string mainFileContent = File.ReadAllText (Path.Combine (resourcesFolderName, "main.cs"));
+			mainFileContent = mainFileContent.Replace (".$", projectName.Replace (" ", string.Empty));
+			mainFilePath = CodeTranslator.GetDestination (mainFilePath, ProjectPath);
+			File.WriteAllText (mainFilePath, mainFileContent);
 		}
 
 		void AddImageAssets (XDocument projectXml)

@@ -63,6 +63,10 @@
       <Project>{6E046429-4481-4532-989E-60C565FCA680}</Project>
       <Name>Translator.UI</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Translator.Logger\Translator.Logger.csproj">
+      <Project>{21CD4C9F-AEF4-4DC5-8557-3B3F4B130DE2}</Project>
+      <Name>Translator.Logger</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Utilities\" />
@@ -226,5 +230,6 @@
     <AddinFile Include="Utilities\resources\include\x86intrin.h" />
     <AddinFile Include="Utilities\resources\include\xmmintrin.h" />
     <AddinFile Include="Utilities\resources\include\xopintrin.h" />
+    <AddinFile Include="Resources\main.cs" />
   </ItemGroup>
 </Project>

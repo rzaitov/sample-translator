@@ -34,9 +34,7 @@ namespace Translator.Addin
 
 			foreach (var file in configuration.SourceFilePaths) {
 				Console.WriteLine (file);
-				if (Path.GetFileName (file) == "main.m")
-					continue;
-				var dstPath = GetDestanation (file, configuration.ProjectPath);
+				var dstPath = GetDestination (file, configuration.ProjectPath);
 				using (var textWriter = File.CreateText (dstPath)) {
 					srcTranslator.Translate (file, configuration.ProjectNamespace, textWriter);
 				}
@@ -44,17 +42,17 @@ namespace Translator.Addin
 			}
 		}
 
-		static IEnumerable<string> FetchHeaderDirs (IEnumerable<string> headerPaths)
-		{
-			return headerPaths.Select (hf => Path.GetDirectoryName (hf)).Distinct ();
-		}
-
-		static string GetDestanation(string srcFileName, string dstDir)
+		public static string GetDestination(string srcFileName, string dstDir)
 		{
 			string fileName = Path.GetFileName (srcFileName);
 			fileName = Path.ChangeExtension (fileName, "cs");
 			var dstPath = Path.Combine (dstDir, fileName);
 			return dstPath;
+		}
+
+		static IEnumerable<string> FetchHeaderDirs (IEnumerable<string> headerPaths)
+		{
+			return headerPaths.Select (hf => Path.GetDirectoryName (hf)).Distinct ();
 		}
 
 		static string FetchResourceDir ()
