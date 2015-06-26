@@ -1,4 +1,5 @@
 ﻿using System;
+
 using Translator.Parser;
 
 namespace Translator.Addin
@@ -16,10 +17,6 @@ namespace Translator.Addin
 		public bool OverwriteAppIcons { get; set; }
 
 		public bool OveriwriteLaunchImages { get; set; }
-
-		public ProjectGenerationSettings ()
-		{
-		}
 	}
 }
 
