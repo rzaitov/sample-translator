@@ -383,7 +383,7 @@ namespace Translator.Addin
 		{
 			var rootNamespace = projectXml.Descendants ().
 				Where (p => p.Name.LocalName == "RootNamespace").First ();
-			rootNamespace.Value = projectName;
+			rootNamespace.Value = projectName.Replace (" ", string.Empty);
 		}
 
 		void AddAssemblyName (XDocument projectXml)
