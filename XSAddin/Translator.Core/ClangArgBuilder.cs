@@ -28,16 +28,17 @@ namespace Translator.Core
 		public string[] Build ()
 		{
 			var clangArgs = new List<string> {
+				"-v",
 				"-ObjC",
 				"-fmodules",  // enable modules
 				"-fobjc-arc", // enable ARC
 			};
 
 			if (!string.IsNullOrWhiteSpace (SimMinVersion))
-				string.Format ("-mios-simulator-version-min={0}", SimMinVersion);
+				clangArgs.Add (string.Format ("-mios-simulator-version-min={0}", SimMinVersion));
 
 			if (!string.IsNullOrWhiteSpace (PathToFrameworks))
-				string.Format ("-F\"{0}\"", PathToFrameworks);
+				clangArgs.Add (string.Format ("-F{0}", PathToFrameworks));
 
 			if (string.IsNullOrWhiteSpace (SysRoot)) {
 				clangArgs.Add ("-isysroot");
@@ -55,7 +56,7 @@ namespace Translator.Core
 			}
 
 			foreach (var include in IncludeDirs) {
-				clangArgs.Add (string.Format ("-I\"{0}\"", include));
+				clangArgs.Add (string.Format ("-I{0}", include));
 			}
 
 			return clangArgs.ToArray ();

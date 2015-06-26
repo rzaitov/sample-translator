@@ -27,11 +27,14 @@ namespace Translator.Addin
 			string xi = pathLocator.GetAssemblyPath (Platform.iOS);
 			var locator = new BindingLocator (new string[] { xi });
 
+			Console.WriteLine (argBuilder.ToString ());
 			string[] clangArgs = argBuilder.Build ();
 			var srcTranslator = new SourceCodeTranslator (clangArgs, locator);
 
 			foreach (var file in configuration.SourceFilePaths) {
 				Console.WriteLine (file);
+				if (Path.GetFileName (file) == "main.m")
+					continue;
 				var dstPath = GetDestanation (file, configuration.ProjectPath);
 				using (var textWriter = File.CreateText (dstPath)) {
 					srcTranslator.Translate (file, configuration.ProjectNamespace, textWriter);
