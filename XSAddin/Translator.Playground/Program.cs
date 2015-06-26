@@ -24,7 +24,8 @@ namespace Translator.Playground
 				"-framework", "UIKit",
 				"-framework", "Foundation",
 				"-isysroot", "/Applications/Xcode-beta.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator8.4.sdk/",
-				"-resource-dir", "/Users/rzaitov/llvm-clang/build/bin/../lib/clang/3.6.2"
+				"-resource-dir", "/Users/rzaitov/llvm-clang/build/bin/../lib/clang/3.6.2",
+				"-include", "/Users/rzaitov/Documents/Apps/Xamarin/samples/apple-samples/LazyTableImages/LazyTable_Prefix.pch"
 			};
 
 			// iOS samples:

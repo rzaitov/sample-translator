@@ -51,7 +51,8 @@ namespace Translator.Addin
 
 		static string GetDestanation(string srcFileName, string dstDir)
 		{
-			string fileName = Path.ChangeExtension (srcFileName, "cs");
+			string fileName = Path.GetFileName (srcFileName);
+			fileName = Path.ChangeExtension (fileName, "cs");
 			var dstPath = Path.Combine (dstDir, fileName);
 			return dstPath;
 		}
