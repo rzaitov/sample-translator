@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -80,6 +81,8 @@ namespace Translator.Parser
 				}
 			}
 
+			FindHeaders (result);
+
 			return result;
 		}
 
@@ -88,13 +91,12 @@ namespace Translator.Parser
 			var mainGroupId = ProjectElement.MainGroup;
 			var rootElement = (PBXGroupBase)GetElementById (mainGroupId);
 			projectFileTree = new TreeNode<Tuple<string, IPBXElement>> (new Tuple<string, IPBXElement> (mainGroupId, rootElement));
-			IterateDependencyTree (rootElement, projectFileTree);
+			IterateProjectTree (rootElement, projectFileTree);
 
 			foreach (TreeNode<Tuple<string, IPBXElement>> node in projectFileTree) {
 				if (node.Data.Item2.GetType () == typeof(PBXFileReference)) {
 					var fullPath = ConstructPath (node, ((PBXFileReference)node.Data.Item2).Path);
 					((PBXFileReference)node.Data.Item2).Path = fullPath.Replace ("\"", string.Empty);
-					Console.WriteLine (fullPath);
 				}
 			}
 		}
@@ -104,7 +106,21 @@ namespace Translator.Parser
 			return Objects.Where (c => c.ID == id).FirstOrDefault ();
 		}
 
-		void IterateDependencyTree (PBXGroupBase parentGroup, TreeNode<Tuple<string, IPBXElement>> parentNode)
+		void FindHeaders (Target target)
+		{
+			var headers = Objects.Where (obj => obj.ObjectType == IsaType.PBXFileReference
+				&& (((PBXFileReference)obj).FileType == PBXFileType.SourcecodeCH || ((PBXFileReference)obj).FileType == PBXFileType.SourcecodeCppH)).Cast<PBXFileReference> ().ToList ();
+
+			foreach (var sourceFile in target.SourceFiles) {
+				var sourceFileName = Path.GetFileNameWithoutExtension (sourceFile);
+				var sourceHeaderFile = headers.Where (header => header.Path.Contains (sourceFileName)).FirstOrDefault ();
+
+				if (sourceHeaderFile != null)
+					target.Files.Add (sourceHeaderFile);
+			}
+		}
+
+		void IterateProjectTree (PBXGroupBase parentGroup, TreeNode<Tuple<string, IPBXElement>> parentNode)
 		{
 			if (parentGroup.Children.Count == 0)
 				return;
@@ -114,7 +130,7 @@ namespace Translator.Parser
 				var childNode = parentNode.AddChild (new Tuple<string, IPBXElement> (childElementId, childElement));
 
 				if (childElement.GetType ().BaseType == typeof(PBXGroupBase))
-					IterateDependencyTree ((PBXGroupBase)childElement, childNode);
+					IterateProjectTree ((PBXGroupBase)childElement, childNode);
 			}
 		}
 

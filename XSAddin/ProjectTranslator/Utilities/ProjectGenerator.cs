@@ -239,7 +239,7 @@ namespace Translator.Addin
 		{
 			var sourceFilesItemGroup = new XElement (xmlNamespace + "ItemGroup");
 
-			List<string> objcFiles = new List<string> ();
+			var objcSourceFiles = new List<string> ();
 
 			foreach (var sourceFile in currentTarget.SourceFiles) {
 				var sourceElement = new XElement (xmlNamespace + "Compile", new XAttribute ("Include", sourceFile.ConvertPathToSharpName ()));
@@ -250,16 +250,22 @@ namespace Translator.Addin
 					Directory.CreateDirectory (Path.GetDirectoryName (sourceFilePath));
 				
 				sourceFilePath = Path.Combine (Directory.GetParent (xcodeProjPath).FullName, sourceFile);
-				objcFiles.Add (sourceFilePath);
+				objcSourceFiles.Add (sourceFilePath);
+			}
+
+			var objcHeaderFiles = new List<string> ();
+			foreach (var headerFile in currentTarget.SourceHeaderFiles) {
+				var sourceFilePath = Path.Combine (Directory.GetParent (xcodeProjPath).FullName, headerFile);
+				objcHeaderFiles.Add (sourceFilePath);
 			}
 
 			projectXml.Root.Add (sourceFilesItemGroup);
 
 			var translationConfig = new CodeTranslationConfiguration {
-				XcodeProjectPath = xcodeProjPath,
 				ProjectNamespace = projectName,
 				ProjectPath = ProjectPath,
-				FilePaths = objcFiles,
+				SourceFilePaths = objcSourceFiles,
+				HeaderFilePaths = objcHeaderFiles,
 				Frameworks = currentTarget.Frameworks
 			};
 

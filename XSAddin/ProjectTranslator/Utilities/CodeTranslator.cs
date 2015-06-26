@@ -29,7 +29,7 @@ namespace Translator.Addin
 			string[] clangArgs = argBuilder.Build ();
 			var srcTranslator = new SourceCodeTranslator (clangArgs, locator);
 
-			foreach (var file in configuration.FilePaths) {
+			foreach (var file in configuration.SourceFilePaths) {
 				Console.WriteLine (file);
 				var dstPath = GetDestanation (file, configuration.ProjectPath);
 				using (var textWriter = File.CreateText (dstPath)) {

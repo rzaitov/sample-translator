@@ -14,25 +14,25 @@ namespace Translator.Addin
 			}
 		}
 
-		// TODO this is hack: all inforamtion about header files should be extracted from Xcode project
-		public string XcodeProjectPath { get; set; }
-
 		public string ProjectPath { get; set; }
 
-		public IList<string> FilePaths { get; set; }
+		public IList<string> SourceFilePaths { get; set; }
+
+		public IList<string> HeaderFilePaths { get; set; }
 
 		public IList<string> Frameworks { get; set; }
 
 		public CodeTranslationConfiguration ()
 		{
-			FilePaths = new List<string> ();
+			SourceFilePaths = new List<string> ();
 			Frameworks = new List<string> ();
+			HeaderFilePaths = new List<string> ();
 		}
 
 		public string FilesToString ()
 		{
 			string files = string.Empty;
-			foreach (string filePath in FilePaths)
+			foreach (string filePath in SourceFilePaths)
 				files += string.Format ("\"{0}\" ", filePath);
 
 			return files;
