@@ -18,7 +18,8 @@ namespace Translator.Addin
 				PathToFrameworks = XCodeConfiguration.PathToFramewroks,
 				SimMinVersion = XCodeConfiguration.SdkVersion,
 				SysRoot = XCodeConfiguration.SdkPath,
-				ResourceDir = FetchResourceDir ()
+				ResourceDir = FetchResourceDir (),
+				PrefixHeaderFilePath = configuration.PCHFilePath
 			};
 			argBuilder.Frameworks.AddRange (configuration.Frameworks);
 			argBuilder.IncludeDirs.AddRange (FetchHeaderDirs (configuration.HeaderFilePaths));
@@ -39,6 +40,7 @@ namespace Translator.Addin
 				using (var textWriter = File.CreateText (dstPath)) {
 					srcTranslator.Translate (file, configuration.ProjectNamespace, textWriter);
 				}
+				Console.WriteLine ("done: {0}", dstPath);
 			}
 		}
 

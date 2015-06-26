@@ -15,6 +15,8 @@ namespace Translator.Core
 
 		public string ResourceDir { get; set; }
 
+		public string PrefixHeaderFilePath { get; set; }
+
 		public List<string> Frameworks { get; set; }
 
 		public List<string> IncludeDirs { get; set; }
@@ -57,6 +59,11 @@ namespace Translator.Core
 
 			foreach (var include in IncludeDirs) {
 				clangArgs.Add (string.Format ("-I{0}", include));
+			}
+
+			if (!string.IsNullOrWhiteSpace (PrefixHeaderFilePath)) {
+				clangArgs.Add ("-include");
+				clangArgs.Add (PrefixHeaderFilePath);
 			}
 
 			return clangArgs.ToArray ();
