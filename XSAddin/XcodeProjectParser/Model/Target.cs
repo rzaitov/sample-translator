@@ -17,6 +17,8 @@ namespace Translator.Parser
 
 		public List<string> Dependencies { get; set; }
 
+		public string PCHFilePath { get; set; }
+
 		IList<string> sourceFiles;
 		public IList<string> SourceFiles {
 			get {

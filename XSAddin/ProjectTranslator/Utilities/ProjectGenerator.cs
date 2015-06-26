@@ -260,13 +260,16 @@ namespace Translator.Addin
 			}
 
 			projectXml.Root.Add (sourceFilesItemGroup);
+			var pchFilePath = currentTarget.PCHFilePath != null ?
+				Path.Combine (Directory.GetParent (xcodeProjPath).FullName, currentTarget.PCHFilePath) : null;
 
 			var translationConfig = new CodeTranslationConfiguration {
 				ProjectNamespace = projectName,
 				ProjectPath = ProjectPath,
 				SourceFilePaths = objcSourceFiles,
 				HeaderFilePaths = objcHeaderFiles,
-				Frameworks = currentTarget.Frameworks
+				Frameworks = currentTarget.Frameworks,
+				PCHFilePath = pchFilePath
 			};
 
 			CodeTranslator.Translate (translationConfig);

@@ -23,11 +23,29 @@ namespace Translator.Parser
 
 		public string FilePath { get; set; }
 
+		List<PBXFileReference> headerFiles;
+		List<PBXFileReference> HeaderFiles {
+			get {
+				if (headerFiles == null)
+					headerFiles = Objects.Where (obj => obj.ObjectType == IsaType.PBXFileReference
+						&& (((PBXFileReference)obj).FileType == PBXFileType.SourcecodeCH || ((PBXFileReference)obj).FileType == PBXFileType.SourcecodeCppH))
+						.Cast<PBXFileReference> ().ToList ();
+				return headerFiles;
+			}
+		}
+
+		string pchFilePath;
+		string PCHFilePath {
+			get {
+				pchFilePath = pchFilePath ?? HeaderFiles.Where (header => header.Path.Contains (".pch")).Select (header => header.Path).FirstOrDefault ();
+				return pchFilePath;
+			}
+		}
+
 		PBXProject projectElement;
 		public PBXProject ProjectElement {
 			get {
-				if (projectElement == null)
-					projectElement = (PBXProject)Objects.Where (c => c.ID == RootObject).FirstOrDefault ();
+				projectElement = projectElement ?? (PBXProject)Objects.Where (c => c.ID == RootObject).FirstOrDefault ();
 				return projectElement;
 			}
 		}
@@ -52,6 +70,7 @@ namespace Translator.Parser
 			var result = new Target {
 				Name = nativeTarget.Name.Replace ("\"", string.Empty),
 				ID = nativeTarget.ID,
+				PCHFilePath = PCHFilePath,
 				ProjectType = nativeTarget.ProductType.Replace ("\"", string.Empty).GetEnumMemberByDescription<SharpProjectType> ()
 			};
 
@@ -97,6 +116,7 @@ namespace Translator.Parser
 				if (node.Data.Item2.GetType () == typeof(PBXFileReference)) {
 					var fullPath = ConstructPath (node, ((PBXFileReference)node.Data.Item2).Path);
 					((PBXFileReference)node.Data.Item2).Path = fullPath.Replace ("\"", string.Empty);
+					Console.WriteLine (((PBXFileReference)node.Data.Item2).Path);
 				}
 			}
 		}
@@ -108,12 +128,9 @@ namespace Translator.Parser
 
 		void FindHeaders (Target target)
 		{
-			var headers = Objects.Where (obj => obj.ObjectType == IsaType.PBXFileReference
-				&& (((PBXFileReference)obj).FileType == PBXFileType.SourcecodeCH || ((PBXFileReference)obj).FileType == PBXFileType.SourcecodeCppH)).Cast<PBXFileReference> ().ToList ();
-
 			foreach (var sourceFile in target.SourceFiles) {
 				var sourceFileName = Path.GetFileNameWithoutExtension (sourceFile);
-				var sourceHeaderFile = headers.Where (header => header.Path.Contains (sourceFileName)).FirstOrDefault ();
+				var sourceHeaderFile = HeaderFiles.Where (header => header.Path.Contains (sourceFileName)).FirstOrDefault ();
 
 				if (sourceHeaderFile != null)
 					target.Files.Add (sourceHeaderFile);
