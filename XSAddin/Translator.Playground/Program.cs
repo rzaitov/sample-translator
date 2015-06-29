@@ -34,7 +34,8 @@ namespace Translator.Playground
 //			string file = "/Users/rzaitov/Documents/Apps/Xamarin/samples/apple-samples/SoZoomy/SoZoomy/ViewController.m";
 //			string file = "/Users/rzaitov/Documents/Apps/Xamarin/samples/apple-samples/SoZoomy/SoZoomy/PreviewView.m";
 //			string file = "/Users/rzaitov/Documents/Apps/Xamarin/samples/apple-samples/SoZoomy/SoZoomy/FaceView.m";
-			string file = "/Users/rzaitov/Documents/Apps/Xamarin/samples/apple-samples/LazyTableImages/Classes/LazyTableAppDelegate.m";
+//			string file = "/Users/rzaitov/Documents/Apps/Xamarin/samples/apple-samples/LazyTableImages/Classes/LazyTableAppDelegate.m";
+			string file = "/Users/rzaitov/Documents/Apps/Xamarin/samples/apple-samples/AVCam-iOSUsingAVFoundationtoCaptureImagesandMovies/AVCam/AAPLCameraViewController.m";
 
 			// Mac samples
 //			string file = "/Users/rzaitov/Documents/Apps/Xamarin/samples/apple-samples/AddressBookCocoa/AddressBookCocoa.m";
