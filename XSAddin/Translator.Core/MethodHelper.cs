@@ -38,16 +38,25 @@ namespace Translator.Core
 
 			string filePath = clang.getFileName (file).ToString ();
 
-			// offset in file starts from 1 (1 column)
-			string result = File.ReadAllText (filePath).Substring ((int)offset1-1, (int)(offset2 - offset1 + 1));
-			return result;
+			// We have to read bytes first and then convert them to utf8 string
+			// because .net string is utf16 char array, but clang handles utf8 src text only.
+			// clang's offset means byte offset (not utf16 char offset)
+
+			uint count = offset2 - offset1 + 1;
+			byte[] text = new byte[count];
+			using(FileStream fs = File.OpenRead(filePath)) {
+				fs.Seek (offset1, SeekOrigin.Begin);
+				fs.Read (text, 0, (int)count);
+			}
+
+			return Encoding.UTF8.GetString (text);
 		}
 
 		public static IEnumerable<string> Comment (string code)
 		{
 			var lines = code.Split (new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
 			foreach (var l in lines)
-				yield return string.Format ("// {0}\n", l.Trim ());
+				yield return string.Format ("// {0}\n", l);
 		}
 	}
 }
