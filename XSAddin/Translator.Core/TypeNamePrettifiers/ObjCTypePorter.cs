@@ -72,6 +72,10 @@ namespace Translator.Core
 			if (type.kind == CXTypeKind.CXType_Double)
 				return CommonTypes.DoubleTypeSyntax;
 
+			if (type.kind == CXTypeKind.CXType_Bool ||
+				clang.getCanonicalType(type).kind == CXTypeKind.CXType_Bool)
+				return CommonTypes.BoolTypeSyntax;
+
 			return SF.ParseTypeName (Prettify (type));
 		}
 
