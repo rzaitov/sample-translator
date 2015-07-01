@@ -54,9 +54,10 @@ namespace Translator.Core
 
 		public static IEnumerable<string> Comment (string code)
 		{
-			var lines = code.Split (new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+			string[] lines = code.Split (new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+
 			foreach (var l in lines)
-				yield return string.Format ("// {0}\n", l);
+				yield return string.Format ("//{0}\n", l);
 		}
 	}
 }
