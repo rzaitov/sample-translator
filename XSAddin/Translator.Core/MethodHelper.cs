@@ -23,26 +23,43 @@ namespace Translator.Core
 
 		public static string GetTextFromCompoundStmt (CXCursor cursor)
 		{
-			var stmts = cursor.GetChildren ();
-
-			CXSourceLocation start = clang.getCursorLocation (stmts.First ());
-			CXSourceLocation end = clang.getRangeEnd (clang.getCursorExtent (stmts.Last ()));
+			var tu = clang.Cursor_getTranslationUnit (cursor);
+			var range = clang.getCursorExtent (cursor);
+			var location = clang.getCursorLocation (cursor);
 
 			CXFile file;
-			uint line1, line2;
-			uint column1, column2;
-			uint offset1, offset2;
+			uint line, column, offset;
 
-			clang.getFileLocation (start, out file, out line1, out column1, out offset1);
-			clang.getFileLocation (end, out file, out line2, out column2, out offset2);
-
+			clang.getFileLocation (location, out file, out line, out column, out offset);
 			string filePath = clang.getFileName (file).ToString ();
+
+			uint offset1 = 0;
+			uint offset2 = 0;
+			using (var tg = TokenGroup.GetTokens (tu, range)) {
+
+				for (int i = 0; i < tg.Tokens.Length; i++) {
+					var t = tg.Tokens [i];
+					offset1 = GetOffset (tu, t);
+
+					if (clang.getTokenSpelling (tu, t).ToString () == "{")
+						break;
+				}
+
+				for (int i = tg.Tokens.Length - 1; i >= 0; i--) {
+					var t = tg.Tokens [i];
+					offset2 = GetOffset (tu, t);
+
+					if (clang.getTokenSpelling (tu, t).ToString () == "}")
+						break;
+				}
+			}
 
 			// We have to read bytes first and then convert them to utf8 string
 			// because .net string is utf16 char array, but clang handles utf8 src text only.
 			// clang's offset means byte offset (not utf16 char offset)
 
-			uint count = offset2 - offset1 + 1;
+			uint count = offset2 - offset1 - 1; // without { and }
+			offset1 ++; // move from open {
 			byte[] text = new byte[count];
 			using(FileStream fs = File.OpenRead(filePath)) {
 				fs.Seek (offset1, SeekOrigin.Begin);
@@ -50,6 +67,17 @@ namespace Translator.Core
 			}
 
 			return Encoding.UTF8.GetString (text);
+		}
+
+		static uint GetOffset (CXTranslationUnit tu, CXToken t)
+		{
+			uint c, l, offset;;
+			CXFile f;
+
+			CXSourceLocation location = clang.getTokenLocation (tu, t);
+			clang.getFileLocation (location, out f, out l, out c, out offset);
+
+			return offset;
 		}
 
 		public static IEnumerable<string> Comment (string code)
