@@ -55,17 +55,17 @@
       <Project>{B6607DBC-D9A7-4803-9A58-1A7D254672CB}</Project>
       <Name>Translator.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\XcodeProjectParser\Translator.Parser.csproj">
-      <Project>{109CCF31-CECC-454A-95BD-8EE1E7B7AE7B}</Project>
-      <Name>Translator.Parser</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ProjectTranslatorUI\Translator.UI.csproj">
-      <Project>{6E046429-4481-4532-989E-60C565FCA680}</Project>
-      <Name>Translator.UI</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Translator.Logger\Translator.Logger.csproj">
       <Project>{21CD4C9F-AEF4-4DC5-8557-3B3F4B130DE2}</Project>
       <Name>Translator.Logger</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Translator.Parser\Translator.Parser.csproj">
+      <Project>{109CCF31-CECC-454A-95BD-8EE1E7B7AE7B}</Project>
+      <Name>Translator.Parser</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Translator.UI\Translator.UI.csproj">
+      <Project>{6E046429-4481-4532-989E-60C565FCA680}</Project>
+      <Name>Translator.UI</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
