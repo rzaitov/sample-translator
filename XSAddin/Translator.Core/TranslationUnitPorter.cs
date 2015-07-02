@@ -247,9 +247,9 @@ namespace Translator.Core
 
 		MethodDeclarationSyntax AddBody (CXCursor compountStmt, MethodDeclarationSyntax mDecl)
 		{
-			mDecl = mDecl.AddBodyStatements (new StatementSyntax[0]);
-			SyntaxToken cl = mDecl.Body.CloseBraceToken.WithLeadingTrivia (FetchTrivias (compountStmt));
-			return mDecl.ReplaceToken(mDecl.Body.CloseBraceToken, cl);
+			SyntaxTriviaList lst = SF.TriviaList (FetchTrivias (compountStmt));
+			StatementSyntax eStat = SF.EmptyStatement().WithLeadingTrivia (lst);
+			return mDecl.AddBodyStatements (eStat);
 		}
 
 		ConstructorDeclarationSyntax AddBody (CXCursor compountStmt, ConstructorDeclarationSyntax ctorDecl)
@@ -263,7 +263,11 @@ namespace Translator.Core
 		{
 			string methodBody = MethodHelper.GetTextFromCompoundStmt (compountStmt);
 			IEnumerable<string> lines = MethodHelper.Comment (methodBody);
-			return lines.Select (l => SyntaxFactory.SyntaxTrivia (SyntaxKind.SingleLineCommentTrivia, l));
+			IEnumerable<SyntaxTrivia> comments = lines.Select (l => SyntaxFactory.SyntaxTrivia (SyntaxKind.SingleLineCommentTrivia, l));
+			foreach (var comment in comments) {
+				yield return comment;
+				yield return SF.CarriageReturnLineFeed;
+			}
 		}
 
 		static bool IsFromHeader (CXCursor cursor)
@@ -276,6 +280,7 @@ namespace Translator.Core
 			var ws = new AdhocWorkspace ();
 //			OptionSet options = ws.Options;
 //			options = options.WithChangedOption (CSharpFormattingOptions.);
+
 			var formattedNode = Formatter.Format (cu, ws);
 
 			StringBuilder sb = new StringBuilder();
