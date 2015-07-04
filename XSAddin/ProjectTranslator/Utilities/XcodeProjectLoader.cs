@@ -13,7 +13,11 @@ namespace Translator.Addin
 				throw new ArgumentNullException ("filePath");
 
 			var files = Directory.GetFiles (filePath, "*.pbxproj");
-			string fileContent = System.IO.File.ReadAllText (files [0]);
+
+			if (files.Length == 0)
+				throw new ArgumentNullException ("No *.pbxproj file found in selected directory");
+
+			string fileContent = File.ReadAllText (files [0]);
 			var xcodeProject = XcodeProjectReader.Parse (fileContent);
 			xcodeProject.FilePath = filePath;
 			return xcodeProject;

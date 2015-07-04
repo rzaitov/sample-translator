@@ -26,6 +26,12 @@ namespace Translator.Addin
 		string rootFolder;
 		string projectName;
 
+		public string SolutionFolder {
+			get {
+				return Path.Combine (rootFolder, projectName);
+			}
+		}
+
 		public SolutionGenerator (XcodeProject xcodeProjectModel, ConversionPreferences preferences)
 		{
 			rootFolder = preferences.CSharpProjectFolderPath;

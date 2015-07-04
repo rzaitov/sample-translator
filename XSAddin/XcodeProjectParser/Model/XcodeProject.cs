@@ -26,10 +26,9 @@ namespace Translator.Parser
 		List<PBXFileReference> headerFiles;
 		List<PBXFileReference> HeaderFiles {
 			get {
-				if (headerFiles == null)
-					headerFiles = Objects.Where (obj => obj.ObjectType == IsaType.PBXFileReference
-						&& (((PBXFileReference)obj).FileType == PBXFileType.SourcecodeCH || ((PBXFileReference)obj).FileType == PBXFileType.SourcecodeCppH))
-						.Cast<PBXFileReference> ().ToList ();
+				headerFiles = Objects.Where (obj => obj.ObjectType == IsaType.PBXFileReference
+					&& (((PBXFileReference)obj).FileType == PBXFileType.SourcecodeCH || ((PBXFileReference)obj).FileType == PBXFileType.SourcecodeCppH))
+					.Cast<PBXFileReference> ().ToList ();
 				return headerFiles;
 			}
 		}
@@ -37,7 +36,7 @@ namespace Translator.Parser
 		string pchFilePath;
 		string PCHFilePath {
 			get {
-				pchFilePath = pchFilePath ?? HeaderFiles.Where (header => header.Path.Contains (".pch")).Select (header => header.Path).FirstOrDefault ();
+				pchFilePath = pchFilePath ?? HeaderFiles.Where (header => Path.GetExtension (header.Path) == ".pch").Select (header => header.Path).FirstOrDefault ();
 				return pchFilePath;
 			}
 		}
@@ -56,7 +55,7 @@ namespace Translator.Parser
 			Targets = new List<Target> ();
 		}
 
-		public void AnalyzeProjectDependecies ()
+		void AnalyzeProjectDependecies ()
 		{
 			var targets = ProjectElement.Targets;
 			foreach (var targetID in targets)
@@ -119,6 +118,8 @@ namespace Translator.Parser
 					Console.WriteLine (((PBXFileReference)node.Data.Item2).Path);
 				}
 			}
+
+			AnalyzeProjectDependecies ();
 		}
 
 		IPBXElement GetElementById (string id)

@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 using System.Collections.Generic;
+using System.Collections;
 
 namespace Translator.Addin
 {
@@ -61,36 +62,43 @@ namespace Translator.Addin
 
 		static string FindLatestXcodeVersion ()
 		{
-			string result = string.Empty;
 			var apps = Directory.GetDirectories ("/Applications");
 			var xcodes = apps.Where (c => c.Contains ("Xcode")).ToList<string> ();
 
-			double maximumVersion = 0;
+			var versionsMap = xcodes.Select (p => new Tuple<string, Tuple<int, int>> (p, GetXcodeVersion (p)));
+			var max = new Tuple<string, Tuple<int, int>> (string.Empty, new Tuple<int, int> (0, 0));
 
-			foreach (var xcode in xcodes) {
-				var currentXcodeVersion = GetXcodeVersion (xcode);
+			foreach (var item in versionsMap) {
 
-				// TODO: currently Xcode 7 beta and higher versions of Xcode are not supported
-				if (currentXcodeVersion > maximumVersion && currentXcodeVersion < 7.0) {
-					maximumVersion = currentXcodeVersion;
-					result = xcode;
-				}
+				if (item.Item2.Item1 >= 7)
+					continue;
+
+				if (IsGreater (item.Item2, max.Item2))
+					max = item;
 			}
 
-			return result;
+			return max.Item1;
 		}
 
-		static double GetXcodeVersion (string pathToXcode)
+		static bool IsGreater (Tuple <int, int> version1, Tuple <int, int> version2)
 		{
-			try {
-				var pathToVersionsPlist = Path.Combine (pathToXcode, "Contents/version.plist");
-				var versionPlist = XDocument.Parse (File.ReadAllText (pathToVersionsPlist));
-				var versionKey = versionPlist.Descendants ().Where (p => p.Value == "CFBundleShortVersionString").First ();
-				var varsionValue = versionKey.ElementsAfterSelf ("string").First ();
-				return Double.Parse (varsionValue.Value);
-			} catch {
-				return 0;
-			}
+			if (version1.Item1 > version2.Item1)
+				return true;
+
+			if (version1.Item1 == version2.Item1)
+				return version1.Item2 > version2.Item2;
+
+			return false;
+		}
+
+		static Tuple<int, int> GetXcodeVersion (string pathToXcode)
+		{
+			var pathToVersionsPlist = Path.Combine (pathToXcode, "Contents/version.plist");
+			var versionPlist = XDocument.Parse (File.ReadAllText (pathToVersionsPlist));
+			var versionKey = versionPlist.Descendants ().Where (p => p.Value == "CFBundleShortVersionString").First ();
+			var versionValue = versionKey.ElementsAfterSelf ("string").First ();
+			var majorMinor = versionValue.Value.Trim ().Split ('.');
+			return new Tuple<int, int> (Int32.Parse (majorMinor [0]), Int32.Parse (majorMinor [1]));
 		}
 	}
 }

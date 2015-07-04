@@ -35,7 +35,6 @@ namespace Translator.Addin
 			this.preferences = preferences;
 			xcodeProjectModel = XcodeProjectLoader.LoadProject (preferences.XcodeProjectPath);
 
-			xcodeProjectModel.AnalyzeProjectDependecies ();
 			xcodeProjectModel.AnalyzeProjectsFileStructure ();
 			return xcodeProjectModel.Targets;
 		}
