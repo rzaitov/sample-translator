@@ -23,7 +23,7 @@ namespace Translator.Parser
 		[CorrespondingClass (typeof(PBXResourcesBuildPhase))]
 		PBXResourcesBuildPhase,
 
-		[CorrespondingClass (typeof(PBXBuildFile))]
+		[CorrespondingClass (typeof(PBXShellScriptBuildPhase))]
 		PBXShellScriptBuildPhase,
 
 		[CorrespondingClass (typeof(PBXSourcesBuildPhase))]
@@ -41,6 +41,7 @@ namespace Translator.Parser
 		[CorrespondingClass (typeof(PBXVariantGroup))]
 		PBXVariantGroup,
 
+		// TODO:
 		[CorrespondingClass (typeof(PBXBuildFile))]
 		PBXAggregateTarget,
 
@@ -56,6 +57,7 @@ namespace Translator.Parser
 		[CorrespondingClass (typeof(XCBuildConfiguration))]
 		XCBuildConfiguration,
 
+		// TODO:
 		[CorrespondingClass (typeof(PBXBuildFile))]
 		XCConfigurationList
 	}
