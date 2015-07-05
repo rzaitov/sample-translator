@@ -58,8 +58,15 @@ namespace Translator.Parser
 		void AnalyzeProjectDependecies ()
 		{
 			var targets = ProjectElement.Targets;
-			foreach (var targetID in targets)
-				Targets.Add (CreateBuildTarget (targetID));
+
+			// TODO;
+			foreach (var targetID in targets) {
+				var target = CreateBuildTarget (targetID);
+
+				if (target.ProjectType == SharpProjectType.None)
+					continue;
+				Targets.Add (target);
+			}
 		}
 
 		Target CreateBuildTarget (string nativeTargetID)

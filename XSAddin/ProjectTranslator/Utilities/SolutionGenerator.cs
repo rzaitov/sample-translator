@@ -80,9 +80,6 @@ namespace Translator.Addin
 		{
 			foreach (var target in xcodeProjectModel.Targets) {
 
-				if (target.ProjectType == SharpProjectType.None)
-					continue;
-
 				var projectGenerationSettings = new ProjectGenerationSettings {
 					OveriwriteLaunchImages = preferences.OveriwriteLaunchImages,
 					OverwriteAppIcons = preferences.OverwriteAppIcons,
