@@ -203,16 +203,17 @@ namespace Translator.UI
 			w15.Y = 81;
 			// Container child fixed3.Gtk.Fixed+FixedChild
 			this.pathToHeaderFilesEntry = new global::Gtk.Entry ();
+			global::Gtk.Tooltips w16 = new Gtk.Tooltips ();
+			w16.SetTip (this.pathToHeaderFilesEntry, "e.g. path to Pods headers", "e.g. path to Pods headers");
 			this.pathToHeaderFilesEntry.WidthRequest = 310;
 			this.pathToHeaderFilesEntry.CanFocus = true;
 			this.pathToHeaderFilesEntry.Name = "pathToHeaderFilesEntry";
-			this.pathToHeaderFilesEntry.Text = global::Mono.Unix.Catalog.GetString ("e.g. path to Pods headers");
 			this.pathToHeaderFilesEntry.IsEditable = true;
 			this.pathToHeaderFilesEntry.InvisibleChar = '●';
 			this.fixed3.Add (this.pathToHeaderFilesEntry);
-			global::Gtk.Fixed.FixedChild w16 = ((global::Gtk.Fixed.FixedChild)(this.fixed3 [this.pathToHeaderFilesEntry]));
-			w16.X = 141;
-			w16.Y = 75;
+			global::Gtk.Fixed.FixedChild w17 = ((global::Gtk.Fixed.FixedChild)(this.fixed3 [this.pathToHeaderFilesEntry]));
+			w17.X = 141;
+			w17.Y = 75;
 			this.Add (this.fixed3);
 			if ((this.Child != null)) {
 				this.Child.ShowAll ();

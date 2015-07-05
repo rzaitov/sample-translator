@@ -219,8 +219,8 @@
           <widget class="Gtk.Entry" id="pathToHeaderFilesEntry">
             <property name="MemberName" />
             <property name="WidthRequest">310</property>
+            <property name="Tooltip" translatable="yes">e.g. path to Pods headers</property>
             <property name="CanFocus">True</property>
-            <property name="Text" translatable="yes">e.g. path to Pods headers</property>
             <property name="IsEditable">True</property>
             <property name="InvisibleChar">●</property>
           </widget>
