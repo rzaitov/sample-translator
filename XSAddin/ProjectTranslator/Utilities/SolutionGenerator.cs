@@ -80,13 +80,17 @@ namespace Translator.Addin
 		{
 			foreach (var target in xcodeProjectModel.Targets) {
 
+				if (target.ProjectType == SharpProjectType.None)
+					continue;
+
 				var projectGenerationSettings = new ProjectGenerationSettings {
 					OveriwriteLaunchImages = preferences.OveriwriteLaunchImages,
 					OverwriteAppIcons = preferences.OverwriteAppIcons,
 					SolutionName = projectName,
 					PathToXcodeProject = xcodeProjectModel.FilePath,
 					CsharpSolutionParentFolder = preferences.CSharpProjectFolderPath,
-					TargetProject = target
+					TargetProject = target,
+					HeaderSearchPaths = preferences.HeaderSearchPaths
 				};
 
 				var projectGenerator = new ProjectGenerator (projectGenerationSettings);

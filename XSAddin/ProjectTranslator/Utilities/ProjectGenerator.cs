@@ -273,7 +273,8 @@ namespace Translator.Addin
 				SourceFilePaths = objcSourceFiles,
 				HeaderFilePaths = objcHeaderFiles,
 				Frameworks = currentTarget.Frameworks,
-				PCHFilePath = pchFilePath
+				PCHFilePath = pchFilePath,
+				HeaderSearchPaths = settings.HeaderSearchPaths
 			};
 
 			CodeTranslator.Translate (translationConfig);

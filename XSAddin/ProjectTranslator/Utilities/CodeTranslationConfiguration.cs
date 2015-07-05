@@ -24,6 +24,8 @@ namespace Translator.Addin
 
 		public IList<string> Frameworks { get; set; }
 
+		public List<string> HeaderSearchPaths { get; set; }
+
 		public CodeTranslationConfiguration ()
 		{
 			SourceFilePaths = new List<string> ();

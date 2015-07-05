@@ -33,6 +33,10 @@ namespace Translator.UI
 		private global::Gtk.ComboBox setProjectTypeCombobox;
 		
 		private global::Gtk.Button analyzeXcodeProjectButton;
+		
+		private global::Gtk.Label pathToHeaderFilesLabel;
+		
+		private global::Gtk.Entry pathToHeaderFilesEntry;
 
 		protected virtual void Build ()
 		{
@@ -133,7 +137,7 @@ namespace Translator.UI
 			this.fixed3.Add (this.overwriteAppIcons);
 			global::Gtk.Fixed.FixedChild w8 = ((global::Gtk.Fixed.FixedChild)(this.fixed3 [this.overwriteAppIcons]));
 			w8.X = 12;
-			w8.Y = 80;
+			w8.Y = 131;
 			// Container child fixed3.Gtk.Fixed+FixedChild
 			this.overwriteLaunchImages = new global::Gtk.CheckButton ();
 			this.overwriteLaunchImages.CanFocus = true;
@@ -145,7 +149,7 @@ namespace Translator.UI
 			this.fixed3.Add (this.overwriteLaunchImages);
 			global::Gtk.Fixed.FixedChild w9 = ((global::Gtk.Fixed.FixedChild)(this.fixed3 [this.overwriteLaunchImages]));
 			w9.X = 12;
-			w9.Y = 105;
+			w9.Y = 154;
 			// Container child fixed3.Gtk.Fixed+FixedChild
 			this.hseparator1 = new global::Gtk.HSeparator ();
 			this.hseparator1.WidthRequest = 450;
@@ -153,7 +157,7 @@ namespace Translator.UI
 			this.fixed3.Add (this.hseparator1);
 			global::Gtk.Fixed.FixedChild w10 = ((global::Gtk.Fixed.FixedChild)(this.fixed3 [this.hseparator1]));
 			w10.X = 10;
-			w10.Y = 71;
+			w10.Y = 120;
 			// Container child fixed3.Gtk.Fixed+FixedChild
 			this.hseparator2 = new global::Gtk.HSeparator ();
 			this.hseparator2.WidthRequest = 450;
@@ -161,7 +165,7 @@ namespace Translator.UI
 			this.fixed3.Add (this.hseparator2);
 			global::Gtk.Fixed.FixedChild w11 = ((global::Gtk.Fixed.FixedChild)(this.fixed3 [this.hseparator2]));
 			w11.X = 10;
-			w11.Y = 161;
+			w11.Y = 220;
 			// Container child fixed3.Gtk.Fixed+FixedChild
 			this.setProjectTypeLabel = new global::Gtk.Label ();
 			this.setProjectTypeLabel.Name = "setProjectTypeLabel";
@@ -169,7 +173,7 @@ namespace Translator.UI
 			this.fixed3.Add (this.setProjectTypeLabel);
 			global::Gtk.Fixed.FixedChild w12 = ((global::Gtk.Fixed.FixedChild)(this.fixed3 [this.setProjectTypeLabel]));
 			w12.X = 10;
-			w12.Y = 170;
+			w12.Y = 235;
 			// Container child fixed3.Gtk.Fixed+FixedChild
 			this.setProjectTypeCombobox = global::Gtk.ComboBox.NewText ();
 			this.setProjectTypeCombobox.WidthRequest = 330;
@@ -177,7 +181,7 @@ namespace Translator.UI
 			this.fixed3.Add (this.setProjectTypeCombobox);
 			global::Gtk.Fixed.FixedChild w13 = ((global::Gtk.Fixed.FixedChild)(this.fixed3 [this.setProjectTypeCombobox]));
 			w13.X = 116;
-			w13.Y = 165;
+			w13.Y = 225;
 			// Container child fixed3.Gtk.Fixed+FixedChild
 			this.analyzeXcodeProjectButton = new global::Gtk.Button ();
 			this.analyzeXcodeProjectButton.WidthRequest = 435;
@@ -188,7 +192,27 @@ namespace Translator.UI
 			this.fixed3.Add (this.analyzeXcodeProjectButton);
 			global::Gtk.Fixed.FixedChild w14 = ((global::Gtk.Fixed.FixedChild)(this.fixed3 [this.analyzeXcodeProjectButton]));
 			w14.X = 12;
-			w14.Y = 125;
+			w14.Y = 180;
+			// Container child fixed3.Gtk.Fixed+FixedChild
+			this.pathToHeaderFilesLabel = new global::Gtk.Label ();
+			this.pathToHeaderFilesLabel.Name = "pathToHeaderFilesLabel";
+			this.pathToHeaderFilesLabel.LabelProp = global::Mono.Unix.Catalog.GetString ("Header search paths:");
+			this.fixed3.Add (this.pathToHeaderFilesLabel);
+			global::Gtk.Fixed.FixedChild w15 = ((global::Gtk.Fixed.FixedChild)(this.fixed3 [this.pathToHeaderFilesLabel]));
+			w15.X = 14;
+			w15.Y = 81;
+			// Container child fixed3.Gtk.Fixed+FixedChild
+			this.pathToHeaderFilesEntry = new global::Gtk.Entry ();
+			this.pathToHeaderFilesEntry.WidthRequest = 310;
+			this.pathToHeaderFilesEntry.CanFocus = true;
+			this.pathToHeaderFilesEntry.Name = "pathToHeaderFilesEntry";
+			this.pathToHeaderFilesEntry.Text = global::Mono.Unix.Catalog.GetString ("e.g. path to Pods headers");
+			this.pathToHeaderFilesEntry.IsEditable = true;
+			this.pathToHeaderFilesEntry.InvisibleChar = '●';
+			this.fixed3.Add (this.pathToHeaderFilesEntry);
+			global::Gtk.Fixed.FixedChild w16 = ((global::Gtk.Fixed.FixedChild)(this.fixed3 [this.pathToHeaderFilesEntry]));
+			w16.X = 141;
+			w16.Y = 75;
 			this.Add (this.fixed3);
 			if ((this.Child != null)) {
 				this.Child.ShowAll ();

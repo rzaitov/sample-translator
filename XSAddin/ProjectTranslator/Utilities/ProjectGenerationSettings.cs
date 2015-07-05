@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 using Translator.Parser;
 
@@ -17,6 +18,8 @@ namespace Translator.Addin
 		public bool OverwriteAppIcons { get; set; }
 
 		public bool OveriwriteLaunchImages { get; set; }
+
+		public List<string> HeaderSearchPaths { get; set; }
 	}
 }
 

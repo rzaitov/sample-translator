@@ -127,7 +127,7 @@
           </widget>
           <packing>
             <property name="X">12</property>
-            <property name="Y">80</property>
+            <property name="Y">131</property>
           </packing>
         </child>
         <child>
@@ -142,7 +142,7 @@
           </widget>
           <packing>
             <property name="X">12</property>
-            <property name="Y">105</property>
+            <property name="Y">154</property>
           </packing>
         </child>
         <child>
@@ -152,7 +152,7 @@
           </widget>
           <packing>
             <property name="X">10</property>
-            <property name="Y">71</property>
+            <property name="Y">120</property>
           </packing>
         </child>
         <child>
@@ -162,7 +162,7 @@
           </widget>
           <packing>
             <property name="X">10</property>
-            <property name="Y">161</property>
+            <property name="Y">220</property>
           </packing>
         </child>
         <child>
@@ -175,7 +175,7 @@
           </widget>
           <packing>
             <property name="X">10</property>
-            <property name="Y">170</property>
+            <property name="Y">235</property>
           </packing>
         </child>
         <child>
@@ -187,7 +187,7 @@
           </widget>
           <packing>
             <property name="X">116</property>
-            <property name="Y">165</property>
+            <property name="Y">225</property>
           </packing>
         </child>
         <child>
@@ -202,7 +202,31 @@
           </widget>
           <packing>
             <property name="X">12</property>
-            <property name="Y">125</property>
+            <property name="Y">180</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="Gtk.Label" id="pathToHeaderFilesLabel">
+            <property name="MemberName" />
+            <property name="LabelProp" translatable="yes">Header search paths:</property>
+          </widget>
+          <packing>
+            <property name="X">14</property>
+            <property name="Y">81</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="Gtk.Entry" id="pathToHeaderFilesEntry">
+            <property name="MemberName" />
+            <property name="WidthRequest">310</property>
+            <property name="CanFocus">True</property>
+            <property name="Text" translatable="yes">e.g. path to Pods headers</property>
+            <property name="IsEditable">True</property>
+            <property name="InvisibleChar">●</property>
+          </widget>
+          <packing>
+            <property name="X">141</property>
+            <property name="Y">75</property>
           </packing>
         </child>
       </widget>

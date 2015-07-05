@@ -150,7 +150,8 @@ namespace Translator.UI
 					XcodeProjectPath = inputProjectEntry.Text,
 					CSharpProjectFolderPath = outputProjectFolderEntry.Text,
 					OveriwriteLaunchImages = overwriteLaunchImages.Active,
-					OverwriteAppIcons = overwriteAppIcons.Active
+					OverwriteAppIcons = overwriteAppIcons.Active,
+					HeaderSearchPaths = new List<string> (pathToHeaderFilesEntry.Text.Split (new []{ ';' }, StringSplitOptions.RemoveEmptyEntries))
 				});
 
 				foreach (var target in targets)
