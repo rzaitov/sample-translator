@@ -99,7 +99,8 @@ namespace Translator.Parser
 				}
 			}
 
-			FindHeaders (result);
+			foreach (var headerPath in HeaderFiles.Select (header => header.Path))
+				result.SourceHeaderFiles.Add (headerPath);
 
 			return result;
 		}
@@ -125,17 +126,6 @@ namespace Translator.Parser
 		IPBXElement GetElementById (string id)
 		{
 			return Objects.Where (c => c.ID == id).FirstOrDefault ();
-		}
-
-		void FindHeaders (Target target)
-		{
-			foreach (var sourceFile in target.SourceFiles) {
-				var sourceFileName = Path.GetFileNameWithoutExtension (sourceFile);
-				var sourceHeaderFile = HeaderFiles.Where (header => header.Path.Contains (sourceFileName)).FirstOrDefault ();
-
-				if (sourceHeaderFile != null)
-					target.Files.Add (sourceHeaderFile);
-			}
 		}
 
 		void IterateProjectTree (PBXGroupBase parentGroup, TreeNode<Tuple<string, IPBXElement>> parentNode)
