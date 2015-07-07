@@ -5,6 +5,7 @@ using ClangSharp;
 using Translator.Core;
 using System.Linq;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace Translator.Playground
 {
@@ -25,7 +26,17 @@ namespace Translator.Playground
 				"-framework", "Foundation",
 				"-isysroot", "/Applications/Xcode-beta.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator8.4.sdk/",
 				"-resource-dir", "/Users/rzaitov/llvm-clang/build/bin/../lib/clang/3.6.2",
-				"-include", "/Users/rzaitov/Documents/Apps/Xamarin/samples/apple-samples/LazyTableImages/LazyTable_Prefix.pch"
+//				"-include", "/Users/rzaitov/Documents/Apps/Xamarin/samples/apple-samples/LazyTableImages/LazyTable_Prefix.pch"
+
+				"-include", "/Users/rzaitov/Documents/Apps/Xamarin/samples/apple-samples/AdvancedUserInterfacesUsingCollectionView/AdvancedCollectionView/AdvancedCollectionView-Prefix.pch",
+				"-I/Users/rzaitov/Documents/Apps/Xamarin/samples/apple-samples/AdvancedUserInterfacesUsingCollectionView/AdvancedCollectionView/DataSources",
+				"-I/Users/rzaitov/Documents/Apps/Xamarin/samples/apple-samples/AdvancedUserInterfacesUsingCollectionView/AdvancedCollectionView/Views",
+				"-I/Users/rzaitov/Documents/Apps/Xamarin/samples/apple-samples/AdvancedUserInterfacesUsingCollectionView/AdvancedCollectionView/Layouts",
+				"-I/Users/rzaitov/Documents/Apps/Xamarin/samples/apple-samples/AdvancedUserInterfacesUsingCollectionView/AdvancedCollectionView",
+				"-I/Users/rzaitov/Documents/Apps/Xamarin/samples/apple-samples/AdvancedUserInterfacesUsingCollectionView/AdvancedCollectionView/Categories",
+				"-I/Users/rzaitov/Documents/Apps/Xamarin/samples/apple-samples/AdvancedUserInterfacesUsingCollectionView/AdvancedCollectionView/DataSources",
+				"-I/Users/rzaitov/Documents/Apps/Xamarin/samples/apple-samples/AdvancedUserInterfacesUsingCollectionView/AdvancedCollectionView/ViewControllers",
+
 			};
 
 			// iOS samples:
@@ -35,7 +46,8 @@ namespace Translator.Playground
 //			string file = "/Users/rzaitov/Documents/Apps/Xamarin/samples/apple-samples/SoZoomy/SoZoomy/PreviewView.m";
 //			string file = "/Users/rzaitov/Documents/Apps/Xamarin/samples/apple-samples/SoZoomy/SoZoomy/FaceView.m";
 //			string file = "/Users/rzaitov/Documents/Apps/Xamarin/samples/apple-samples/LazyTableImages/Classes/LazyTableAppDelegate.m";
-			string file = "/Users/rzaitov/Documents/Apps/Xamarin/samples/apple-samples/AVCam-iOSUsingAVFoundationtoCaptureImagesandMovies/AVCam/AAPLCameraViewController.m";
+//			string file = "/Users/rzaitov/Documents/Apps/Xamarin/samples/apple-samples/AVCam-iOSUsingAVFoundationtoCaptureImagesandMovies/AVCam/AAPLCameraViewController.m";
+			string file = "/Users/rzaitov/Documents/Apps/Xamarin/samples/apple-samples/AdvancedUserInterfacesUsingCollectionView/AdvancedCollectionView/Layouts/AAPLCollectionViewGridLayout.m";
 
 			// Mac samples
 //			string file = "/Users/rzaitov/Documents/Apps/Xamarin/samples/apple-samples/AddressBookCocoa/AddressBookCocoa.m";
@@ -51,7 +63,18 @@ namespace Translator.Playground
 			var srcTranslator = new SourceCodeTranslator (clangArgs, locator);
 			var tu = srcTranslator.GetTranslationUnit (file);
 			tu.Dump ();
-			srcTranslator.Translate (file, "TestNamespace", sw);
+
+			var options = new TranslatorOptions {
+				SkipMethodBody = false,
+				Namespace = "TestNamespace",
+			};
+			try {
+				srcTranslator.Translate (file, options, sw);
+			} catch (TaskSchedulerException ex) {
+				Console.WriteLine (ex);
+				options.SkipMethodBody = true;
+				srcTranslator.Translate (file, options, sw);
+			}
 
 			Console.WriteLine (sw.ToString ());
 

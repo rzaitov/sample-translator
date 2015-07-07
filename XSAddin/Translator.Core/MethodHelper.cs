@@ -66,7 +66,10 @@ namespace Translator.Core
 				fs.Read (text, 0, (int)count);
 			}
 
-			return Encoding.UTF8.GetString (text);
+			var str = Encoding.UTF8.GetString (text);
+//			Console.WriteLine (str);
+
+			return str;
 		}
 
 		static uint GetOffset (CXTranslationUnit tu, CXToken t)
@@ -78,14 +81,6 @@ namespace Translator.Core
 			clang.getFileLocation (location, out f, out l, out c, out offset);
 
 			return offset;
-		}
-
-		public static IEnumerable<string> Comment (string code)
-		{
-			string[] lines = code.Split (new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-
-			foreach (var l in lines)
-				yield return string.Format ("//{0}\n", l);
 		}
 	}
 }

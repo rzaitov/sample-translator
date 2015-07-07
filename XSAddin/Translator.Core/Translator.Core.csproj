@@ -32,12 +32,6 @@
     <Reference Include="ClangSharp">
       <HintPath>ClangSharp.dll</HintPath>
     </Reference>
-    <Reference Include="System.Collections.Immutable">
-      <HintPath>..\packages\System.Collections.Immutable.1.1.33-beta\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Reflection.Metadata">
-      <HintPath>..\packages\System.Reflection.Metadata.1.0.18-beta\lib\portable-net45+win8\System.Reflection.Metadata.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.CodeAnalysis">
       <HintPath>..\packages\Microsoft.CodeAnalysis.Common.1.0.0-rc2\lib\net45\Microsoft.CodeAnalysis.dll</HintPath>
     </Reference>
@@ -101,10 +95,15 @@
     <Reference Include="Mono.Cecil.Rocks">
       <HintPath>..\packages\Mono.Cecil.0.9.6.1\lib\net45\Mono.Cecil.Rocks.dll</HintPath>
     </Reference>
+    <Reference Include="System.Collections.Immutable">
+      <HintPath>..\packages\System.Collections.Immutable.1.1.36\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reflection.Metadata">
+      <HintPath>..\packages\System.Reflection.Metadata.1.0.21\lib\portable-net45+win8\System.Reflection.Metadata.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TranslationUnitPorter.cs" />
     <Compile Include="Extensions\CXCursorExtensions.cs" />
     <Compile Include="MethodHelper.cs" />
     <Compile Include="BindingLocator\BindingLocator.cs" />
@@ -119,12 +118,14 @@
     <Compile Include="Extensions\Roslyn\MethodDeclarationSyntaxExtensions.cs" />
     <Compile Include="Context\ObjCImplementationDeclContext.cs" />
     <Compile Include="Context\ObjCCategoryImplDeclContext.cs" />
-    <Compile Include="SourceCodeTranslator.cs" />
     <Compile Include="Extensions\CXType.cs" />
     <Compile Include="CommonTypes.cs" />
     <Compile Include="TypeNamePrettifiers\ObjCTypePorter.cs" />
     <Compile Include="ClangArgBuilder.cs" />
-    <Compile Include="TokenGroup.cs" />
+    <Compile Include="Translator\TranslationUnitPorter.cs" />
+    <Compile Include="Translator\SourceCodeTranslator.cs" />
+    <Compile Include="CursorWrappers\TokenGroup.cs" />
+    <Compile Include="Translator\TranslatorOptions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -339,6 +340,7 @@
     <Folder Include="CursorWrappers\" />
     <Folder Include="Extensions\Roslyn\" />
     <Folder Include="Context\" />
+    <Folder Include="Translator\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

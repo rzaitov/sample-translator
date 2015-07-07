@@ -17,10 +17,10 @@ namespace Translator.Core
 			this.bindingLocator = bindingLocator;
 		}
 
-		public void Translate (string pathToSrc, string namespaceName, TextWriter writer)
+		public void Translate (string pathToSrc, TranslatorOptions options, TextWriter writer)
 		{
 			CXCursor tu = GetTranslationUnit (pathToSrc);
-			TranslationUnitPorter porter = new TranslationUnitPorter (tu, namespaceName, bindingLocator);
+			var porter = new TranslationUnitPorter (tu, options, bindingLocator);
 			writer.Write (porter.Generate ());
 		}
 

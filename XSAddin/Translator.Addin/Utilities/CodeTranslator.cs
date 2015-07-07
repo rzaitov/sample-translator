@@ -7,6 +7,7 @@ using System.Text;
 
 using Translator.Core;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Translator.Addin
 {
@@ -37,7 +38,17 @@ namespace Translator.Addin
 				Console.WriteLine (file);
 				var dstPath = GetDestination (file, configuration.ProjectPath);
 				using (var textWriter = File.CreateText (dstPath)) {
-					srcTranslator.Translate (file, configuration.ProjectNamespace, textWriter);
+					var options = new TranslatorOptions {
+						SkipMethodBody = false,
+						Namespace = configuration.ProjectNamespace,
+					};
+					try {
+						srcTranslator.Translate (file, options, textWriter);
+					} catch (Exception ex) {
+						Console.WriteLine (ex);
+						options.SkipMethodBody = true;
+						srcTranslator.Translate (file, options, textWriter);
+					}
 				}
 				Console.WriteLine ("done: {0}", dstPath);
 			}
