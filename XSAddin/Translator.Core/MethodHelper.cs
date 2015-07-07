@@ -82,29 +82,6 @@ namespace Translator.Core
 
 			return offset;
 		}
-
-		public static IEnumerable<string> Comment (string code)
-		{
-			string[] lines = code.Split (new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-//			Console.WriteLine (">>>");
-//			foreach (var l in lines) {
-//				Console.WriteLine (l);
-//			}
-//			Console.WriteLine ("<<<");
-//			Console.WriteLine ();
-
-//			StringBuilder sb = new StringBuilder ();
-//			foreach (var l in lines) {
-//				sb.AppendFormat ("//{0}\n", l);
-//			}
-//			sb.AppendLine ();
-//			return new string[] {sb.ToString ()};
-////			yield return "/*";
-			foreach (var l in lines) {
-//				yield return string.Format("")(i++).ToString();
-				yield return string.Format ("//{0}", l);
-			}
-		}
 	}
 }
 

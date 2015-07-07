@@ -46,7 +46,7 @@ namespace Translator.Core
 
 			cu = SyntaxFactory.CompilationUnit ();
 
-			IEnumerable<UsingDirectiveSyntax> usings = CreateUsings ();
+			UsingDirectiveSyntax[] usings = CreateUsings ();
 			foreach (var u in usings)
 				cu = cu.AddUsings (u);
 
@@ -57,12 +57,14 @@ namespace Translator.Core
 			cu = cu.AddMembers (nsDecl);
 		}
 
-		IEnumerable<UsingDirectiveSyntax> CreateUsings ()
+		UsingDirectiveSyntax[] CreateUsings ()
 		{
 			// TODO: generate usings acording to included files
-			yield return CreateUsing ("System");
-			yield return CreateUsing ("UIKit");
-			yield return CreateUsing ("Foundation");
+			return new UsingDirectiveSyntax[] {
+				CreateUsing ("System"),
+				CreateUsing ("UIKit"),
+				CreateUsing ("Foundation")
+			};
 		}
 
 		UsingDirectiveSyntax CreateUsing (string name)
@@ -75,10 +77,10 @@ namespace Translator.Core
 			return SyntaxFactory.NamespaceDeclaration (SyntaxFactory.IdentifierName (ns));
 		}
 
-		IEnumerable<ClassDeclarationSyntax> PortClasses ()
+		List<ClassDeclarationSyntax> PortClasses ()
 		{
 			var classes = new List<ClassDeclarationSyntax> ();
-			IEnumerable<CXCursor> children = translationUnit.GetChildren ().Where (c => !IsFromHeader(c));
+			var children = translationUnit.GetChildren ().Where (c => !IsFromHeader (c));
 
 			var unrecognized = new List<CXCursor> ();
 			foreach (var c in children) {
@@ -114,7 +116,7 @@ namespace Translator.Core
 				classDecl = classDecl.AddMembers (CreatePropertyFromPropertyDecl (pDecl));
 
 			var unrecognized = new List<CXCursor> ();
-			IEnumerable<CXCursor> children = cursor.GetChildren ();
+			List<CXCursor> children = cursor.GetChildren ();
 			foreach (var m in children) {
 				if (m.kind == CXCursorKind.CXCursor_ObjCInstanceMethodDecl || m.kind == CXCursorKind.CXCursor_ObjCClassMethodDecl)
 					classDecl = classDecl.AddMembers(PortMethod (m));
@@ -140,7 +142,7 @@ namespace Translator.Core
 			classDecl = classDecl.AddModifiers (SF.Token (SyntaxKind.PublicKeyword), SF.Token (SyntaxKind.StaticKeyword));
 
 			var unrecognized = new List<CXCursor> ();
-			IEnumerable<CXCursor> children = cursor.GetChildren ();
+			List<CXCursor> children = cursor.GetChildren ();
 			foreach (var m in children) {
 				if (m.kind == CXCursorKind.CXCursor_ObjCInstanceMethodDecl || m.kind == CXCursorKind.CXCursor_ObjCClassMethodDecl)
 					classDecl = classDecl.AddMembers(PortCategoryMethod (m));
@@ -156,11 +158,12 @@ namespace Translator.Core
 		MethodDeclarationSyntax PortCategoryMethod (CXCursor cursor)
 		{
 			var objcMethod = new ObjCMethod (cursor);
-			IEnumerable<ParameterSyntax> mParams = FetchParamInfos (cursor);
+
+			ParameterSyntax[] mParams = FetchParamInfos (cursor);
 
 			ParameterSyntax thisParam = SF.Parameter (SF.Identifier ("self"))
 				.WithType (SF.ParseTypeName (CategoryImplContext.ExtendedClassName));
-			mParams = (new ParameterSyntax[] { thisParam }).Concat (mParams);
+			mParams = (new ParameterSyntax[] { thisParam }).Concat (mParams).ToArray ();
 
 			TypeSyntax retType = TypePorter.PortType (objcMethod.ReturnType);
 			string methodName = MethodHelper.ConvertToMehtodName (objcMethod.Selector);
@@ -168,7 +171,7 @@ namespace Translator.Core
 			var mb = new MethodBuilder ();
 			MethodDeclarationSyntax mDecl = mb.BuildExtensionMethod (retType, methodName, mParams);
 
-			IEnumerable<CXCursor> children = cursor.GetChildren ();
+			List<CXCursor> children = cursor.GetChildren ();
 			var compoundStmt = children.First (c => c.kind == CXCursorKind.CXCursor_CompoundStmt);
 			return AddBody (compoundStmt, mDecl);
 		}
@@ -195,7 +198,7 @@ namespace Translator.Core
 		BaseMethodDeclarationSyntax PortMethod (CXCursor cursor)
 		{
 			var objcMethod = new ObjCMethod (cursor);
-			IEnumerable<ParameterSyntax> mParams = FetchParamInfos (cursor);
+			ParameterSyntax[] mParams = FetchParamInfos (cursor);
 
 			MethodDefinition mDef;
 			MethodDeclarationSyntax mDecl = null;
@@ -215,7 +218,7 @@ namespace Translator.Core
 					mDecl = BuildDefaultDeclaration (objcMethod, mParams);
 			}
 
-			IEnumerable<CXCursor> children = cursor.GetChildren ();
+			List<CXCursor> children = cursor.GetChildren ();
 			var compoundStmt = children.First (c => c.kind == CXCursorKind.CXCursor_CompoundStmt);
 
 			if (ctorDecl != null)
@@ -224,7 +227,7 @@ namespace Translator.Core
 				return AddBody (compoundStmt, mDecl);
 		}
 
-		MethodDeclarationSyntax BuildDefaultDeclaration (ObjCMethod objcMethod, IEnumerable<ParameterSyntax> mParams)
+		MethodDeclarationSyntax BuildDefaultDeclaration (ObjCMethod objcMethod, ParameterSyntax[] mParams)
 		{
 			TypeSyntax retType = TypePorter.PortType (objcMethod.ReturnType);
 			string methodName = MethodHelper.ConvertToMehtodName (objcMethod.Selector);
@@ -238,16 +241,18 @@ namespace Translator.Core
 			return mDecl;
 		}
 
-		IEnumerable<ParameterSyntax> FetchParamInfos (CXCursor methodCursor)
+		ParameterSyntax[] FetchParamInfos (CXCursor methodCursor)
 		{
 			return methodCursor.GetChildren ()
 				.Where (c => c.kind == CXCursorKind.CXCursor_ParmDecl)
-				.Select (TypePorter.PortParameter);
+				.Select (TypePorter.PortParameter)
+				.ToArray ();
 		}
 
 		MethodDeclarationSyntax AddBody (CXCursor compountStmt, MethodDeclarationSyntax mDecl)
 		{
-			SyntaxTriviaList lst = SF.TriviaList (FetchTrivias (compountStmt));
+			var syntaxTrivia = FetchTrivias (compountStmt);
+			SyntaxTriviaList lst = SF.TriviaList (syntaxTrivia);
 			StatementSyntax eStat = SF.EmptyStatement().WithLeadingTrivia (lst);
 			return mDecl.AddBodyStatements (eStat);
 		}
@@ -255,19 +260,23 @@ namespace Translator.Core
 		ConstructorDeclarationSyntax AddBody (CXCursor compountStmt, ConstructorDeclarationSyntax ctorDecl)
 		{
 			ctorDecl = ctorDecl.AddBodyStatements (new StatementSyntax[0]);
-			SyntaxToken cl = ctorDecl.Body.CloseBraceToken.WithLeadingTrivia (FetchTrivias (compountStmt));
+			var trivias = FetchTrivias (compountStmt);
+			SyntaxToken cl = ctorDecl.Body.CloseBraceToken.WithLeadingTrivia (trivias);
 			return ctorDecl.ReplaceToken(ctorDecl.Body.CloseBraceToken, cl);
 		}
 
-		IEnumerable<SyntaxTrivia> FetchTrivias (CXCursor compountStmt)
+		SyntaxTrivia[] FetchTrivias (CXCursor compountStmt)
 		{
 			string methodBody = MethodHelper.GetTextFromCompoundStmt (compountStmt);
-			IEnumerable<string> lines = MethodHelper.Comment (methodBody);
-			IEnumerable<SyntaxTrivia> comments = lines.Select (l => SyntaxFactory.SyntaxTrivia (SyntaxKind.SingleLineCommentTrivia, l));
-			foreach (var comment in comments) {
-				yield return comment;
-				yield return SF.CarriageReturnLineFeed;
+
+			string[] lines = methodBody.Split (new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+			SyntaxTrivia[] trivias = new SyntaxTrivia[2 * lines.Length];
+			for (int i = 0; i < lines.Length; i ++) {
+				trivias [2 * i] = SF.SyntaxTrivia (SyntaxKind.SingleLineCommentTrivia, string.Format ("//{0}", lines[i]));
+				trivias [2 * i + 1] = SF.CarriageReturnLineFeed;
 			}
+
+			return trivias;
 		}
 
 		static bool IsFromHeader (CXCursor cursor)
@@ -278,9 +287,6 @@ namespace Translator.Core
 		public string Generate()
 		{
 			var ws = new AdhocWorkspace ();
-//			OptionSet options = ws.Options;
-//			options = options.WithChangedOption (CSharpFormattingOptions.);
-
 			var formattedNode = Formatter.Format (cu, ws);
 
 			StringBuilder sb = new StringBuilder();

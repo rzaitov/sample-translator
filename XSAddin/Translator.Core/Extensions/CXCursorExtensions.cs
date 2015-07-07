@@ -12,22 +12,21 @@ namespace Translator.Core
 	{
 		class VisitorState
 		{
-			readonly List<CXCursor> children = new List<CXCursor> ();
-			public IEnumerable<CXCursor> Children {
-				get {
-					return children;
-				}
+			public List<CXCursor> Children { get; private set; }
+
+			public VisitorState ()
+			{
+				Children = new List<CXCursor> ();
 			}
 
 			public CXChildVisitResult VisitorCallback (CXCursor cursor, CXCursor parent, IntPtr client_data)
 			{
-				children.Add (cursor);
-
+				Children.Add (cursor);
 				return CXChildVisitResult.CXChildVisit_Continue;
 			}
 		}
 
-		public static IEnumerable<CXCursor> GetChildren (this CXCursor cursor)
+		public static List<CXCursor> GetChildren (this CXCursor cursor)
 		{
 			var state = new VisitorState ();
 			clang.visitChildren(cursor, state.VisitorCallback, new CXClientData());

@@ -18,7 +18,7 @@ namespace Translator.Core
 		{
 		}
 
-		public MethodDeclarationSyntax BuildDeclaration (MethodDefinition baseMethodDef, IEnumerable<ParameterSyntax> paramsInfo)
+		public MethodDeclarationSyntax BuildDeclaration (MethodDefinition baseMethodDef, ParameterSyntax[] paramsInfo)
 		{
 			if (baseMethodDef == null || baseMethodDef.IsConstructor)
 				throw new ArgumentNullException ();
@@ -33,7 +33,7 @@ namespace Translator.Core
 			return mDecl;
 		}
 
-		public MethodDeclarationSyntax BuildDeclaration (TypeSyntax returnType, string name, IEnumerable<ParameterSyntax> paramsInfo)
+		public MethodDeclarationSyntax BuildDeclaration (TypeSyntax returnType, string name, ParameterSyntax[] paramsInfo)
 		{
 			MethodDeclarationSyntax mDecl = SF.MethodDeclaration (returnType, name);
 			mDecl = mDecl.AddModifiers (SF.Token (SyntaxKind.PublicKeyword));
@@ -42,7 +42,7 @@ namespace Translator.Core
 			return mDecl;
 		}
 
-		public MethodDeclarationSyntax BuildExtensionMethod (TypeSyntax returnType, string name, IEnumerable<ParameterSyntax> paramsInfo)
+		public MethodDeclarationSyntax BuildExtensionMethod (TypeSyntax returnType, string name, ParameterSyntax[] paramsInfo)
 		{
 			MethodDeclarationSyntax mDecl = SF.MethodDeclaration (returnType, name);
 			mDecl = mDecl.AddModifiers (SF.Token (SyntaxKind.PublicKeyword), SF.Token (SyntaxKind.StaticKeyword));
@@ -56,7 +56,7 @@ namespace Translator.Core
 			return mDecl;
 		}
 
-		public ConstructorDeclarationSyntax BuildCtor (MethodDefinition baseCtorDef, string className, IEnumerable<ParameterSyntax> paramsInfo)
+		public ConstructorDeclarationSyntax BuildCtor (MethodDefinition baseCtorDef, string className, ParameterSyntax[] paramsInfo)
 		{
 			if (baseCtorDef == null || !baseCtorDef.IsConstructor)
 				throw new ArgumentNullException ();
@@ -70,7 +70,7 @@ namespace Translator.Core
 			return ctorDecl;
 		}
 
-		public ConstructorDeclarationSyntax BuildCtor (string className, IEnumerable<ParameterSyntax> paramsInfo)
+		public ConstructorDeclarationSyntax BuildCtor (string className, ParameterSyntax[] paramsInfo)
 		{
 			ConstructorDeclarationSyntax ctorDecl = SF.ConstructorDeclaration (className)
 				.AddModifiers(SF.Token (SyntaxKind.PublicKeyword));
@@ -99,18 +99,13 @@ namespace Translator.Core
 			return modifiers.ToArray ();
 		}
 
-		IEnumerable<ParameterSyntax> ReplaceTypes (MethodDefinition mDef, IEnumerable<ParameterSyntax> paramsInfo)
+		ParameterSyntax[] ReplaceTypes (MethodDefinition mDef, ParameterSyntax[] paramsInfo)
 		{
-			IEnumerator<ParameterDefinition> typesEnumerator = ((IEnumerable<ParameterDefinition>)mDef.Parameters).GetEnumerator ();
-			var paramsEnumerator = paramsInfo.GetEnumerator ();
+			ParameterSyntax[] parameters = new ParameterSyntax[mDef.Parameters.Count];
+			for (int i = 0; i < parameters.Length; i++)
+				parameters [i] = paramsInfo [i].WithType (Convert (mDef.Parameters[i].ParameterType));
 
-			while (typesEnumerator.MoveNext ()) {
-				if (!paramsEnumerator.MoveNext ())
-					throw new ArgumentException ();
-
-				var type = Convert (typesEnumerator.Current.ParameterType);
-				yield return paramsEnumerator.Current.WithType (type);
-			}
+			return parameters;
 		}
 
 		TypeSyntax Convert(TypeReference typeRef)
