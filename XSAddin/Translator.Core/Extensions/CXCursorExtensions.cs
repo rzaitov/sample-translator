@@ -40,7 +40,7 @@ namespace Translator.Core
 
 		public static bool IsFromMainFile (this CXCursor cursor)
 		{
-			return clang.Location_isFromMainFile (clang.getCursorLocation (cursor)) > 0;
+			return clang.Location_isFromMainFile (cursor.Location()) > 0;
 		}
 
 		public static void Dump (this CXCursor cursor)

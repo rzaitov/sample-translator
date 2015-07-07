@@ -207,7 +207,8 @@ namespace Translator.Core
 			ConstructorDeclarationSyntax ctorDecl = null;
 
 			var mb = new MethodBuilder ();
-			var isBound = bindingLocator.TryFindMethod (ImplContext.SuperClassName, objcMethod.Selector, out mDef);
+			var className = ImplContext.GetFirstParentFromSystemFramework ().ToString ();
+			var isBound = bindingLocator.TryFindMethod (className, objcMethod.Selector, out mDef);
 			if (isBound) {
 				if (mDef.IsConstructor)
 					ctorDecl = mb.BuildCtor (mDef, ImplContext.ClassName, mParams);

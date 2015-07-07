@@ -36,5 +36,20 @@ namespace Translator.Core
 		{
 			return interfaceDecl.GetChildren ().Where (c => c.kind == CXCursorKind.CXCursor_ObjCSuperClassRef).Single ();
 		}
+
+		public CXCursor GetFirstParentFromSystemFramework ()
+		{
+			return FindFirstParentFromSystemFramework (DeclCursor);
+		}
+
+		static CXCursor FindFirstParentFromSystemFramework (CXCursor declCursor)
+		{
+			var super = GetSuperClass (declCursor);
+			super = clang.getTypeDeclaration (clang.getCursorType (super));
+			if (clang.Location_isInSystemHeader (super.Location ()) > 0)
+				return super;
+
+			return FindFirstParentFromSystemFramework (super);
+		}
 	}
 }
