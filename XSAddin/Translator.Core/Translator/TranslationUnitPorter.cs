@@ -24,24 +24,26 @@ namespace Translator.Core
 		readonly IBindingLocator bindingLocator;
 		readonly CXCursor translationUnit;
 		CompilationUnitSyntax cu;
+		readonly TranslatorOptions options;
 
 		ObjCImplementationDeclContext ImplContext { get; set; }
 		ObjCCategoryImplDeclContext CategoryImplContext { get; set; }
 
 		ObjCTypePorter TypePorter { get; set; }
 
-		public TranslationUnitPorter (CXCursor translationUnit, string ns, IBindingLocator bindingLocator)
+		public TranslationUnitPorter (CXCursor translationUnit, TranslatorOptions options, IBindingLocator bindingLocator)
 		{
 			if (translationUnit.kind != CXCursorKind.CXCursor_TranslationUnit)
 				throw new ArgumentException ();
 
-			if (string.IsNullOrWhiteSpace (ns))
-				throw new ArgumentException ();
+			if (options == null)
+				throw new ArgumentNullException ();
 
 			if (bindingLocator == null)
 				throw new ArgumentNullException ();
 
 			this.translationUnit = translationUnit;
+			this.options = options;
 			this.bindingLocator = bindingLocator;
 
 			cu = SyntaxFactory.CompilationUnit ();
@@ -50,7 +52,7 @@ namespace Translator.Core
 			foreach (var u in usings)
 				cu = cu.AddUsings (u);
 
-			var nsDecl = CreateNamespace (ns);
+			var nsDecl = CreateNamespace (options.Namespace);
 			foreach (var c in PortClasses ())
 				nsDecl = nsDecl.AddMembers (c);
 
@@ -251,18 +253,24 @@ namespace Translator.Core
 
 		MethodDeclarationSyntax AddBody (CXCursor compountStmt, MethodDeclarationSyntax mDecl)
 		{
-			var syntaxTrivia = FetchTrivias (compountStmt);
-			SyntaxTriviaList lst = SF.TriviaList (syntaxTrivia);
-			StatementSyntax eStat = SF.EmptyStatement().WithLeadingTrivia (lst);
-			return mDecl.AddBodyStatements (eStat);
+			return mDecl.AddBodyStatements (GetEmptyStatement (compountStmt));
 		}
 
 		ConstructorDeclarationSyntax AddBody (CXCursor compountStmt, ConstructorDeclarationSyntax ctorDecl)
 		{
-			ctorDecl = ctorDecl.AddBodyStatements (new StatementSyntax[0]);
-			var trivias = FetchTrivias (compountStmt);
-			SyntaxToken cl = ctorDecl.Body.CloseBraceToken.WithLeadingTrivia (trivias);
-			return ctorDecl.ReplaceToken(ctorDecl.Body.CloseBraceToken, cl);
+			return ctorDecl.AddBodyStatements (GetEmptyStatement (compountStmt));
+		}
+
+		StatementSyntax GetEmptyStatement (CXCursor compountStmt)
+		{
+			var stat = SF.EmptyStatement ();
+			if (options.SkipMethodBody)
+				return stat;
+
+			SyntaxTrivia[] syntaxTrivia = FetchTrivias (compountStmt);
+			stat = stat.WithLeadingTrivia (syntaxTrivia);
+
+			return stat;
 		}
 
 		SyntaxTrivia[] FetchTrivias (CXCursor compountStmt)
