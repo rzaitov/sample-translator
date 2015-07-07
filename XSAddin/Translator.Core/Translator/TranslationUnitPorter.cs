@@ -253,24 +253,26 @@ namespace Translator.Core
 
 		MethodDeclarationSyntax AddBody (CXCursor compountStmt, MethodDeclarationSyntax mDecl)
 		{
-			return mDecl.AddBodyStatements (GetEmptyStatement (compountStmt));
+			return mDecl.AddBodyStatements (NotImplementedStatement (compountStmt));
 		}
 
 		ConstructorDeclarationSyntax AddBody (CXCursor compountStmt, ConstructorDeclarationSyntax ctorDecl)
 		{
-			return ctorDecl.AddBodyStatements (GetEmptyStatement (compountStmt));
+			return ctorDecl.AddBodyStatements (NotImplementedStatement (compountStmt));
 		}
 
-		StatementSyntax GetEmptyStatement (CXCursor compountStmt)
+		StatementSyntax NotImplementedStatement (CXCursor compountStmt)
 		{
-			var stat = SF.EmptyStatement ();
+			var throwSyntaxToken = SF.Token (SyntaxKind.ThrowKeyword);
+			ObjectCreationExpressionSyntax creationExpr = SF.ObjectCreationExpression (SF.ParseTypeName ("NotImplementedException")).WithArgumentList(SF.ArgumentList());
+			ThrowStatementSyntax notImplementedStat = SF.ThrowStatement (throwSyntaxToken, creationExpr, SF.Token (SyntaxKind.SemicolonToken));
 			if (options.SkipMethodBody)
-				return stat;
+				return notImplementedStat;
 
 			SyntaxTrivia[] syntaxTrivia = FetchTrivias (compountStmt);
-			stat = stat.WithLeadingTrivia (syntaxTrivia);
+			notImplementedStat = notImplementedStat.WithLeadingTrivia (syntaxTrivia);
 
-			return stat;
+			return notImplementedStat;
 		}
 
 		SyntaxTrivia[] FetchTrivias (CXCursor compountStmt)
