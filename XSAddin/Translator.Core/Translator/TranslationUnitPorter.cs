@@ -111,7 +111,12 @@ namespace Translator.Core
 
 			ClassDeclarationSyntax classDecl = SF.ClassDeclaration (ImplContext.ClassName);
 			classDecl = classDecl.AddModifiers (SF.Token (SyntaxKind.PublicKeyword));
-			classDecl = classDecl.AddBaseListTypes (SF.SimpleBaseType (SF.ParseTypeName(ImplContext.SuperClassName)));
+
+			CXCursor superObjCClassRef;
+			if (cursor.TryGetSuperClassRef (out superObjCClassRef)) {
+				var superClassName = superObjCClassRef.ToString ();
+				classDecl = classDecl.AddBaseListTypes (SF.SimpleBaseType (SF.ParseTypeName (superClassName)));
+			}
 
 			var propDecls = ImplContext.DeclCursor.GetChildren ().Where (c => c.kind == CXCursorKind.CXCursor_ObjCPropertyDecl);
 			foreach (var pDecl in propDecls)
@@ -121,7 +126,7 @@ namespace Translator.Core
 			List<CXCursor> children = cursor.GetChildren ();
 			foreach (var m in children) {
 				if (m.kind == CXCursorKind.CXCursor_ObjCInstanceMethodDecl || m.kind == CXCursorKind.CXCursor_ObjCClassMethodDecl)
-					classDecl = classDecl.AddMembers(PortMethod (m));
+					classDecl = classDecl.AddMembers (PortMethod (m));
 				else
 					unrecognized.Add (m);
 			}
@@ -202,13 +207,15 @@ namespace Translator.Core
 			var objcMethod = new ObjCMethod (cursor);
 			ParameterSyntax[] mParams = FetchParamInfos (cursor);
 
-			MethodDefinition mDef;
+			MethodDefinition mDef = null;
 			MethodDeclarationSyntax mDecl = null;
 			ConstructorDeclarationSyntax ctorDecl = null;
 
 			var mb = new MethodBuilder ();
-			var className = ImplContext.GetFirstParentFromSystemFramework ().ToString ();
-			var isBound = bindingLocator.TryFindMethod (className, objcMethod.Selector, out mDef);
+			var bcFinder = new BaseClassFinder (ImplContext.DeclCursor);
+			CXCursor firstInSysHeader;
+			bool parentFound = bcFinder.TryFindFirstBaseFromSystemHeaders (out firstInSysHeader);
+			var isBound = parentFound && bindingLocator.TryFindMethod (firstInSysHeader.ToString (), objcMethod.Selector, out mDef);
 			if (isBound) {
 				if (mDef.IsConstructor)
 					ctorDecl = mb.BuildCtor (mDef, ImplContext.ClassName, mParams);

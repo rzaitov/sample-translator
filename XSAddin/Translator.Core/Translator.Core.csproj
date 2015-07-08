@@ -105,7 +105,6 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Extensions\CXCursorExtensions.cs" />
-    <Compile Include="MethodHelper.cs" />
     <Compile Include="BindingLocator\BindingLocator.cs" />
     <Compile Include="BindingLocator\XamarinAttributesExtensions.cs" />
     <Compile Include="BindingLocator\IBindingLocator.cs" />
@@ -126,6 +125,9 @@
     <Compile Include="Translator\SourceCodeTranslator.cs" />
     <Compile Include="CursorWrappers\TokenGroup.cs" />
     <Compile Include="Translator\TranslatorOptions.cs" />
+    <Compile Include="Helpers\MethodHelper.cs" />
+    <Compile Include="Helpers\InheritanceChainHelper.cs" />
+    <Compile Include="Helpers\BaseClassFinder.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -341,6 +343,7 @@
     <Folder Include="Extensions\Roslyn\" />
     <Folder Include="Context\" />
     <Folder Include="Translator\" />
+    <Folder Include="Helpers\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
