@@ -113,7 +113,7 @@ namespace Translator.Core
 			classDecl = classDecl.AddModifiers (SF.Token (SyntaxKind.PublicKeyword));
 
 			CXCursor superObjCClassRef;
-			if (cursor.TryGetSuperClassRef (out superObjCClassRef)) {
+			if (InheritanceChainHelper.TryGetSuperClassRef (ImplContext.DeclCursor, out superObjCClassRef)) {
 				var superClassName = superObjCClassRef.ToString ();
 				classDecl = classDecl.AddBaseListTypes (SF.SimpleBaseType (SF.ParseTypeName (superClassName)));
 			}

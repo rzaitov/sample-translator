@@ -23,7 +23,7 @@ namespace Translator.Core
 
 		static bool TryFindFirstBaseFromSystemHeaders (CXCursor interfaceDecl, out CXCursor superClassInterfaceDecl)
 		{
-			if (!interfaceDecl.TryGetSuperClassDecl (out superClassInterfaceDecl))
+			if (!InheritanceChainHelper.TryGetSuperClassDecl (interfaceDecl, out superClassInterfaceDecl))
 				return false;
 
 			CXSourceLocation location = superClassInterfaceDecl.Location ();
