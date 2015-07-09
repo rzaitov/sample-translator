@@ -128,6 +128,11 @@
     <Compile Include="Helpers\MethodHelper.cs" />
     <Compile Include="Helpers\InheritanceChainHelper.cs" />
     <Compile Include="Helpers\BaseClassFinder.cs" />
+    <Compile Include="Helpers\CursorDumper.cs" />
+    <Compile Include="Helpers\TextHelper.cs" />
+    <Compile Include="Extensions\CXSourceLocationExtensions.cs" />
+    <Compile Include="Extensions\CXSourceRangeExtensions.cs" />
+    <Compile Include="Helpers\CXTokenExtensions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

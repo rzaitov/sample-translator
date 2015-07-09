@@ -27,7 +27,8 @@ namespace Translator.Core
 		public CXCursor GetTranslationUnit (string pathToSrc)
 		{
 			CXUnsavedFile unsavedFiles;
-			CXTranslationUnit translationUnit = clang.parseTranslationUnit(index, pathToSrc, clangArgs, clangArgs.Length, out unsavedFiles, 0, 0);
+			uint options = (uint)CXTranslationUnit_Flags.CXTranslationUnit_DetailedPreprocessingRecord;
+			CXTranslationUnit translationUnit = clang.parseTranslationUnit(index, pathToSrc, clangArgs, clangArgs.Length, out unsavedFiles, 0, options);
 			if (translationUnit.Pointer == IntPtr.Zero)
 				throw new InvalidOperationException ();
 

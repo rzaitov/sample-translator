@@ -38,6 +38,17 @@ namespace Translator.Core
 			return clang.getCursorLocation (cursor);
 		}
 
+		public static CXSourceRange Extent (this CXCursor cursor)
+		{
+			return clang.getCursorExtent (cursor);
+		}
+
+		public static Tuple<CXSourceLocation, CXSourceLocation> LocactionInfo (this CXCursor cursor)
+		{
+			var extent = cursor.Extent ();
+			return new Tuple<CXSourceLocation, CXSourceLocation> (extent.Begin (), extent.End ());
+		}
+
 		public static bool IsFromMainFile (this CXCursor cursor)
 		{
 			return clang.Location_isFromMainFile (cursor.Location()) > 0;
@@ -45,37 +56,8 @@ namespace Translator.Core
 
 		public static void Dump (this CXCursor cursor)
 		{
-			var sb = new StringBuilder ();
-			Dump (cursor, sb, 0, 0);
-			Console.WriteLine (sb.ToString ());
-		}
-
-		static void Dump (CXCursor cursor, StringBuilder sb, int level, int mask)
-		{
-			for (int i = 1; i <= level; i++) {
-				if (IsSet (mask, level - i)) {
-					if (i == level)
-						sb.Append ("|-");
-					else
-						sb.Append ("| ");
-				} else {
-					if (i == level)
-						sb.Append ("`-");
-					else
-						sb.Append ("  ");
-				}
-			}
-			sb.AppendFormat ("{0} {1}\n", cursor.kind, cursor.ToString ());
-
-			CXCursor[] children = cursor.GetChildren ().ToArray();
-			for (int i = 0; i < children.Length; i++)
-				Dump (children[i], sb, level + 1, (mask << 1) | (i == children.Length - 1 ? 0 : 1));
-		}
-
-		static bool IsSet(int mask, int i)
-		{
-			int probe = 1 << i;
-			return (mask & probe) == probe;
+			var dumper = new CursorDumper ();
+			Console.WriteLine (dumper.Dump (cursor));
 		}
 
 		public static bool IsObjCClassMethod (this CXCursor cursor)
@@ -84,4 +66,3 @@ namespace Translator.Core
 		}
 	}
 }
-
