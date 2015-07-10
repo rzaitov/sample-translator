@@ -18,12 +18,15 @@ namespace Translator.Core
 
 		public static string GetTextBetween (CXSourceLocation begin, CXSourceLocation end)
 		{
-			var beginInfo = begin.SpellingLocation ();
-			var endInfo = end.SpellingLocation ();
+			var beginInfo = begin.ExpansionLocation ();
+			var endInfo = end.ExpansionLocation ();
 
-			string filePath = beginInfo.Item1;
-			int length = Math.Abs (endInfo.Item4 - beginInfo.Item4);
-			int start = Math.Min (endInfo.Item4, beginInfo.Item4);
+			string filePath = beginInfo.Item1.Path;
+			int start = beginInfo.Item4;
+			int length = endInfo.Item4 - beginInfo.Item4;
+
+			if (length < 0)
+				return null;
 
 			byte[] text = new byte[length];
 			using(FileStream fs = File.OpenRead(filePath)) {

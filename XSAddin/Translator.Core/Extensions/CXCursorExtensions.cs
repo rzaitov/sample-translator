@@ -43,7 +43,7 @@ namespace Translator.Core
 			return clang.getCursorExtent (cursor);
 		}
 
-		public static Tuple<CXSourceLocation, CXSourceLocation> LocactionInfo (this CXCursor cursor)
+		public static Tuple<CXSourceLocation, CXSourceLocation> LocationInfo (this CXCursor cursor)
 		{
 			var extent = cursor.Extent ();
 			return new Tuple<CXSourceLocation, CXSourceLocation> (extent.Begin (), extent.End ());

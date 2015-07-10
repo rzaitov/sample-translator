@@ -52,78 +52,47 @@ namespace Translator.Core
 
 		static void PrintCursorInfo (CXCursor cursor, StringBuilder sb)
 		{
+			sb.Append (BasicInfo (cursor));
+
 			switch (cursor.kind) {
 			case CXCursorKind.CXCursor_BinaryOperator:
-				sb.AppendFormat ("{0} \"{1}\" ", cursor.kind, GetBinaryOpCode(cursor));
+				string opCode = GetBinaryOpCode (cursor);
+				if (!string.IsNullOrWhiteSpace (opCode))
+					sb.AppendFormat (" \"{0}\"", opCode);
 				break;
 			default:
-				sb.AppendFormat ("{0} {1} ", cursor.kind, cursor.ToString ());
 				break;
 			}
 
-			sb.Append (GetString (cursor.LocactionInfo (), Show.Line | Show.Column));
+			sb.AppendFormat (" {0}", GetString (cursor.LocactionInfo (), Show.LineColumn));
 			sb.AppendLine ();
+		}
+
+		static string BasicInfo (CXCursor cursor)
+		{
+			var sb = new StringBuilder ();
+			sb.Append (cursor.kind);
+
+			string spelling = cursor.ToString ();
+			if (!string.IsNullOrWhiteSpace (spelling))
+				sb.AppendFormat (" {0}", spelling);
+
+			return sb.ToString ();
 		}
 
 		static string GetBinaryOpCode (CXCursor cursor)
 		{
-			return string.Empty;
+			if (cursor.kind != CXCursorKind.CXCursor_BinaryOperator)
+				throw new ArgumentException ();
 
-		//	if (cursor.kind != CXCursorKind.CXCursor_BinaryOperator)
-		//		throw new ArgumentException ();
+			var children = cursor.GetChildren ();
+			var left = children [0];
+			var righ = children [1];
 
-		//	var children = cursor.GetChildren ();
-		//	var first = children [0];
-		//	var second = children [1];
-
-		//	var sb = new StringBuilder ();
-		//	Tuple<CXSourceLocation, CXSourceLocation> firstLocInfo = first.LocactionInfo ();
-		//	Tuple<CXSourceLocation, CXSourceLocation> secondLocInfo = second.LocactionInfo ();
-		//	PrintLocationInfo (firstLocInfo, sb);
-		//	sb.AppendFormat (" {0}", TextHelper.GetText (first));
-
-		//	sb.Append ("___");
-
-		//	PrintLocationInfo (secondLocInfo, sb);
-		//	sb.AppendFormat (" {0}", TextHelper.GetText (second));
-
-		//	var firstRange = clang.getCursorExtent (first);
-		//	var secondRange = clang.getCursorExtent (second);
-
-		//	var opStart = clang.getRangeEnd (firstRange);
-		//	var opEnd = clang.getRangeStart (secondRange);
-		//	var opRange = clang.getRange (opStart, opEnd);
-
-		//	Console.WriteLine ();
-		//	Console.WriteLine (">>>");
-		//	Console.WriteLine ("is from main file: {0}", cursor.Location().IsFromMainFile());
-		//	Console.WriteLine ("full expression: {0}", TextHelper.GetText(cursor));
-		//	Console.WriteLine ("left: {0} {1} {2}", TextHelper.GetText(first), first.kind, first.Location().IsFromMainFile());
-		//	Console.WriteLine ("right: {0} {1} {2}", TextHelper.GetText(second), second.kind, second.Location().IsFromMainFile());
-		//	Console.WriteLine (GetString(opStart, true));
-		//	Console.WriteLine (GetString(opEnd, true));
-
-		//	string opcode = TextHelper.GetTextBetween (opStart, opEnd).Trim ();
-		//	Console.WriteLine (opcode);
-		//	return opcode;
-
-
-		//	CXTranslationUnit tu = clang.Cursor_getTranslationUnit (cursor);
-		//	using (var tg = TokenGroup.GetTokens (tu, /*cursor.Extent()*/ opRange)) {
-		//		Console.WriteLine (">>>");
-		//		Console.WriteLine ("{0} {1}", tg.Tokens.Length, TextHelper.GetText(cursor));
-		//		Console.WriteLine ("opRange {0}-{1}", GetString(opStart), GetString(opEnd));
-		//		for (int i = 0; i < tg.Tokens.Length; i++) {
-		//			CXToken t = tg.Tokens [i];
-		//			var extent = t.Extent (tu);
-		//			string startInfo = GetString (extent.Begin());
-		//			string endInfo = GetString (extent.End ());
-		//			Console.WriteLine ("{0} {1} {2}-{3}", t.Kind (), clang.getTokenSpelling (tu, t), startInfo, endInfo);
-		//		}
-		//		Console.WriteLine ();
-		//	}
-
-		//	return sb.ToString ();
+			Tuple<CXSourceLocation, CXSourceLocation> leftOpLoc = left.LocactionInfo ();
+			Tuple<CXSourceLocation, CXSourceLocation> rightOpLoc = righ.LocactionInfo ();
+			string opCode = TextHelper.GetTextBetween (leftOpLoc.Item2, rightOpLoc.Item1);
+			return string.IsNullOrWhiteSpace (opCode) ? null : opCode.Trim ();
 		}
 
 		static string GetString (Tuple<CXSourceLocation, CXSourceLocation> locations, Show opt)
@@ -137,14 +106,14 @@ namespace Translator.Core
 			sb.Append (GetString (end, opt & ~Show.FileName & ~Show.FilePath));
 
 			if (opt.HasFlag (Show.FilePath))
-				sb.AppendFormat (" {0}", begin.Item1);
+				sb.AppendFormat (" {0}", begin.Item1.Path);
 			else if (opt.HasFlag (Show.FileName))
-				sb.AppendFormat (" {0}", Path.GetFileName (begin.Item1));
+				sb.AppendFormat (" {0}", begin.Item1.FileName);
 
 			return sb.ToString ();
 		}
 
-		static string GetString (Tuple<string, int, int, int> locationInof, Show opt)
+		static string GetString (Tuple<ClangFile, int, int, int> locationInof, Show opt)
 		{
 			var sb = new StringBuilder ();
 			if (opt.HasFlag (Show.Line))
@@ -154,9 +123,9 @@ namespace Translator.Core
 			if (opt.HasFlag (Show.Offset))
 				sb.Append (locationInof.Item4).Append (',');
 			if (opt.HasFlag (Show.FilePath))
-				sb.Append (locationInof.Item1).Append (',');
+				sb.Append (locationInof.Item1.Path).Append (',');
 			else if (opt.HasFlag (Show.FileName))
-				sb.Append (Path.GetFileName (locationInof.Item1)).Append (',');
+				sb.Append (Path.GetFileName (locationInof.Item1.FileName)).Append (',');
 
 			if (sb.Length > 0)
 				sb.Length -= 1;
@@ -168,6 +137,7 @@ namespace Translator.Core
 			Nothing = 0,
 			Line = 1,
 			Column = 1 << 1,
+			LineColumn = Line | Column,
 			Offset = 1 << 2,
 			FileName = 1 << 3,
 			FilePath = 1 << 4,

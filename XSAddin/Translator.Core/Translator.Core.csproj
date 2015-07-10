@@ -133,6 +133,7 @@
     <Compile Include="Extensions\CXSourceLocationExtensions.cs" />
     <Compile Include="Extensions\CXSourceRangeExtensions.cs" />
     <Compile Include="Helpers\CXTokenExtensions.cs" />
+    <Compile Include="CursorWrappers\ClangFile.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

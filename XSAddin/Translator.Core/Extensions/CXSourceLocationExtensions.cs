@@ -27,15 +27,14 @@ namespace Translator.Core
 			return new Tuple<string, int, int, int> (filePath, (int)line, (int)col, (int)offset);
 		}
 
-		public static Tuple<string, int, int, int>  ExpansionLocation (this CXSourceLocation location)
+		public static Tuple<ClangFile, int, int, int>  ExpansionLocation (this CXSourceLocation location)
 		{
 			CXFile file;
 			uint line, col, offset;
 
 			clang.getExpansionLocation(location, out file, out line, out col, out offset);
 
-			string filePath = clang.getFileName (file).ToString ();
-			return new Tuple<string, int, int, int> (filePath, (int)line, (int)col, (int)offset);
+			return new Tuple<ClangFile, int, int, int> (new ClangFile(file), (int)line, (int)col, (int)offset);
 		}
 
 		public static bool IsFromMainFile (this CXSourceLocation location)
