@@ -28,7 +28,6 @@ namespace Translator.Addin
 				PathToFrameworks = xcodeConfig.IPhoneSimulator.Frameworks,
 				SimMinVersion = xcodeConfig.IPhoneSimulator.SdkVersion,
 				SysRoot = xcodeConfig.IPhoneSimulator.SdkPath,
-				ResourceDir = FetchResourceDir (),
 				PrefixHeaderFilePath = configuration.PCHFilePath
 			};
 			argBuilder.Frameworks.AddRange (configuration.Frameworks);
@@ -74,18 +73,6 @@ namespace Translator.Addin
 		static IEnumerable<string> FetchHeaderDirs (IEnumerable<string> headerPaths)
 		{
 			return headerPaths.Select (hf => Path.GetDirectoryName (hf)).Distinct ();
-		}
-
-		static string FetchResourceDir ()
-		{
-			UriBuilder uri = new UriBuilder (Assembly.GetExecutingAssembly ().GetName ().CodeBase);
-			string path = Uri.UnescapeDataString (uri.Path);
-
-			string strAppDir = Path.GetDirectoryName (path);
-			string utilsPath = Path.Combine (strAppDir, "Utilities");
-			string resourceDir = Path.Combine (utilsPath, "resources");
-
-			return resourceDir;
 		}
 	}
 }

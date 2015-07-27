@@ -25,6 +25,9 @@ namespace Translator.Core
 		{
 			Frameworks = new List<string> ();
 			IncludeDirs = new List<string> ();
+
+			var locator = new ClangResourceDirLocator ();
+			ResourceDir = locator.FindResourceDir ();
 		}
 
 		public string[] Build ()

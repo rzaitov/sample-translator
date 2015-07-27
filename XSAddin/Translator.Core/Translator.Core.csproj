@@ -21,6 +21,7 @@
     <EnvironmentVariables>
       <EnvironmentVariables>
         <Variable name="LIBCLANG_DISABLE_CRASH_RECOVERY" value="" />
+        <Variable name="LIBCLANG_BGPRIO_DISABLE" value="" />
       </EnvironmentVariables>
     </EnvironmentVariables>
   </PropertyGroup>
@@ -34,6 +35,7 @@
     <EnvironmentVariables>
       <EnvironmentVariables>
         <Variable name="LIBCLANG_DISABLE_CRASH_RECOVERY" value="" />
+        <Variable name="LIBCLANG_BGPRIO_DISABLE" value="" />
       </EnvironmentVariables>
     </EnvironmentVariables>
   </PropertyGroup>
@@ -132,7 +134,6 @@
     <Compile Include="Extensions\CXType.cs" />
     <Compile Include="CommonTypes.cs" />
     <Compile Include="TypeNamePrettifiers\ObjCTypePorter.cs" />
-    <Compile Include="ClangArgBuilder.cs" />
     <Compile Include="Translator\TranslationUnitPorter.cs" />
     <Compile Include="Translator\SourceCodeTranslator.cs" />
     <Compile Include="CursorWrappers\TokenGroup.cs" />
@@ -153,6 +154,8 @@
     <Compile Include="XCode\VersionInfo.cs" />
     <Compile Include="XCode\Platforms\PlatformConfiguration.cs" />
     <Compile Include="XCode\Platforms\PlatformsName.cs" />
+    <Compile Include="ClangArgs\ClangArgBuilder.cs" />
+    <Compile Include="ClangArgs\ClangResourceDirLocator.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -371,6 +374,7 @@
     <Folder Include="Helpers\" />
     <Folder Include="XCode\" />
     <Folder Include="XCode\Platforms\" />
+    <Folder Include="ClangArgs\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
