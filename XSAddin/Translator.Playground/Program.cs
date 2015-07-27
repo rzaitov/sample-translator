@@ -68,16 +68,9 @@ namespace Translator.Playground
 				SkipMethodBody = false,
 				Namespace = "TestNamespace",
 			};
-			try {
-				srcTranslator.Translate (file, options, sw);
-			} catch (TaskSchedulerException ex) {
-				Console.WriteLine (ex);
-				options.SkipMethodBody = true;
-				srcTranslator.Translate (file, options, sw);
-			}
 
+			srcTranslator.Translate (file, options, sw);
 			Console.WriteLine (sw.ToString ());
-
 		}
 	}
 }
