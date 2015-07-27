@@ -64,7 +64,7 @@ namespace Translator.Core
 				break;
 			}
 
-			sb.AppendFormat (" {0}", GetString (cursor.LocactionInfo (), Show.LineColumn));
+			sb.AppendFormat (" {0}", GetString (cursor.LocationInfo (), Show.LineColumn));
 			sb.AppendLine ();
 		}
 
@@ -89,8 +89,8 @@ namespace Translator.Core
 			var left = children [0];
 			var righ = children [1];
 
-			Tuple<CXSourceLocation, CXSourceLocation> leftOpLoc = left.LocactionInfo ();
-			Tuple<CXSourceLocation, CXSourceLocation> rightOpLoc = righ.LocactionInfo ();
+			Tuple<CXSourceLocation, CXSourceLocation> leftOpLoc = left.LocationInfo ();
+			Tuple<CXSourceLocation, CXSourceLocation> rightOpLoc = righ.LocationInfo ();
 			string opCode = TextHelper.GetTextBetween (leftOpLoc.Item2, rightOpLoc.Item1);
 			return string.IsNullOrWhiteSpace (opCode) ? null : opCode.Trim ();
 		}
