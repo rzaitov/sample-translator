@@ -15,10 +15,19 @@ namespace Translator.Addin
 	{
 		public static void Translate (CodeTranslationConfiguration configuration)
 		{
+			var xcodeLocator = new XCodeLocator ();
+			var criteria = new XCodeCriteria {
+				Max = new VersionInfo {
+					Major = 7
+				}
+			};
+			string xcodePath = xcodeLocator.FindXCode (criteria);
+			var xcodeConfig = new XCodeConfiguration (xcodePath);
+
 			var argBuilder = new ClangArgBuilder {
-				PathToFrameworks = XCodeConfiguration.PathToFramewroks,
-				SimMinVersion = XCodeConfiguration.SdkVersion,
-				SysRoot = XCodeConfiguration.SdkPath,
+				PathToFrameworks = xcodeConfig.IPhoneSimulator.Frameworks,
+				SimMinVersion = xcodeConfig.IPhoneSimulator.SdkVersion,
+				SysRoot = xcodeConfig.IPhoneSimulator.SdkPath,
 				ResourceDir = FetchResourceDir (),
 				PrefixHeaderFilePath = configuration.PCHFilePath
 			};

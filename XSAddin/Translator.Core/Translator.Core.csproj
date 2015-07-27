@@ -111,6 +111,8 @@
     <Reference Include="System.Reflection.Metadata">
       <HintPath>..\packages\System.Reflection.Metadata.1.0.21\lib\portable-net45+win8\System.Reflection.Metadata.dll</HintPath>
     </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -144,6 +146,13 @@
     <Compile Include="Extensions\CXSourceRangeExtensions.cs" />
     <Compile Include="Helpers\CXTokenExtensions.cs" />
     <Compile Include="CursorWrappers\ClangFile.cs" />
+    <Compile Include="XCode\XCodeConfiguration.cs" />
+    <Compile Include="XCode\XCodeLocator.cs" />
+    <Compile Include="XCode\VersionComporator.cs" />
+    <Compile Include="XCode\XCodeQuery.cs" />
+    <Compile Include="XCode\VersionInfo.cs" />
+    <Compile Include="XCode\Platforms\PlatformConfiguration.cs" />
+    <Compile Include="XCode\Platforms\PlatformsName.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -360,6 +369,8 @@
     <Folder Include="Context\" />
     <Folder Include="Translator\" />
     <Folder Include="Helpers\" />
+    <Folder Include="XCode\" />
+    <Folder Include="XCode\Platforms\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

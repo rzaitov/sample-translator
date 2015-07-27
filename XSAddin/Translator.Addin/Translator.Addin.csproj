@@ -38,7 +38,6 @@
     <Compile Include="Utilities\CodeTranslator.cs" />
     <Compile Include="Utilities\ProjectGenerationSettings.cs" />
     <Compile Include="Utilities\CodeTranslationConfiguration.cs" />
-    <Compile Include="Utilities\XCodeConfiguration.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Manifest.addin.xml">
