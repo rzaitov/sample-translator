@@ -68,6 +68,12 @@ namespace Translator.Test
 			return clang.parseTranslationUnit (index.Value, path, args, args.Length, out unsavedFiles, 0, options);
 		}
 
+		public CXCursor GetRootCursor (string path)
+		{
+			var tu = BuildTranslationUnit (path);
+			return  clang.getTranslationUnitCursor (tu);
+		}
+
 		#region IDisposable implementation
 
 		public void Dispose ()

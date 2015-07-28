@@ -60,6 +60,9 @@ namespace Translator.Core
 				if (!string.IsNullOrWhiteSpace (opCode))
 					sb.AppendFormat (" \"{0}\"", opCode);
 				break;
+			case CXCursorKind.CXCursor_ObjCPropertyDecl:
+				sb.Append (' ').Append (GetPropertyAttributes (cursor));
+				break;
 			default:
 				break;
 			}
@@ -93,6 +96,48 @@ namespace Translator.Core
 			Tuple<CXSourceLocation, CXSourceLocation> rightOpLoc = righ.LocationInfo ();
 			string opCode = TextHelper.GetTextBetween (leftOpLoc.Item2, rightOpLoc.Item1);
 			return string.IsNullOrWhiteSpace (opCode) ? null : opCode.Trim ();
+		}
+
+		static string GetPropertyAttributes(CXCursor propDecl)
+		{
+			var attrs = (CXObjCPropertyAttrKind)clang.Cursor_getObjCPropertyAttributes (propDecl, 0);
+
+			var sb = new StringBuilder ();
+			sb.Append ('{');
+
+			if (attrs.Equals (CXObjCPropertyAttrKind.CXObjCPropertyAttr_noattr))
+				sb.Append ("noattr,");
+			if (attrs.HasFlag (CXObjCPropertyAttrKind.CXObjCPropertyAttr_readonly))
+				sb.Append ("readonly,");
+			if (attrs.HasFlag (CXObjCPropertyAttrKind.CXObjCPropertyAttr_getter))
+				sb.Append ("getter,");
+			if (attrs.HasFlag (CXObjCPropertyAttrKind.CXObjCPropertyAttr_assign))
+				sb.Append ("assign,");
+			if (attrs.HasFlag (CXObjCPropertyAttrKind.CXObjCPropertyAttr_readwrite))
+				sb.Append ("readwrite,");
+			if (attrs.HasFlag (CXObjCPropertyAttrKind.CXObjCPropertyAttr_retain))
+				sb.Append ("retain,");
+			if (attrs.HasFlag (CXObjCPropertyAttrKind.CXObjCPropertyAttr_copy))
+				sb.Append ("copy,");
+			if (attrs.HasFlag (CXObjCPropertyAttrKind.CXObjCPropertyAttr_nonatomic))
+				sb.Append ("nonatomic,");
+			if (attrs.HasFlag (CXObjCPropertyAttrKind.CXObjCPropertyAttr_setter))
+				sb.Append ("setter,");
+			if (attrs.HasFlag (CXObjCPropertyAttrKind.CXObjCPropertyAttr_atomic))
+				sb.Append ("atomic,");
+			if (attrs.HasFlag (CXObjCPropertyAttrKind.CXObjCPropertyAttr_weak))
+				sb.Append ("weak,");
+			if (attrs.HasFlag (CXObjCPropertyAttrKind.CXObjCPropertyAttr_strong))
+				sb.Append ("strong,");
+			if (attrs.HasFlag (CXObjCPropertyAttrKind.CXObjCPropertyAttr_unsafe_unretained))
+				sb.Append ("unsafe_unretained,");
+
+			if (sb.Length > 1)
+				sb.Length -= 1;
+
+			sb.Append ('}');
+
+			return sb.ToString ();
 		}
 
 		static string GetString (Tuple<CXSourceLocation, CXSourceLocation> locations, Show opt)
