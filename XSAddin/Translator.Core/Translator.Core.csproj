@@ -21,7 +21,6 @@
     <EnvironmentVariables>
       <EnvironmentVariables>
         <Variable name="LIBCLANG_DISABLE_CRASH_RECOVERY" value="" />
-        <Variable name="LIBCLANG_BGPRIO_DISABLE" value="" />
       </EnvironmentVariables>
     </EnvironmentVariables>
   </PropertyGroup>
