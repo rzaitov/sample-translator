@@ -59,8 +59,60 @@ namespace Translator.Test
 			Assert.That (properties.Length, Is.EqualTo (1));
 
 			root.Dump ();
-			var attrs = (CXObjCPropertyAttrKind)clang.Cursor_getObjCPropertyAttributes (properties[0], 0);
-			Console.WriteLine (attrs);
+		}
+
+		[Test]
+		public void ReadonlyProperty ()
+		{
+			const string headerContent = @"
+#import <Foundation/Foundation.h>
+@interface Person : NSObject
+@property (nonatomic, readonly) NSString *name;
+@end";
+
+			const string codeContent = @"
+#import ""Person.h""
+@implementation Person
+@end";
+
+			var manager = new ClangManager ();
+			manager.StoreFile (headerContent, "Person.h");
+			string codePath = manager.StoreFile (codeContent, "Person.m");
+			var root = manager.GetRootCursor (codePath);
+			var interfaceDecl = root.GetChildren ().Single (c => c.kind == CXCursorKind.CXCursor_ObjCInterfaceDecl);
+
+			var properties = interfaceDecl.GetChildren ().Where (c => c.kind == CXCursorKind.CXCursor_ObjCPropertyDecl).ToArray();
+			Assert.That (properties.Length, Is.EqualTo (1));
+
+			root.Dump ();
+		}
+
+		[Test]
+		public void PropertyCustomGetterSetter ()
+		{
+			const string headerContent = @"
+#import <Foundation/Foundation.h>
+@interface Person : NSObject
+@property (nonatomic, getter=myName, setter=customSetMyName) NSString *name;
+@end";
+
+			const string codeContent = @"
+#import ""Person.h""
+@implementation Person
+@end";
+
+			var manager = new ClangManager ();
+			manager.StoreFile (headerContent, "Person.h");
+			string codePath = manager.StoreFile (codeContent, "Person.m");
+			var root = manager.GetRootCursor (codePath);
+			var interfaceDecl = root.GetChildren ().Single (c => c.kind == CXCursorKind.CXCursor_ObjCInterfaceDecl);
+
+			var properties = interfaceDecl.GetChildren ().Where (c => c.kind == CXCursorKind.CXCursor_ObjCPropertyDecl).ToArray();
+			Assert.That (properties.Length, Is.EqualTo (1));
+
+			root.Dump ();
+			Console.WriteLine ();
+			properties [0].DumpTokens ();
 		}
 	}
 }

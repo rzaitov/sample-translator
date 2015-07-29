@@ -60,6 +60,12 @@ namespace Translator.Core
 			Console.WriteLine (dumper.Dump (cursor));
 		}
 
+		public static void DumpTokens (this CXCursor cursor)
+		{
+			var dumper = new CursorTokenDumper ();
+			Console.WriteLine (dumper.Dump(cursor));
+		}
+
 		public static bool IsObjCClassMethod (this CXCursor cursor)
 		{
 			return cursor.kind == CXCursorKind.CXCursor_ObjCClassMethodDecl;

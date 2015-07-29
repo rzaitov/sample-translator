@@ -155,6 +155,7 @@
     <Compile Include="XCode\Platforms\PlatformsName.cs" />
     <Compile Include="ClangArgs\ClangArgBuilder.cs" />
     <Compile Include="ClangArgs\ClangResourceDirLocator.cs" />
+    <Compile Include="Helpers\CursorTokenDumper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
