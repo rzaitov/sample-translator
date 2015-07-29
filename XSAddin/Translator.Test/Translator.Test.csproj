@@ -50,6 +50,7 @@
     <Compile Include="ClangManager.cs" />
     <Compile Include="ClangManagerTest.cs" />
     <Compile Include="ClangExplorer.cs" />
+    <Compile Include="Wrappers\ObjCPropertyTest.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -60,5 +61,8 @@
       <Project>{B6607DBC-D9A7-4803-9A58-1A7D254672CB}</Project>
       <Name>Translator.Core</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Wrappers\" />
   </ItemGroup>
 </Project>

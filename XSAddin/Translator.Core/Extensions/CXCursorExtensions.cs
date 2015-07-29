@@ -33,6 +33,13 @@ namespace Translator.Core
 			return state.Children;
 		}
 
+		public static TokenGroup Tokenize(this CXCursor cursor)
+		{
+			var tu = clang.Cursor_getTranslationUnit (cursor);
+			var range = clang.getCursorExtent (cursor);
+			return TokenGroup.GetTokens (tu, range);
+		}
+
 		public static CXSourceLocation Location (this CXCursor cursor)
 		{
 			return clang.getCursorLocation (cursor);

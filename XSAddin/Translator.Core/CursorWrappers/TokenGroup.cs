@@ -7,7 +7,7 @@ namespace Translator.Core
 {
 	public class TokenGroup : IDisposable
 	{
-		CXTranslationUnit tu;
+		public CXTranslationUnit TranslationUnit { get; private set; }
 		IntPtr memory;
 		uint count;
 
@@ -17,7 +17,7 @@ namespace Translator.Core
 		{
 			this.memory = memory;
 			this.count = count;
-			this.tu = tu;
+			TranslationUnit = tu;
 
 			Tokens = new CXToken[(int)count];
 			for (int i = 0; i < count; i++)
@@ -35,7 +35,7 @@ namespace Translator.Core
 
 		public void Dispose ()
 		{
-			disposeTokens(tu, memory, count);
+			disposeTokens(TranslationUnit, memory, count);
 		}
 
 		[DllImport ("libclang.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "clang_disposeTokens")]
