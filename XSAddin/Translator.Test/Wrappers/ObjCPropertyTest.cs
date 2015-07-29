@@ -31,7 +31,7 @@ namespace Translator.Test
 @implementation Person
 @end";
 
-			ObjCProperty p = FetchProperty (headerContent, codeContent);
+			ObjCPropertyDecl p = FetchProperty (headerContent, codeContent);
 
 			Assert.AreEqual ("name", p.GetterName);
 			Assert.AreEqual ("setName", p.SetterName);
@@ -53,7 +53,7 @@ namespace Translator.Test
 @implementation Person
 @end";
 
-			ObjCProperty p = FetchProperty (headerContent, codeContent);
+			ObjCPropertyDecl p = FetchProperty (headerContent, codeContent);
 
 			Assert.AreEqual ("name", p.GetterName);
 			Assert.AreEqual (null, p.SetterName);
@@ -75,7 +75,7 @@ namespace Translator.Test
 @implementation Person
 @end";
 
-			ObjCProperty p = FetchProperty (headerContent, codeContent);
+			ObjCPropertyDecl p = FetchProperty (headerContent, codeContent);
 
 			Assert.AreEqual ("personName", p.GetterName);
 			Assert.AreEqual ("setupPersonName", p.SetterName);
@@ -83,7 +83,7 @@ namespace Translator.Test
 			Assert.AreEqual (false, p.IsReadonly);
 		}
 
-		ObjCProperty FetchProperty(string header, string code)
+		ObjCPropertyDecl FetchProperty(string header, string code)
 		{
 			var manager = new ClangManager ();
 			manager.StoreFile (header, "Person.h");
@@ -95,7 +95,7 @@ namespace Translator.Test
 				.GetChildren()
 				.Single (c => c.kind == CXCursorKind.CXCursor_ObjCPropertyDecl);
 
-			return new ObjCProperty (prop);
+			return new ObjCPropertyDecl (prop);
 		}
 	}
 }

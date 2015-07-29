@@ -3,7 +3,7 @@ using ClangSharp;
 
 namespace Translator.Core
 {
-	public class ObjCProperty
+	public class ObjCPropertyDecl
 	{
 		readonly CXCursor cursor;
 
@@ -60,7 +60,7 @@ namespace Translator.Core
 			}
 		}
 
-		public ObjCProperty (CXCursor cursor)
+		public ObjCPropertyDecl (CXCursor cursor)
 		{
 			if (cursor.kind != CXCursorKind.CXCursor_ObjCPropertyDecl)
 				throw new ArgumentException ();
