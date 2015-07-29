@@ -1,5 +1,6 @@
 ﻿using System;
 using ClangSharp;
+using System.Text;
 
 namespace Translator.Core
 {
@@ -72,7 +73,7 @@ namespace Translator.Core
 		{
 			using (TokenGroup tg = cursor.Tokenize ()) {
 				int index = IdentifierIndex (tg, "getter");
-				return FirstIdentifier (tg, index+1);
+				return FirstIdentifier (tg, index + 1);
 			}
 		}
 
@@ -80,7 +81,7 @@ namespace Translator.Core
 		{
 			using (TokenGroup tg = cursor.Tokenize ()) {
 				int index = IdentifierIndex (tg, "setter");
-				return FirstIdentifier (tg, index+1);
+				return string.Format ("{0}:", FirstIdentifier (tg, index + 1));
 			}
 		}
 
@@ -113,16 +114,15 @@ namespace Translator.Core
 
 		string BuildDefaultSetterName ()
 		{
-			char[] arr = new char[Name.Length + 3];
-			arr[0] = 's';
-			arr[1] = 'e';
-			arr[2] = 't';
+			var sb = new StringBuilder ("set", Name.Length + 4); // "setPropName:"
+			sb.Append (char.ToUpper (Name [0]));
 
-			arr[3] = char.ToUpper(Name[0]);
 			for (int i = 1; i < Name.Length; i++)
-				arr[i + 3] = Name [i];
+				sb.Append (Name [i]);
 
-			return new String(arr);
+			sb.Append (':');
+
+			return sb.ToString ();
 		}
 	}
 }

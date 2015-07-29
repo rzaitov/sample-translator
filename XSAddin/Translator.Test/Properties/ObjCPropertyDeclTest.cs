@@ -9,7 +9,7 @@ using System.Linq;
 namespace Translator.Test
 {
 	[TestFixture]
-	public class ObjCPropertyTest
+	public class ObjCPropertyDeclTest
 	{
 		class Context
 		{
@@ -34,7 +34,7 @@ namespace Translator.Test
 			ObjCPropertyDecl p = FetchProperty (headerContent, codeContent);
 
 			Assert.AreEqual ("name", p.GetterName);
-			Assert.AreEqual ("setName", p.SetterName);
+			Assert.AreEqual ("setName:", p.SetterName);
 			Assert.AreEqual (true, p.IsReadWrite);
 			Assert.AreEqual (false, p.IsReadonly);
 		}
@@ -78,22 +78,20 @@ namespace Translator.Test
 			ObjCPropertyDecl p = FetchProperty (headerContent, codeContent);
 
 			Assert.AreEqual ("personName", p.GetterName);
-			Assert.AreEqual ("setupPersonName", p.SetterName);
+			Assert.AreEqual ("setupPersonName:", p.SetterName);
 			Assert.AreEqual (true, p.IsReadWrite);
 			Assert.AreEqual (false, p.IsReadonly);
 		}
 
-		ObjCPropertyDecl FetchProperty(string header, string code)
+		protected ObjCPropertyDecl FetchProperty(string header, string code)
 		{
 			var manager = new ClangManager ();
 			manager.StoreFile (header, "Person.h");
 			string codePath = manager.StoreFile (code, "Person.m");
 
 			var root = manager.GetRootCursor (codePath);
-			var prop = root.GetChildren ()
-				.Single(c => c.kind == CXCursorKind.CXCursor_ObjCInterfaceDecl)
-				.GetChildren()
-				.Single (c => c.kind == CXCursorKind.CXCursor_ObjCPropertyDecl);
+			var prop = root.Child (CXCursorKind.CXCursor_ObjCInterfaceDecl)
+						   .Child (CXCursorKind.CXCursor_ObjCPropertyDecl);
 
 			return new ObjCPropertyDecl (prop);
 		}

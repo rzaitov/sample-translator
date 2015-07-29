@@ -49,8 +49,11 @@
   <ItemGroup>
     <Compile Include="ClangManager.cs" />
     <Compile Include="ClangManagerTest.cs" />
-    <Compile Include="ClangExplorer.cs" />
-    <Compile Include="Wrappers\ObjCPropertyTest.cs" />
+    <Compile Include="Explorer\ClangExplorer.cs" />
+    <Compile Include="Explorer\MethodExplorer.cs" />
+    <Compile Include="Properties\ObjCPropertyDeclTest.cs" />
+    <Compile Include="Properties\ObjCPropertyImplInfoTest.cs" />
+    <Compile Include="CXCursorExtensionsTest.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -63,6 +66,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Wrappers\" />
+    <Folder Include="Explorer\" />
+    <Folder Include="Properties\" />
   </ItemGroup>
 </Project>

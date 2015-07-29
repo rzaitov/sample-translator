@@ -157,6 +157,7 @@
     <Compile Include="ClangArgs\ClangResourceDirLocator.cs" />
     <Compile Include="Helpers\CursorTokenDumper.cs" />
     <Compile Include="CursorWrappers\ObjCPropertyDecl.cs" />
+    <Compile Include="CursorWrappers\ObjCPropertyImplInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
