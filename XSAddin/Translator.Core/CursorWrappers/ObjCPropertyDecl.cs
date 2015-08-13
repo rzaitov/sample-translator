@@ -6,24 +6,30 @@ namespace Translator.Core
 {
 	public class ObjCPropertyDecl
 	{
-		readonly CXCursor cursor;
+		readonly CXCursor propDeclCursor;
+
+		public CXCursor DeclarationCursor {
+			get {
+				return propDeclCursor;
+			}
+		}
 
 		public string Name {
 			get {
-				return cursor.ToString ();
+				return propDeclCursor.ToString ();
 			}
 		}
 
 		public bool IsReadonly {
 			get {
-				var attrs = (CXObjCPropertyAttrKind)clang.Cursor_getObjCPropertyAttributes (cursor, 0);
+				var attrs = (CXObjCPropertyAttrKind)clang.Cursor_getObjCPropertyAttributes (propDeclCursor, 0);
 				return attrs.HasFlag (CXObjCPropertyAttrKind.CXObjCPropertyAttr_readonly);
 			}
 		}
 
 		public bool IsReadWrite {
 			get {
-				var attrs = (CXObjCPropertyAttrKind)clang.Cursor_getObjCPropertyAttributes (cursor, 0);
+				var attrs = (CXObjCPropertyAttrKind)clang.Cursor_getObjCPropertyAttributes (propDeclCursor, 0);
 
 				bool hasReadWriteAttr = attrs.HasFlag (CXObjCPropertyAttrKind.CXObjCPropertyAttr_readwrite);
 				bool hasReadonlyAttr = attrs.HasFlag (CXObjCPropertyAttrKind.CXObjCPropertyAttr_readonly);
@@ -32,11 +38,13 @@ namespace Translator.Core
 			}
 		}
 
+		public CXCursor Getter { get; private set; }
+
 		string getterName;
 		public string GetterName {
 			get {
 				if (getterName == null) {
-					var attrs = (CXObjCPropertyAttrKind)clang.Cursor_getObjCPropertyAttributes (cursor, 0);
+					var attrs = (CXObjCPropertyAttrKind)clang.Cursor_getObjCPropertyAttributes (propDeclCursor, 0);
 					getterName = attrs.HasFlag (CXObjCPropertyAttrKind.CXObjCPropertyAttr_getter)
 						? FindCustomGetterName ()
 						: BuildDefaultGetterName ();
@@ -45,6 +53,8 @@ namespace Translator.Core
 			}
 		}
 
+		public CXCursor? Setter { get; set; }
+
 		string setterName;
 		public string SetterName {
 			get {
@@ -52,7 +62,7 @@ namespace Translator.Core
 					return null;
 
 				if(setterName == null) {
-					var attrs = (CXObjCPropertyAttrKind)clang.Cursor_getObjCPropertyAttributes (cursor, 0);
+					var attrs = (CXObjCPropertyAttrKind)clang.Cursor_getObjCPropertyAttributes (propDeclCursor, 0);
 					setterName = attrs.HasFlag (CXObjCPropertyAttrKind.CXObjCPropertyAttr_setter)
 						? FindCustomSetterName ()
 						: BuildDefaultSetterName ();
@@ -66,12 +76,40 @@ namespace Translator.Core
 			if (cursor.kind != CXCursorKind.CXCursor_ObjCPropertyDecl)
 				throw new ArgumentException ();
 
-			this.cursor = cursor;
+			propDeclCursor = cursor;
+			FindAccessors ();
+		}
+
+		void FindAccessors ()
+		{
+			var parent = clang.getCursorSemanticParent (propDeclCursor);
+			foreach (var c in  parent.GetChildren()) {
+				if (IsGetter (c))
+					Getter = c;
+				else if (IsSetter (c))
+					Setter = c;
+			}
+		}
+
+		bool IsGetter(CXCursor cursor)
+		{
+			if (cursor.kind != CXCursorKind.CXCursor_ObjCInstanceMethodDecl)
+				return false;
+
+			return cursor.ToString () == GetterName;
+		}
+
+		bool IsSetter (CXCursor cursor)
+		{
+			if (cursor.kind != CXCursorKind.CXCursor_ObjCInstanceMethodDecl)
+				return false;
+
+			return cursor.ToString () == SetterName;
 		}
 
 		string FindCustomGetterName ()
 		{
-			using (TokenGroup tg = cursor.Tokenize ()) {
+			using (TokenGroup tg = propDeclCursor.Tokenize ()) {
 				int index = IdentifierIndex (tg, "getter");
 				return FirstIdentifier (tg, index + 1);
 			}
@@ -79,7 +117,7 @@ namespace Translator.Core
 
 		string FindCustomSetterName ()
 		{
-			using (TokenGroup tg = cursor.Tokenize ()) {
+			using (TokenGroup tg = propDeclCursor.Tokenize ()) {
 				int index = IdentifierIndex (tg, "setter");
 				return string.Format ("{0}:", FirstIdentifier (tg, index + 1));
 			}

@@ -37,6 +37,10 @@ namespace Translator.Test
 			Assert.AreEqual ("setName:", p.SetterName);
 			Assert.AreEqual (true, p.IsReadWrite);
 			Assert.AreEqual (false, p.IsReadonly);
+
+			Assert.AreEqual ("name", p.Getter.ToString ());
+			Assert.True (p.Setter.HasValue);
+			Assert.AreEqual ("setName:", p.Setter.ToString ());
 		}
 
 		[Test]
@@ -59,6 +63,9 @@ namespace Translator.Test
 			Assert.AreEqual (null, p.SetterName);
 			Assert.AreEqual (false, p.IsReadWrite);
 			Assert.AreEqual (true, p.IsReadonly);
+
+			Assert.AreEqual ("name", p.Getter.ToString ());
+			Assert.False (p.Setter.HasValue);
 		}
 
 		[Test]
@@ -81,6 +88,10 @@ namespace Translator.Test
 			Assert.AreEqual ("setupPersonName:", p.SetterName);
 			Assert.AreEqual (true, p.IsReadWrite);
 			Assert.AreEqual (false, p.IsReadonly);
+
+			Assert.AreEqual ("personName", p.Getter.ToString ());
+			Assert.True (p.Setter.HasValue);
+			Assert.AreEqual ("setupPersonName:", p.Setter.ToString ());
 		}
 
 		protected ObjCPropertyDecl FetchProperty(string header, string code)
