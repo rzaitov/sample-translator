@@ -158,6 +158,7 @@
     <Compile Include="Helpers\CursorTokenDumper.cs" />
     <Compile Include="CursorWrappers\ObjCPropertyDecl.cs" />
     <Compile Include="CursorWrappers\ObjCPropertyImplInfo.cs" />
+    <Compile Include="Helpers\Index.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
